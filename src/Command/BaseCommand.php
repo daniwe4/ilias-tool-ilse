@@ -4,8 +4,6 @@
 namespace CaT\Ilse\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use CaT\Ilse\App;
 
 /**
@@ -28,12 +26,16 @@ abstract class BaseCommand extends Command
 	 */
 	protected $merge;
 
+	/**
+	 * @var \CaT\Ilse\Interfaces\RequirementChecker
+	 */
+	protected $checker;
+
 	public function __construct(\CaT\Ilse\Interfaces\CommonPathes $path,
 								\CaT\Ilse\Interfaces\Merger $merger,
 								\CaT\Ilse\Interfaces\RequirementChecker $checker)
 	{
 		parent::__construct();
-		$this->process 	= new Process("");
 		$this->path 	= $path;
 		$this->merger 	= $merger;
 		$this->checker 	= $checker;
