@@ -63,16 +63,9 @@ class IlseSetupHeader
 		define ("CLIENT_WEB_DIR",ILIAS_ABSOLUTE_PATH."/".ILIAS_WEB_DIR."/".$client_id);
 		define ("CLIENT_ID", $client_id);
 		define('IL_PHPUNIT_TEST', true);
+		define ("TPLPATH","./templates/blueshadow");
+		define('IL_PHPUNIT_TEST', true);
 
-		$this->ilias_http_path 		= $http_path;
-		$this->ilias_absolute_path 	= $absolute_path;
-		$this->ilias_data_dir 		= $data_path;
-		$this->ilias_web_dir 		= $web_dir;
-		$this->client_data_dir 		= $data_path . "/" . $client_id;
-		$this->client_web_dir 		= $absolute_path . "/" . web_dir . "/" . $client_id;
-		$this->client_id 			= $client_id;
-		$this->phpunit_test 		= true;
-		$this->tplpath 				= "./templates/blueshadow";
 		$this->lang 				= "de";
 		$_COOKIE['ilClientId'] 		= $client_id;
 		$_SESSION['lang'] 			= $lang;
@@ -92,7 +85,7 @@ class IlseSetupHeader
 	{
 		$this->ilErr = new \ilErrorHandling();
 		// TODO: PEAR_ERROR_CALLBACK don't work atm
-		$this->ilErr->setErrorHandling(PEAR_ERROR_CALLBACK, array($ilErr,'errorHandler'));
+		$this->ilErr->setErrorHandling(PEAR_ERROR_EXCEPTION, array($ilErr,'errorHandler'));
 	}
 
 	public function initLanguage()
@@ -143,8 +136,9 @@ class IlseSetupHeader
 	protected function initIni()
 	{
 		include_once './Services/Init/classes/class.ilIniFile.php';
-		$ini = new \ilIniFile($this->ilias_absolute_path.'/ilias.ini.php');
+		$ini = new \ilIniFile(ILIAS_ABSOLUTE_PATH.'/ilias.ini.php');
 		$ini->read();
+		$GLOBALS['ini'] = $ini;
 		$DIC["ini"] = function($c) { return $GLOBALS["ini"]; };
 	}
 }
