@@ -3,11 +3,18 @@
 
 namespace CaT\Ilse\Executer;
 
+use CaT\Ilse\App;
+
 /**
  * Base class for all executers
  */
 abstract class BaseExecuter
 {
+	/**
+	 * @var string
+	 */
+	protected $gc;
+
 	/**
 	 * @var \CaT\Ilse\Interfaces\RequirementChecker
 	 */
@@ -54,21 +61,20 @@ abstract class BaseExecuter
 	 * @param string 									$config
 	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
 	 */
-	public function _construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker)
+	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker)
 	{
-		assert('is_strig($config)');
+		assert('is_string($config)');
 
 		$parser = new \CaT\Ilse\YamlParser();
-		$gc = $parser->read_config($config, "\\CaT\\Ilse\\Config\\General");
+		$this->gc = $parser->read_config($config, "\\CaT\\Ilse\\Config\\General");
 
 		$this->checker 			= $checker;
-		$this->http_path 		= $gc->server()->httpPath();
-		$this->absolute_path 	= $gc->server()->absolute_path();
-		$this->data_path 		= $gc->client()->dataDir();
-		$this->client_id 		= $gc->client()->name();
-		$this->git_url 			= $gc->gitBranch()->url();
-		$this->git_branch_name 	= $gc->gitBranch()->branch();
+		$this->http_path 		= $this->gc->server()->httpPath();
+		$this->absolute_path 	= $this->gc->server()->absolute_path();
+		$this->data_path 		= $this->gc->client()->dataDir();
+		$this->client_id 		= $this->gc->client()->name();
+		$this->git_url 			= $this->gc->gitBranch()->url();
+		$this->git_branch_name 	= $this->gc->gitBranch()->branch();
 		$this->web_dir 			= App::I_D_WEB_DIR;
 	}
-
 }
