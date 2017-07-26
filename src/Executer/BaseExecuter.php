@@ -9,21 +9,59 @@ namespace CaT\Ilse\Executer;
 abstract class BaseExecuter
 {
 	/**
+	 * @var string
+	 */
+	protected $http_path;
+
+	/**
+	 * @var string
+	 */
+	protected $absolute_path;
+
+	/**
+	 * @var string
+	 */
+	protected $data_path;
+
+	/**
+	 * @var string
+	 */
+	protected $client_id;
+
+	/**
+	 * @var string
+	 */
+	protected $git_url;
+
+	/**
+	 * @var string
+	 */
+	protected $git_branch_name;
+
+	/**
+	 * @var string
+	 */
+	protected $web_dir;
+
+	/**
 	 * Constructor of the BaseExecuter class
 	 *
-	 * @param $string 		$config_name
+	 * @param $string 		$config
 	 */
-	public function _construct($config_name)
+	public function _construct($config)
 	{
-		assert('is_strig($config_name)');
+		assert('is_strig($config)');
 
-		if(!is_file($config_name)) {
-			throw new Exception("No config file found. (Path: ".$config_name.")");
-		}
-
-		$yaml_string = file_get_contents($config_name);
 		$parser = new \CaT\Ilse\YamlParser();
-		$this->general_config = $parser->read_config($yaml_string, "\\CaT\\Ilse\\Config\\General");
+		$gc = $parser->read_config($config, "\\CaT\\Ilse\\Config\\General");
+
+		$this->http_path 		= $gc->server()->httpPath();
+		$this->absolute_path 	= $gc->server()->absolute_path();
+		$this->data_path 		= $gc->client()->dataDir();
+		$this->client_id 		= $gc->client()->name();
+		$this->git_url 			= $gc->gitBranch()->url();
+		$this->git_branch_name 	= $gc->gitBranch()->branch();
+		$this->web_dir 			= App::I_D_WEB_DIR;
 	}
 
 }
