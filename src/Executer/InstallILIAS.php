@@ -23,6 +23,18 @@ class InstallILIAS extends BaseExecuter
 	protected $db_updater;
 
 	/**
+	 * Constructor of the class InstallILIAS
+	 *
+	 * @param string 									$config
+	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
+	 */
+	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker)
+	{
+		assert('is_string($config)');
+		parent::__construct($config, $checker);
+	}
+
+	/**
 	 * Start the installation process
 	 * 
 	 * @param string 		$config
@@ -63,7 +75,7 @@ class InstallILIAS extends BaseExecuter
 	{
 		$setup = new \ilSetup(true,"admin");
 		echo "Initializing installer...";
-		$this->iinst = new \CaT\Ilse\IliasReleaseInstaller($setup, $general_config);
+		$this->iinst = new \CaT\Ilse\IliasReleaseInstaller($setup, $this->gc);
 		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 	}
 
@@ -149,7 +161,7 @@ class InstallILIAS extends BaseExecuter
 
 		if(!$this->iinst->finishSetup()) {
 			echo "\nSomething went wrong.";
-			die(1);
+			exit(1);
 		}
 
 		echo "\nILIAS successfull installed.";
