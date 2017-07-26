@@ -9,6 +9,11 @@ namespace CaT\Ilse\Executer;
 abstract class BaseExecuter
 {
 	/**
+	 * @var \CaT\Ilse\Interfaces\RequirementChecker
+	 */
+	protected $checker;
+
+	/**
 	 * @var string
 	 */
 	protected $http_path;
