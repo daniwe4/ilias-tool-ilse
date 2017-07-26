@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use CaT\Ilse\Executer;
 
 /**
  * Implementation of the install command
@@ -23,8 +24,8 @@ class ReinstallCommand extends BaseCommand
 		$this
 			->setName("reinstall")
 			->setDescription("Reinstall the Ilias-Environment.")
-			->addArgument("config_name", InputArgument::REQUIRED, "Name of the Ilias Config File.")
-			->addOption("interactiv", "i", InputOption::VALUE_NONE, "Set i to start the setup in interactiv mode.");
+			->addArgument("config_names", InputArgument::IS_ARRAY, "Name of the Ilias Config File.")
+			->addOption("interactive", "i", InputOption::VALUE_NONE, "Set i to start the setup in interactiv mode.");
 			;
 	}
 
@@ -36,13 +37,25 @@ class ReinstallCommand extends BaseCommand
 	 */
 	protected function execute(InputInterface $in, OutputInterface $out)
 	{
-		$args = ["config_name" => $in->getArgument("config_name"),
-				 "interactiv" => $in->getOption("interactiv")
-				];
+		$config_names = $in->getArgument("config_names");
+		$args = ["config" => $this->merge($config_names),
+				 "interactive" => $in->getOption("interactive")];
 
 		$this->delete($args);
+		$this->setup($args);
 		$this->start($args);
 		$out->writeln("\t\t\t\tDone!");
+	}
+
+	/**
+	 * Setup the environment
+	 *
+	 * @param ["param_name" => param_value] 	$args
+	 */
+	protected function setup(array $args)
+	{
+		$sp = new Executer\SetupEnvironment($args['config'], $this->checker, $this->git, $args['interactive']);
+		$sp->run();
 	}
 
 	/**
@@ -52,12 +65,8 @@ class ReinstallCommand extends BaseCommand
 	 */
 	protected function start(array $args)
 	{
-		$this->process->setWorkingDirectory($this->path->getCWD() . "/" . "src/bin");
-		$this->process->setCommandLine("php install_ilias.php "
-									 . $this->getConfigPathByName($args['config_name']) . " "
-									 . "non_interactiv");
-		$this->process->setTty(true);
-		$this->process->run();
+		$ii = new Executer\InstallILIAS($args['config'], $this->checker, $this->git);
+		$ii->run();
 	}
 
 	/**
@@ -65,7 +74,7 @@ class ReinstallCommand extends BaseCommand
 	 */
 	protected function delete(array $args)
 	{
-		$ri = new DeleteIlias($this->getConfigPathByName($args['config_name']));
+		$ri = new Executer\DeleteILIAS($args['config'], $this->checker, $this->git);
 		$ri->run();
 	}
 }
