@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use CaT\Ilse\Executer;
 
 /**
  * Implementation of the install command
@@ -24,7 +25,7 @@ class InstallCommand extends BaseCommand
 			->setName("install")
 			->setDescription("Start the installation.")
 			->addArgument("config_names", InputArgument::IS_ARRAY, "Name of the Ilias Config Files.")
-			->addOption("interactive", "i", InputOption::VALUE_NONE, "Set i to start the setup with interatcion.");
+			->addOption("interactive", "i", InputOption::VALUE_NONE, "Set i to start the setup in interactive mode.");
 			;
 	}
 
@@ -39,9 +40,22 @@ class InstallCommand extends BaseCommand
 		$config_names = $in->getArgument("config_names");
 		$args = ["config" => $this->merge($config_names),
 				 "interactive" => $in->getOption("interactive")];
+
+		$this->setup($args);
 		$this->start($args);
-		$this->config($args);
+		// $this->config($args);
 		$out->writeln("\t\t\t\tDone!");
+	}
+
+	/**
+	 * Setup the environment
+	 *
+	 * @param ["param_name" => param_value] 	$args
+	 */
+	protected function setup(array $args)
+	{
+		$sp = new Executer\SetupEnvironment($args['config'], $this->checker, $args['interactive']);
+		$sp->run();
 	}
 
 	/**
@@ -51,12 +65,8 @@ class InstallCommand extends BaseCommand
 	 */
 	protected function start(array $args)
 	{
-		$this->process->setWorkingDirectory($this->path->getCWD() . "/src/bin");
-		$this->process->setCommandLine("php install_ilias.php "
-									 . $args['config']
-									 . " non_interactiv");
-		$this->process->setTty(true);
-		$this->process->run();
+		$ii = new Executer\InstallILIAS($args['config'], $this->checker);
+		$ii->run();
 	}
 
 	/**
