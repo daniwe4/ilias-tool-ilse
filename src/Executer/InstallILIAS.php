@@ -23,15 +23,27 @@ class InstallILIAS extends BaseExecuter
 	protected $db_updater;
 
 	/**
+	 * @var ilLanguage
+	 */
+	protected $lng;
+
+	/**
 	 * Constructor of the class InstallILIAS
 	 *
 	 * @param string 									$config
 	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
+	 * @param \CaT\Ilse\Interfaces\Git 					$git
 	 */
-	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker)
+	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker, \CaT\Ilse\Interfaces\Git $git)
 	{
 		assert('is_string($config)');
-		parent::__construct($config, $checker);
+		parent::__construct($config, $checker, $git);
+
+		chdir($this->absolute_path);
+		if(file_exists($this->absolute_path.'/libs/composer/vendor/autoload.php'))
+		{
+			include_once $this->absolute_path.'/libs/composer/vendor/autoload.php';
+		}
 	}
 
 	/**
@@ -64,7 +76,13 @@ class InstallILIAS extends BaseExecuter
 		// Unfortunately it is required to do these steps,
 		// or the installation will not run.
 		echo "Initializing ILIAS...";
-		require_once("my_setup_header.php");
+		$sh = new IlseSetupHeader($this->http_path,
+								$this->absolute_path,
+								$this->data_path,
+								$this->web_dir,
+								$this->client_id);
+		$this->lng = $sh->initLanguage();
+		$sh->init();
 		echo "\t\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 	}
 
@@ -146,8 +164,8 @@ class InstallILIAS extends BaseExecuter
 	protected function installLanguages()
 	{
 		echo "Installing languages...";
-		$lng->setDbHandler($ilDB);
-		$this->iinst->installLanguages($lng);
+		$this->lng->setDbHandler($ilDB);
+		$this->iinst->installLanguages($this->lng);
 		echo "\t\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 	}
 
