@@ -29,12 +29,14 @@ abstract class BaseCommand extends Command
 	protected $merge;
 
 	public function __construct(\CaT\Ilse\Interfaces\CommonPathes $path,
-								\CaT\Ilse\Interfaces\Merger $merger)
+								\CaT\Ilse\Interfaces\Merger $merger,
+								\CaT\Ilse\Interfaces\RequirementChecker $checker)
 	{
 		parent::__construct();
-		$this->process = new Process("");
-		$this->path = $path;
-		$this->merger = $merger;
+		$this->process 	= new Process("");
+		$this->path 	= $path;
+		$this->merger 	= $merger;
+		$this->checker 	= $checker;
 	}
 
 	/**
