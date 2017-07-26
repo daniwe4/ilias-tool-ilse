@@ -7,6 +7,8 @@
 * @author	Stefan Hecken <stefan.hecken@concepts-and-training.de>
 */
 
+namespace CaT\Ilse\Executer;
+
 // remove notices from error reporting
 if (version_compare(PHP_VERSION, '5.3.0', '>='))
 {
@@ -53,6 +55,15 @@ class IlseSetupHeader
 								$client_id
 								)
 	{
+		define ("ILIAS_HTTP_PATH", $http_path);
+		define ("ILIAS_ABSOLUTE_PATH", $absolute_path);
+		define ("ILIAS_DATA_DIR", $data_path);
+		define ("ILIAS_WEB_DIR", $web_dir);
+		define ("CLIENT_DATA_DIR",ILIAS_DATA_DIR."/".$client_id);
+		define ("CLIENT_WEB_DIR",ILIAS_ABSOLUTE_PATH."/".ILIAS_WEB_DIR."/".$client_id);
+		define ("CLIENT_ID", $client_id);
+		define('IL_PHPUNIT_TEST', true);
+
 		$this->ilias_http_path 		= $http_path;
 		$this->ilias_absolute_path 	= $absolute_path;
 		$this->ilias_data_dir 		= $data_path;
@@ -65,6 +76,7 @@ class IlseSetupHeader
 		$this->lang 				= "de";
 		$_COOKIE['ilClientId'] 		= $client_id;
 		$_SESSION['lang'] 			= $lang;
+
 	}
 
 	public function init()
@@ -78,43 +90,49 @@ class IlseSetupHeader
 
 	protected function setErrorHandling()
 	{
-		$this->ilErr = new ilErrorHandling();
-		$this->ilErr->setErrorHandling(PEAR_ERROR_CALLBACK,array($ilErr,'errorHandler'));
+		$this->ilErr = new \ilErrorHandling();
+		// TODO: PEAR_ERROR_CALLBACK don't work atm
+		$this->ilErr->setErrorHandling(PEAR_ERROR_CALLBACK, array($ilErr,'errorHandler'));
 	}
 
-	protected function initLanguage()
+	public function initLanguage()
 	{
-		return new ilLanguage($this->lang);
+		$lng = new \ilLanguage($this->lang);
+		$GLOBALS['lng'] = $lng;
+		return $lng;
 	}
 
 	protected function initLog()
 	{
 		include_once './Services/Logging/classes/class.ilLoggingSetupSettings.php';
-		$logging_settings = new ilLoggingSetupSettings();
+		$logging_settings = new \ilLoggingSetupSettings();
 		$logging_settings->init();
 
 		include_once './Services/Logging/classes/public/class.ilLoggerFactory.php';
 
-		$log = ilLoggerFactory::newInstance($logging_settings)->getComponentLogger('setup');
+		$log = \ilLoggerFactory::newInstance($logging_settings)->getComponentLogger('setup');
 		$ilLog = $log;
+		$GLOBALS['ilLog'] = $log;
 		$DIC["ilLog"] = function($c) { return $GLOBALS["ilLog"]; };
 	}
 
 	protected function intiTemplate()
 	{
-		$tpl = new ilTemplate("tpl.main.html", true, true, "setup");		
+		$tpl = new ilTemplate("tpl.main.html", true, true, "setup");
+		$GLOBALS['ilTemplate'] = $tpl;
 	}
 
 	protected function initStructureReader()
 	{
-		$ilCtrlStructureReader = new ilCtrlStructureReader();
+		$ilCtrlStructureReader = new \ilCtrlStructureReader();
 		$ilCtrlStructureReader->setErrorObject($this->ilErr);
+		$GLOBALS['ilCtrlStructureReader'] = $ilCtrlStructureReader;
 	}
 
 	protected function initBenchmark()
 	{
 		require_once "./Services/Utilities/classes/class.ilBenchmark.php";
-		$ilBench = new ilBenchmark();
+		$ilBench = new \ilBenchmark();
 		$GLOBALS['ilBench'] = $ilBench;
 
 		include_once("./Services/Database/classes/class.ilDBAnalyzer.php");
@@ -125,7 +143,7 @@ class IlseSetupHeader
 	protected function initIni()
 	{
 		include_once './Services/Init/classes/class.ilIniFile.php';
-		$ini = new ilIniFile(ILIAS_ABSOLUTE_PATH.'/ilias.ini.php');
+		$ini = new \ilIniFile($this->ilias_absolute_path.'/ilias.ini.php');
 		$ini->read();
 		$DIC["ini"] = function($c) { return $GLOBALS["ini"]; };
 	}
