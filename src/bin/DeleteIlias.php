@@ -42,7 +42,7 @@ class DeleteIlias {
 
 		if($this->dataBaseExist($database)) {
 			if(!$this->con->query($drop_query)) {
-				throw new Exception("Database could noch be deleted. (Error: )");
+				throw new Exception("Database could not be deleted. (Error: )");
 			}
 		}
 		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
