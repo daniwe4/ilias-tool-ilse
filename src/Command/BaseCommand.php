@@ -31,14 +31,21 @@ abstract class BaseCommand extends Command
 	 */
 	protected $checker;
 
+	/**
+	 * @var \CaT\Ilse\Interfaces\Git
+	 */
+	protected $git;
+
 	public function __construct(\CaT\Ilse\Interfaces\CommonPathes $path,
 								\CaT\Ilse\Interfaces\Merger $merger,
-								\CaT\Ilse\Interfaces\RequirementChecker $checker)
+								\CaT\Ilse\Interfaces\RequirementChecker $checker,
+								\CaT\Ilse\Interfaces\Git $git)
 	{
 		parent::__construct();
 		$this->path 	= $path;
 		$this->merger 	= $merger;
 		$this->checker 	= $checker;
+		$this->git 		= $git;
 	}
 
 	/**

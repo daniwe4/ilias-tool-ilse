@@ -54,7 +54,7 @@ class InstallCommand extends BaseCommand
 	 */
 	protected function setup(array $args)
 	{
-		$sp = new Executer\SetupEnvironment($args['config'], $this->checker, $args['interactive']);
+		$sp = new Executer\SetupEnvironment($args['config'], $this->checker, $this->git, $args['interactive']);
 		$sp->run();
 	}
 
@@ -65,7 +65,7 @@ class InstallCommand extends BaseCommand
 	 */
 	protected function start(array $args)
 	{
-		$ii = new Executer\InstallILIAS($args['config'], $this->checker);
+		$ii = new Executer\InstallILIAS($args['config'], $this->checker, $this->git);
 		$ii->run();
 	}
 

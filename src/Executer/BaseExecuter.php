@@ -21,6 +21,11 @@ abstract class BaseExecuter
 	protected $checker;
 
 	/**
+	 * @var \CaT\Ilse\Interfaces\Git
+	 */
+	protected $git;
+
+	/**
 	 * @var string
 	 */
 	protected $http_path;
@@ -61,7 +66,7 @@ abstract class BaseExecuter
 	 * @param string 									$config
 	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
 	 */
-	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker)
+	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker, \CaT\Ilse\Interfaces\Git $git)
 	{
 		assert('is_string($config)');
 
@@ -69,6 +74,7 @@ abstract class BaseExecuter
 		$this->gc = $parser->read_config($config, "\\CaT\\Ilse\\Config\\General");
 
 		$this->checker 			= $checker;
+		$this->git 				= $git;
 		$this->http_path 		= $this->gc->server()->httpPath();
 		$this->absolute_path 	= $this->gc->server()->absolute_path();
 		$this->data_path 		= $this->gc->client()->dataDir();

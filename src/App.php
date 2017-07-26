@@ -25,13 +25,15 @@ class App extends Application
 
 	public function __construct(Interfaces\CommonPathes $path,
 								Interfaces\Merger $merger,
-								Interfaces\RequirementChecker $checker)
+								Interfaces\RequirementChecker $checker,
+								Interfaces\Git $git)
 	{
 		parent::__construct();
 
 		$this->path 	= $path;
 		$this->merger 	= $merger;
 		$this->checker 	= $checker;
+		$this->git 		= $git;
 		$this->initConfigRepo();
 		$this->initCommands();
 	}
@@ -42,8 +44,8 @@ class App extends Application
 	protected function initCommands()
 	{
 		// $this->add(new Command\UpdateCommand($this->path, $this->merger, $this->checker));
-		$this->add(new Command\ReinstallCommand($this->path, $this->merger, $this->checker));
-		$this->add(new Command\InstallCommand($this->path, $this->merger, $this->checker));
+		$this->add(new Command\ReinstallCommand($this->path, $this->merger, $this->checker, $this->git));
+		$this->add(new Command\InstallCommand($this->path, $this->merger, $this->checker, $this->git));
 	}
 
 	/**
