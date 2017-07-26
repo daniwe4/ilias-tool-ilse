@@ -48,9 +48,6 @@ class InstallILIAS extends BaseExecuter
 
 	/**
 	 * Start the installation process
-	 * 
-	 * @param string 		$config
-	 * @param bool 			$interactive
 	 */
 	public function run()
 	{
