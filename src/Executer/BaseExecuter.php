@@ -46,15 +46,17 @@ abstract class BaseExecuter
 	/**
 	 * Constructor of the BaseExecuter class
 	 *
-	 * @param $string 		$config
+	 * @param string 									$config
+	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
 	 */
-	public function _construct($config)
+	public function _construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker)
 	{
 		assert('is_strig($config)');
 
 		$parser = new \CaT\Ilse\YamlParser();
 		$gc = $parser->read_config($config, "\\CaT\\Ilse\\Config\\General");
 
+		$this->checker 			= $checker;
 		$this->http_path 		= $gc->server()->httpPath();
 		$this->absolute_path 	= $gc->server()->absolute_path();
 		$this->data_path 		= $gc->client()->dataDir();
