@@ -22,13 +22,14 @@ class SetupEnvironment extends BaseExecuter
 	 *
 	 * @param string 									$config
 	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
+	 * @param \CaT\Ilse\Interfaces\Git 					$git
 	 * @param bool 										$interactive
 	 */
-	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker, $interactive)
+	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker, \CaT\Ilse\Interfaces\Git $git, $interactive)
 	{
 		assert('is_string($config)');
 		assert('is_bool($interactive)');
-		parent::__construct($config, $checker);
+		parent::__construct($config, $checker, $git);
 
 		$this->interactive = $interactive;
 	}
@@ -221,7 +222,7 @@ class SetupEnvironment extends BaseExecuter
 		try {
 			echo "Clone repository from ".$this->git_url;
 			echo " (This could take a few minutes)...";
-			$git->cloneGitTo($this->git_url, $this->git_branch_name, $this->absolute_path);
+			$this->git->cloneGitTo($this->git_url, $this->git_branch_name, $this->absolute_path);
 			echo "\t\t\tDone!\n";
 		} catch(\RuntimeException $e) {
 			echo $e->getMessage();
