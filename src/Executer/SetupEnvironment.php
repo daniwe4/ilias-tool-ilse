@@ -19,13 +19,16 @@ class SetupEnvironment extends BaseExecuter
 
 	/**
 	 * Constructor of the class SetupEnvironment
-	 * 
-	 * @param bool 		$interactive
+	 *
+	 * @param string 									$config
+	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
+	 * @param bool 										$interactive
 	 */
-	public function __construct($interactive)
+	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker, $interactive)
 	{
+		assert('is_string($config)');
 		assert('is_bool($interactive)');
-		parent::__construct();
+		parent::__construct($config, $checker);
 
 		$this->interactive = $interactive;
 	}
@@ -127,7 +130,7 @@ class SetupEnvironment extends BaseExecuter
 	 */
 	protected function createLogDir()
 	{
-		$check = $this->checker->logDirectoryExists($this->general_config->log()->path());
+		$check = $this->checker->logDirectoryExists($this->gc->log()->path());
 		if($this->interactive && !$check)
 		{
 			echo "Log directory does not exist. Create the directory (yes|no)? ";
