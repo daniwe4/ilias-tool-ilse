@@ -12,10 +12,10 @@ use CaT\Ilse\GitExecuter;
  */
 class App extends Application
 {
-	const II_P_GLOBAL_CONFIG 	= ".ilias-installer/config";
-	const II_F_CONFIG			= "ilse_config.yaml";
-	const II_R_CONFIG			= "https://github.com/conceptsandtraining/ilias-configs.git";
-	const II_R_BRANCH			= "master";
+	const I_P_GLOBAL_CONFIG 	= ".ilias-installer/config";
+	const I_F_CONFIG			= "ilse_config.yaml";
+	const I_R_CONFIG			= "https://github.com/conceptsandtraining/ilias-configs.git";
+	const I_R_BRANCH			= "master";
 
 	/**
 	 * @var CaT\Ilse\Interfaces\Path
@@ -50,11 +50,11 @@ class App extends Application
 	{
 		$ge = new GitExecuter();
 
-		if(!is_dir($this->path->getHomeDir() . "/" . self::II_P_GLOBAL_CONFIG))
+		if(!is_dir($this->path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG))
 		{
-			$ge->cloneGitTo(self::II_R_CONFIG,
-							self::II_R_BRANCH,
-							$this->path->getHomeDir() . "/" . self::II_P_GLOBAL_CONFIG
+			$ge->cloneGitTo(self::I_R_CONFIG,
+							self::I_R_BRANCH,
+							$this->path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG
 							);
 		}
 	}

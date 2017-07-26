@@ -46,7 +46,7 @@ abstract class BaseCommand extends Command
 	protected function getConfigPathByName($name)
 	{
 		assert('is_string($name)');
-		return $this->path->getHomeDir() . "/" . App::II_P_GLOBAL_CONFIG . "/" . $name . "/" . App::II_F_CONFIG;
+		return $this->path->getHomeDir() . "/" . App::I_P_GLOBAL_CONFIG . "/" . $name . "/" . App::I_F_CONFIG;
 	}
 
 	/**
