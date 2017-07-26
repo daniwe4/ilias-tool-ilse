@@ -65,7 +65,7 @@ class IliasRequirementChecker implements \CaT\Ilse\Interfaces\RequirementChecker
 		assert('is_string($phpversion)');
 		assert('is_string($branch_name)');
 
-		if($phpversion >= "7.0" && $branch_name != "trunk") {
+		if($phpversion >= "7.1" && $branch_name != "trunk") {
 			return false;
 		}
 
