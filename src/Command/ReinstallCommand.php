@@ -44,6 +44,7 @@ class ReinstallCommand extends BaseCommand
 		$this->delete($args);
 		$this->setup($args);
 		$this->start($args);
+		$this->config($args);
 		$out->writeln("\t\t\t\tDone!");
 	}
 
@@ -76,5 +77,16 @@ class ReinstallCommand extends BaseCommand
 	{
 		$ri = new Executer\DeleteILIAS($args['config'], $this->checker, $this->git);
 		$ri->run();
+	}
+
+	/**
+	 * Start the configuration process of ILIAS
+	 *
+	 * @param ["param_name" => param_value] 	$args
+	 */
+	protected function config(array $args)
+	{
+		$ci = new Executer\ConfigurateILIAS($args['config'], $this->checker, $this->git);
+		$ci->run();
 	}
 }

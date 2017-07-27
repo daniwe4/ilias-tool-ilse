@@ -43,7 +43,7 @@ class InstallCommand extends BaseCommand
 
 		$this->setup($args);
 		$this->start($args);
-		// $this->config($args);
+		$this->config($args);
 		$out->writeln("\t\t\t\tDone!");
 	}
 
@@ -76,11 +76,7 @@ class InstallCommand extends BaseCommand
 	 */
 	protected function config(array $args)
 	{
-		$this->process->setWorkingDirectory($this->path->getCWD() . "/" . "src/bin");
-		$this->process->setCommandLine("php configurate_ilias.php "
-									  . $this->getConfigPathByName($args['config_name'])
-									  );
-		$this->process->setTty(true);
-		$this->process->run();
+		$ci = new Executer\ConfigurateILIAS($args['config'], $this->checker, $this->git);
+		$ci->run();
 	}
 }
