@@ -7,13 +7,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use CaT\Ilse\Executer;
 
 /**
- * Implementation of the install command
+ * Implementation of the update command
  *
  * @author Daniel Weise 	<daniel.weise@concepts-and-training.de>
  */
-class ReinstallCommand extends BaseCommand
+class UpdateCommand extends BaseCommand
 {
 	/**
 	 * Configure the command with description and help text
@@ -22,8 +23,8 @@ class ReinstallCommand extends BaseCommand
 	{
 		$this
 			->setName("update")
-			->setDescription("Reinstall the Ilias-Environment.")
-			->addArgument("config_name", InputArgument::REQUIRED, "Name of the Ilias Config File.")
+			->setDescription("Update the Ilias-Environment.")
+			->addArgument("config_names", InputArgument::IS_ARRAY, "Name of the Ilias Config Files.")
 			;
 	}
 
@@ -35,27 +36,23 @@ class ReinstallCommand extends BaseCommand
 	 */
 	protected function execute(InputInterface $in, OutputInterface $out)
 	{
-		$args = ["config_name" => $in->getArgument("config_name")
-				];
+		$config_names = $in->getArgument("config_names");
+		$args = ["config" => $this->merge($config_names)];
 
-		$this->start($args);
-		$this->updateConfig($args);
+		//$this->setup($args);
+		$this->update($args);
 		$out->writeln("\t\t\t\tDone!");
 	}
 
 	/**
-	 * Start the installation process
+	 * Setup the environment
 	 *
 	 * @param ["param_name" => param_value] 	$args
 	 */
-	protected function start(array $args)
+	protected function setup(array $args)
 	{
-		$this->process->setWorkingDirectory($this->path->getCWD() . "/" . "src/bin");
-		$this->process->setCommandLine("php update_ilias.php "
-									   . $this->getConfigPathByName($args['config_name'])
-									  );
-		$this->process->setTty(true);
-		$this->process->run();
+		$sp = new Executer\SetupEnvironment($args['config'], $this->checker, $this->git, false);
+		$sp->run();
 	}
 
 	/**
@@ -63,13 +60,9 @@ class ReinstallCommand extends BaseCommand
 	 *
 	 * @param ["param_name" => param_value] 	$args
 	 */
-	protected function updateConfig(array $args)
+	protected function update(array $args)
 	{
-		$this->process->setWorkingDirectory($this->path->getCWD() . "/" . "src/bin");
-		$this->process->setCommandLine("php update_configuration_ilias.php "
-									   . $this->getConfigPathByName($args['config_name'])
-									  );
-		$this->process->setTty(true);
-		$this->process->run();
+		$u = new Executer\UpdateILIAS($args['config'], $this->checker, $this->git);
+		$u->run();
 	}
 }
