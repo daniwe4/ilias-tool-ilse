@@ -68,8 +68,7 @@ class IlseSetupHeader
 
 		$this->lang 				= "de";
 		$_COOKIE['ilClientId'] 		= $client_id;
-		$_SESSION['lang'] 			= $lang;
-
+		$_SESSION['lang'] 			= $this->lang;
 	}
 
 	public function init()
@@ -97,6 +96,7 @@ class IlseSetupHeader
 
 	protected function initLog()
 	{
+		global $DIC;
 		include_once './Services/Logging/classes/class.ilLoggingSetupSettings.php';
 		$logging_settings = new \ilLoggingSetupSettings();
 		$logging_settings->init();
@@ -135,6 +135,7 @@ class IlseSetupHeader
 
 	protected function initIni()
 	{
+		global $DIC;
 		include_once './Services/Init/classes/class.ilIniFile.php';
 		$ini = new \ilIniFile(ILIAS_ABSOLUTE_PATH.'/ilias.ini.php');
 		$ini->read();
