@@ -8,7 +8,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use CaT\Ilse\App;
 
 /**
- * Run the ILIAS installation process
+ * Run the ILIAS configuration process
  */
 class ConfigurateILIAS extends BaseExecuter
 {
