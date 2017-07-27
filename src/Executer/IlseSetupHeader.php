@@ -83,8 +83,7 @@ class IlseSetupHeader
 	protected function setErrorHandling()
 	{
 		$this->ilErr = new \ilErrorHandling();
-		// TODO: PEAR_ERROR_CALLBACK don't work atm
-		$this->ilErr->setErrorHandling(PEAR_ERROR_EXCEPTION, array($ilErr,'errorHandler'));
+		$this->ilErr->setErrorHandling(PEAR_ERROR_CALLBACK, array($this->ilErr,'errorHandler'));
 	}
 
 	public function initLanguage()
