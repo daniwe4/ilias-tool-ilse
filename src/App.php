@@ -43,9 +43,11 @@ class App extends Application
 	 */
 	protected function initCommands()
 	{
-		// $this->add(new Command\UpdateCommand($this->path, $this->merger, $this->checker));
+		$this->add(new Command\UpdateCommand($this->path, $this->merger, $this->checker, $this->git));
+		$this->add(new Command\UpdatePluginsCommand($this->path, $this->merger, $this->checker, $this->git));
 		$this->add(new Command\ReinstallCommand($this->path, $this->merger, $this->checker, $this->git));
 		$this->add(new Command\InstallCommand($this->path, $this->merger, $this->checker, $this->git));
+		$this->add(new Command\ConfigCommand($this->path, $this->merger, $this->checker, $this->git));
 	}
 
 	/**
