@@ -28,6 +28,11 @@ class InstallILIAS extends BaseExecuter
 	protected $lng;
 
 	/**
+	 * @var $ilDB
+	 */
+	protected $db;
+
+	/**
 	 * Constructor of the class InstallILIAS
 	 *
 	 * @param string 									$config
@@ -137,9 +142,9 @@ class InstallILIAS extends BaseExecuter
 
 		echo "Creating database...";
 		$this->iinst->installDatabase();
-		$db = $this->iinst->getDatabaseHandle();
+		$this->db = $this->iinst->getDatabaseHandle();
 		echo "\t\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
-		$this->db_updater = new \ilDBUpdate($db);
+		$this->db_updater = new \ilDBUpdate($this->db);
 	}
 
 	/**
@@ -161,7 +166,7 @@ class InstallILIAS extends BaseExecuter
 	protected function installLanguages()
 	{
 		echo "Installing languages...";
-		$this->lng->setDbHandler($ilDB);
+		$this->lng->setDbHandler($this->db);
 		$this->iinst->installLanguages($this->lng);
 		echo "\t\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 	}
