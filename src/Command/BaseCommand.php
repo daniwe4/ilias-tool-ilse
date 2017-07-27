@@ -4,6 +4,8 @@
 namespace CaT\Ilse\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use CaT\Ilse\App;
 
 /**
@@ -42,6 +44,7 @@ abstract class BaseCommand extends Command
 								\CaT\Ilse\Interfaces\Git $git)
 	{
 		parent::__construct();
+		$this->process 	= new Process("");
 		$this->path 	= $path;
 		$this->merger 	= $merger;
 		$this->checker 	= $checker;
