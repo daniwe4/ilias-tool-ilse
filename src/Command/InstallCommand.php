@@ -43,7 +43,7 @@ class InstallCommand extends BaseCommand
 
 		$this->setup($args);
 		$this->start($args);
-		$this->config($args);
+		$this->config('./ilse.php config ' . implode(" ", $config_names));
 		$out->writeln("\t\t\t\tDone!");
 	}
 
@@ -70,13 +70,18 @@ class InstallCommand extends BaseCommand
 	}
 
 	/**
-	 * Start the configuration process of ILIAS
+	 * Configurate the ILIAS environment
 	 *
-	 * @param ["param_name" => param_value] 	$args
+	 * @param string 		$cmd
 	 */
-	protected function config(array $args)
+	protected function config($cmd)
 	{
-		$ci = new Executer\ConfigurateILIAS($args['config'], $this->checker, $this->git);
-		$ci->run();
+		assert('is_string($cmd)');
+
+		// A hack to avoid an ilLanguage error.
+		// It runs config in an seperate process.
+		$this->process->setCommandLine($cmd);
+		$this->process->setTty(true);
+		$this->process->run();
 	}
 }
