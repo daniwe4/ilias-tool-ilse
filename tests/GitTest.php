@@ -18,29 +18,44 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	 */
 	protected static $gw;
 
+	/**
+	 * Setup the testing environment
+	 */
 	public function setUp()
 	{
 		self::$gw = $this->getImplementation();
 	}
 
+	/**
+	 * Test the gitClone method
+	 */
 	public function test_gitClone()
 	{
 		self::$gw->gitClone();
 		$this->assertFileExists(self::$gw->gitGetPath() . "/DWLibrary/run_tests.sh");
 	}
 
+	/**
+	 * Test the gitFetch method
+	 */
 	public function test_gitFetch()
 	{
 		$result = self::$gw->gitFetch();
 		$this->assertEquals($result, 1);
 	}
 
+	/**
+	 * Test the gitPull method
+	 */
 	public function test_gitPull()
 	{
 		$result = self::$gw->gitPull();
 		$this->assertEquals($result, 1);
 	}
 
+	/**
+	 * Test the gitCheckout method
+	 */
 	public function test_gitCheckout()
 	{
 		foreach($this->getCheckoutProvider() as $provider)
@@ -50,12 +65,18 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
+	/**
+	 * Test the gitGetBranches method
+	 */
 	public function test_gitGetBranches()
 	{
 		$branches = self::$gw->gitGetBranches();
 		$this->assertContains("test", $branches);
 	}
 
+	/**
+	 * Provides data for the gitCheckout test
+	 */
 	protected function getCheckoutProvider()
 	{
 		return [["test", true, true],
@@ -63,6 +84,9 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 				["test", false, true]];
 	}
 
+	/**
+	 * Do cleanup
+	 */
 	public static function tearDownAfterClass()
 	{
 		echo "\nRemoving ". self::$gw->gitGetPath().'/'.self::$gw->gitGetName();
