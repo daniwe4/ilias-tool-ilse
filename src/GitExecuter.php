@@ -10,7 +10,7 @@ use Gitonomy\Git\Repository;
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class GitExecuter implements \CaT\Ilse\interfaces\Git {
+class GitExecuter implements \CaT\Ilse\Interfaces\Git {
 
 	const URL_REG_EX = "/^(https:\/\/github\.com)/";
 

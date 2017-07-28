@@ -1,25 +1,23 @@
 <?php
 
-namespace CaT\InstILIAS;
+namespace CaT\Ilse;
 use Symfony\Component\Yaml\Yaml;
+use CaT\Ilse\Interfaces\Merger;
 
 /**
  * Merge any number of config files
  */
-class MergeConfigs {
+class MergeConfigs implements Merger{
 
 	public function __construct() {
 		$this->counter = 0;
 	}
+
 	/**
-	 * Merge config files.
-	 * Config with higher key is leading
-	 *
-	 * @param [sting[]]
-	 *
-	 * @return string[]
+	 * @inheritdoc
 	 */
-	public function mergeConfigs(array $configs) {
+	public function mergeConfigs(array $configs)
+	{
 		$ret = Yaml::parse($configs[0]);
 
 		if(count($configs) > 0) {
@@ -38,7 +36,8 @@ class MergeConfigs {
 		return Yaml::dump($ret);
 	}
 
-	protected function merge($base, $new) {
+	protected function merge($base, $new)
+	{
 		if(is_array($base)) {
 			$base = $this->addMissingKeys($base, $new);
 
@@ -56,7 +55,8 @@ class MergeConfigs {
 		return $base;
 	}
 
-	protected function addMissingKeys($base, $new) {
+	protected function addMissingKeys($base, $new)
+	{
 		$key_base = array_keys($base);
 		$key_new = array_keys($new);
 		$diff = array_diff($key_new, $key_base);

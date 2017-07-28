@@ -8,7 +8,7 @@ namespace CaT\Ilse;
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
 
-class IliasReleaseConfigurator implements \CaT\Ilse\interfaces\Configurator {
+class IliasReleaseConfigurator implements \CaT\Ilse\Interfaces\Configurator {
 
 	/**
 	 * @var string

@@ -9,7 +9,7 @@ namespace CaT\Ilse;
 * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
 */
 
-class IliasReleaseInstaller implements \CaT\Ilse\interfaces\Installer {
+class IliasReleaseInstaller implements \CaT\Ilse\Interfaces\Installer {
 	protected $ilias_setup;
 	protected $general;
 

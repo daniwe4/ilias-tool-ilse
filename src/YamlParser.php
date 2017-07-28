@@ -10,7 +10,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class YamlParser implements \CaT\Ilse\interfaces\Parser {
+class YamlParser implements \CaT\Ilse\Interfaces\Parser {
 	/**
 	 * @inheritdoc
 	 */

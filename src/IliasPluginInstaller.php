@@ -7,7 +7,7 @@ namespace CaT\Ilse;
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class IliasPluginInstaller implements \CaT\Ilse\interfaces\Plugin {
+class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 	const PLUGIN_TMP_FOLDER = "plugin_tmp";
 	const PLUGIN_CLASS_PREFIX_IL = "il";
 	const PLUGIN_CLASS_PREFIX_CLASS = "class.";

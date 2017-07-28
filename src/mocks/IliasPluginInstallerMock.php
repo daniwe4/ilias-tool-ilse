@@ -7,7 +7,7 @@ namespace CaT\Ilse\mocks;
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class IliasPluginInstallerMock implements \CaT\Ilse\interfaces\Plugin {
+class IliasPluginInstallerMock implements \CaT\Ilse\Interfaces\Plugin {
 	/**
 	 * @inheritdoc
 	 */
