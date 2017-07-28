@@ -107,7 +107,7 @@ class UpdateILIAS extends BaseExecuter
 		try
 		{
 			echo "Updating ILIAS Code from ".$this->git_url;
-			echo " (This could take a few minutes)...";
+			echo " (This could take a few minutes)...\n";
 			$this->git->cloneGitTo($this->git_url, $this->git_branch_name, $this->absolute_path);
 			echo "\t\t\tDone!\n";
 		}

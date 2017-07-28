@@ -6,7 +6,7 @@ namespace CaT\Ilse\Git;
  * 
  * @author Daniel Weise <daniel.weise@concepts-and-training.de>
  */
-interface IGitWrapper
+interface Git
 {
 		/**
 		 * Clone a repository by a given URL
@@ -37,20 +37,14 @@ interface IGitWrapper
 		 * @return boolean
 		 */
 		public function gitPull($remote, $branch);
-	 //  *
-	 //   * Set remote
-	 //   *
-	 //   * @param array     $remote
-	 //   *
-	 //   * @throws Exception
-	 //   * @return boolean
-		 
-	 //  public function gitSetRemote($remote);
-	 //  /**
-	 //   * Get remotes
-	 //   *
-	 //   * @throws Exception
-	 //   * @return ['name' => 'url']
-	 //   */
-	 // public function gitGetRemotes(); 
+
+		/**
+		 * Fetch a repo
+		 *
+		 * @param string    $remote
+		 *
+		 * @throws Exception
+		 * @return boolean
+		 */
+		public function gitFetch($remote);
 }

@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use CaT\Ilse\Executer;
 
 /**
- * Implementation of the install command
+ * Implementation of the reinstall command
  *
  * @author Daniel Weise 	<daniel.weise@concepts-and-training.de>
  */

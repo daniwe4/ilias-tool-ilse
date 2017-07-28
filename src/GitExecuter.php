@@ -2,8 +2,6 @@
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
 namespace CaT\Ilse;
-use Gitonomy\Git\Admin as Git;
-use Gitonomy\Git\Repository;
 use CaT\Ilse\Git\GitWrapper;
 /**
  * Implementation of the git interface.
@@ -26,30 +24,23 @@ class GitExecuter implements \CaT\Ilse\Interfaces\Git
 		assert('is_string($installation_path)');
 
 		$git = new GitWrapper($installation_path, $git_url);
-		$git->gitClone();
-		$git->gitCheckout($git_branch);
-	}
 
-	protected function fetch($repository)
-	{
-		$repository->run("fetch");
-	}
+		$cur_dir = getcwd();
+		if(is_dir($installation_path)) {
+			chdir($installation_path);
+		}
 
-	protected function checkoutBranch($repository, $git_branch)
-	{
-		$args = array($git_branch);
-		$repository->run("checkout", $args);
-	}
-
-	protected function pullBranch($repository, $git_branch)
-	{
-		$args = array("origin", $git_branch);
-		$repository->run("pull", $args);
-	}
-
-	protected function cloneRepository($installation_path, $git_url, $git_branch)
-	{
-		$args = array("--branch", $git_branch);
-		Git::cloneRepository($installation_path, $git_url, $args);
+		if(is_dir($installation_path)) {
+			if(!$git->gitIsGitRepo()) {
+				$git->gitClone();
+				return;
+			}
+			$git->gitFetch();
+			$git->gitCheckout($git_branch, false);
+			$git->gitPull("origin", $git_branch);
+		} else {
+			$git->gitClone();;
+		}
+		chdir($cur_dir);
 	}
 }

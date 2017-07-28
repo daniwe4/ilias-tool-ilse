@@ -2,7 +2,7 @@
 
 namespace CaT\Ilse\Git;
 
-use DWLibrary\Git\GitException;
+use CaT\Ilse\Git\GitException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -13,11 +13,6 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  */
 class GitWrapper implements Git
 {
-	/**
-	 * @var string
-	 */
-	protected $cwd;
-
 	/**
 	 * @var string
 	 */
@@ -32,6 +27,11 @@ class GitWrapper implements Git
 	 * @var string
 	 */
 	protected $repo_name;
+
+	/**
+	 * @var string[]
+	 */
+	protected $out = array();
 
 	/**
 	 * @var Symfony\Component\Process\Process
@@ -49,6 +49,7 @@ class GitWrapper implements Git
 		assert('is_string($path)');
 		assert('is_string($repo_url)');
 
+		$path = $this->removeTrailer($path);
 		$this->path = $path;
 		$this->repo_url = $repo_url;
 		$this->repo_name = $this->gitGetName($repo_url);
@@ -70,7 +71,27 @@ class GitWrapper implements Git
 		}
 		try
 		{
-			$this->gitExec("git clone", array($this->repo_url), $this->repo_name);
+			$this->gitExec("git clone", array($this->repo_url), "");
+		}
+		catch(GitException $e)
+		{
+			echo($e->__toString());
+		}
+		return true;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function gitFetch($remote="origin")
+	{
+		if(!$this->gitIsGitRepo())
+		{
+			throw new GitException("Fetch command on a non repo!");
+		}
+		try
+		{
+			$this->gitExec("git fetch", array($remote), $this->repo_name);
 		}
 		catch(GitException $e)
 		{
@@ -90,7 +111,7 @@ class GitWrapper implements Git
 		}
 		try
 		{
-			$this->gitExec("git pull", array($remote, $branch, $this->repo_name));
+			$this->gitExec("git pull", array($remote, $branch), $this->repo_name);
 		}
 		catch(GitException $e)
 		{
@@ -130,7 +151,7 @@ class GitWrapper implements Git
 	}
 
 	/**
-	 * 
+	 * Check whethet $this->path is a git repo
 	 */
 	public function gitIsGitRepo()
 	{
@@ -156,10 +177,12 @@ class GitWrapper implements Git
 		$clean = array_map(function ($i) {
 				return escapeshellarg(trim($i));
 			}, $params);
-
 		$this->process->setWorkingDirectory($this->path . '/' . $repo_name);
 		$this->process->setCommandLine($cmd." ".implode(' ', $clean));
-		$this->process->setTty(true);
+		if($cmd === "git clone")
+		{
+			$this->process->setTty(true);
+		}
 		$this->process->run();
 
 		if(!$this->process->isSuccessful())
@@ -167,12 +190,12 @@ class GitWrapper implements Git
 			throw new GitException("\nError while executing git command '" . $cmd . "'\n", $result);
 		}
 		$this->out = $this->process->getOutput();
-		return $this;
+		
 	}
 
 	/**
 	 * Get the repository path
-	 * 
+	 *
 	 * @return string
 	 */
 	public function gitGetPath()
@@ -191,6 +214,19 @@ class GitWrapper implements Git
 	}
 
 	/**
+	 * Remove the last piece of a url behind the last slash
+	 *
+	 * @param string 		$path
+	 *
+	 * @return string
+	 */
+	protected function removeTrailer($path)
+	{
+		assert('is_string($path)');
+		return substr($path, 0, strrpos($path, '/'));
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public function gitGetBranches()
@@ -201,11 +237,9 @@ class GitWrapper implements Git
 		}
 		catch(GitException $e)
 		{
-			echo($e);
+			echo($e->__toString());
 		}
-		$this->out = array_map(function ($i) {
-			return trim(str_replace("*", " ", $i));
-		},$this->out);
+		$this->out = explode(" ", trim(str_replace("*", " ", $this->out)));
 		return $this->out;
 	}
 }
