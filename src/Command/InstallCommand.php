@@ -38,8 +38,8 @@ class InstallCommand extends BaseCommand
 	protected function execute(InputInterface $in, OutputInterface $out)
 	{
 		$config_names = $in->getArgument("config_names");
-		$args = ["config" => $this->merge($config_names),
-				 "interactive" => $in->getOption("interactive")];
+		$args["config"] = $this->merge($config_names);
+		$args["interactive"] = $in->getOption("interactive");
 
 		$this->setup($args);
 		$this->start($args);

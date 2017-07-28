@@ -37,9 +37,8 @@ class UpdateCommand extends BaseCommand
 	protected function execute(InputInterface $in, OutputInterface $out)
 	{
 		$config_names = $in->getArgument("config_names");
-		$args = ["config" => $this->merge($config_names)];
+		$args["config"] = $this->merge($config_names);
 
-		//$this->setup($args);
 		$this->update($args);
 		$out->writeln("\t\t\t\tDone!");
 	}
