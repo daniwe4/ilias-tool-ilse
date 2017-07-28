@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS;
+namespace CaT\Ilse;
 use Gitonomy\Git\Admin as Git;
 use Gitonomy\Git\Repository;
 use CaT\Ilse\Git\GitWrapper;
@@ -11,7 +11,8 @@ use CaT\Ilse\Git\GitWrapper;
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  * @author Daniel Weise <daniel.weise@concepts-and-training.de>
  */
-class GitExecuter implements \CaT\InstILIAS\interfaces\Git
+
+class GitExecuter implements \CaT\Ilse\Interfaces\Git
 {
 	const URL_REG_EX = "/^(https:\/\/github\.com)/";
 

@@ -1,7 +1,7 @@
 <?php
 
-use \CaT\InstILIAS\Config\Categories;
-use \CaT\InstILIAS\YamlParser;
+use \CaT\Ilse\Config\Categories;
+use \CaT\Ilse\YamlParser;
 
 class CategoriesConfigTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
@@ -33,8 +33,8 @@ categories:
 	}
 
 	public function test_createCategoriesConfig() {
-		$config = $this->parser->read_config($this->yaml_string, "\\CaT\\InstILIAS\\Config\\Categories");
+		$config = $this->parser->read_config($this->yaml_string, "\\CaT\\Ilse\\Config\\Categories");
 
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Categories", $config);
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Categories", $config);
 	}
 }

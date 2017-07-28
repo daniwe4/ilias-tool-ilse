@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS\Config;
+namespace CaT\Ilse\Config;
 
 /**
  * Config for the languages to be used in ILIAS.

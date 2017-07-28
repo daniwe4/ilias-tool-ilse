@@ -1,7 +1,7 @@
 <?php
 
-use \CaT\InstILIAS\Config\OrgUnits;
-use \CaT\InstILIAS\YamlParser;
+use \CaT\Ilse\Config\OrgUnits;
+use \CaT\Ilse\YamlParser;
 
 class OrgUnitsConfigTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
@@ -33,8 +33,8 @@ orgunits:
 	}
 
 	public function test_createOrgUnitsConfig() {
-		$config = $this->parser->read_config($this->yaml_string, "\\CaT\\InstILIAS\\Config\\OrgUnits");
+		$config = $this->parser->read_config($this->yaml_string, "\\CaT\\Ilse\\Config\\OrgUnits");
 
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\OrgUnits", $config);
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\OrgUnits", $config);
 	}
 }

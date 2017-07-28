@@ -1,13 +1,13 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS;
+namespace CaT\Ilse;
 /**
  * implementation of plugin interface to install plugins
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class IliasPluginInstaller implements \CaT\InstILIAS\interfaces\Plugin {
+class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 	const PLUGIN_TMP_FOLDER = "plugin_tmp";
 	const PLUGIN_CLASS_PREFIX_IL = "il";
 	const PLUGIN_CLASS_PREFIX_CLASS = "class.";
@@ -57,7 +57,7 @@ class IliasPluginInstaller implements \CaT\InstILIAS\interfaces\Plugin {
 	/**
 	 * @inheritdoc
 	 */
-	public function install(\CaT\InstILIAS\Config\Plugin $plugin) {
+	public function install(\CaT\Ilse\Config\Plugin $plugin) {
 		$this->checkout($plugin->git()->url(), $plugin->git()->branch(), $this->temp_folder."/".$plugin->name());
 
 		$plugin_path = $this->getPluginPath($this->temp_folder, $plugin->name());
@@ -75,7 +75,7 @@ class IliasPluginInstaller implements \CaT\InstILIAS\interfaces\Plugin {
 		return array_keys($this->installed_plugins);
 	}
 
-	public function updateBranch(\CaT\InstILIAS\Config\Plugin $plugin) {
+	public function updateBranch(\CaT\Ilse\Config\Plugin $plugin) {
 		$plugin_path = $this->installed_plugins[$plugin->name()];
 		$this->checkout($plugin->git()->url(), $plugin->git()->branch(), $plugin_path);
 	}
@@ -83,7 +83,7 @@ class IliasPluginInstaller implements \CaT\InstILIAS\interfaces\Plugin {
 	/**
 	 * @inheritdoc
 	 */
-	public function isInstalled(\CaT\InstILIAS\Config\Plugin $plugin) {
+	public function isInstalled(\CaT\Ilse\Config\Plugin $plugin) {
 		if(empty($this->installed_plugins)) {
 			return false;
 		}
@@ -93,7 +93,7 @@ class IliasPluginInstaller implements \CaT\InstILIAS\interfaces\Plugin {
 	/**
 	 * @inheritdoc
 	 */
-	public function update(\CaT\InstILIAS\Config\Plugin $plugin) {
+	public function update(\CaT\Ilse\Config\Plugin $plugin) {
 		$pl = $this->getPluginObject($plugin->name());
 
 		if($this->needsUpdate($pl)) {
@@ -106,7 +106,7 @@ class IliasPluginInstaller implements \CaT\InstILIAS\interfaces\Plugin {
 	/**
 	 * @inheritdoc
 	 */
-	public function activate(\CaT\InstILIAS\Config\Plugin $plugin) {
+	public function activate(\CaT\Ilse\Config\Plugin $plugin) {
 		$pl = $this->getPluginObject($plugin->name());
 
 		if($this->needsUpdate($pl)) {
@@ -123,7 +123,7 @@ class IliasPluginInstaller implements \CaT\InstILIAS\interfaces\Plugin {
 	/**
 	 * @inheritdoc
 	 */
-	public function deactivate(\CaT\InstILIAS\Config\Plugin $plugin) {
+	public function deactivate(\CaT\Ilse\Config\Plugin $plugin) {
 		$pl = $this->getPluginObject($plugin->name());
 
 		if($pl->isActive()) {
@@ -136,7 +136,7 @@ class IliasPluginInstaller implements \CaT\InstILIAS\interfaces\Plugin {
 	/**
 	 * @inheritdoc
 	 */
-	public function updateLanguage(\CaT\InstILIAS\Config\Plugin $plugin) {
+	public function updateLanguage(\CaT\Ilse\Config\Plugin $plugin) {
 		$pl = $this->getPluginObject($plugin->name());
 		$pl->updateLanguages();
 	}
@@ -181,7 +181,7 @@ class IliasPluginInstaller implements \CaT\InstILIAS\interfaces\Plugin {
 		assert('is_string($git_branch)');
 		assert('is_string($temp_folder)');
 
-		$git = new \CaT\InstILIAS\GitExecuter;
+		$git = new \CaT\Ilse\GitExecuter;
 
 		try {
 			$git->cloneGitTo($git_url, $git_branch, $temp_folder);

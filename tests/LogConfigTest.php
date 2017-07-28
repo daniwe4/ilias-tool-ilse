@@ -1,6 +1,6 @@
 <?php
 
-use \CaT\InstILIAS\Config\Log;
+use \CaT\Ilse\Config\Log;
 
 class LogConfigTest extends PHPUnit_Framework_TestCase{
 	public function test_not_enough_params() {

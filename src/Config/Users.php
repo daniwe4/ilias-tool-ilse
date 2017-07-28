@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS\Config;
+namespace CaT\Ilse\Config;
 
 /**
  * Configuration for User Accounts.
@@ -22,7 +22,7 @@ class Users extends Base {
 			( "registration" => array("int", false)
 			, "link_lifetime" => array("int", false)
 			, "required_fields" => array(array("string"), true)
-			, "users" => array(array("\\CaT\\InstILIAS\\Config\\User"), true)
+			, "users" => array(array("\\CaT\\Ilse\\Config\\User"), true)
 			);
 	}
 

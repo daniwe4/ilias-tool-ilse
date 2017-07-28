@@ -1,7 +1,7 @@
 <?php
 
-use \CaT\InstILIAS\Config\General;
-use \CaT\InstILIAS\YamlParser;
+use \CaT\Ilse\Config\General;
+use \CaT\Ilse\YamlParser;
 
 class GeneralConfigTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
@@ -219,30 +219,30 @@ learning_progress:
 	}
 
 	public function test_createIliasConfig() {
-		$config = $this->parser->read_config($this->yaml_string, "\\CaT\\InstILIAS\\Config\\General");
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\General", $config);
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Client", $config->client());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\DB", $config->database());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Language", $config->language());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Server", $config->server());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Setup", $config->setup());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Tools", $config->tools());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Log", $config->log());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\GitBranch", $config->git_branch());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Categories", $config->category());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\OrgUnits", $config->orgunit());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Roles", $config->role());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\LDAP", $config->ldap());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Plugins", $config->plugin());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\HTTPSAutoDetect", $config->httpsAutoDetect());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\OrgunitTypes", $config->orgunitType());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\OrgunitTypeAssignments", $config->orgunitTypeAssignment());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Users", $config->user());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\PasswordSettings", $config->passwordSettings());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Editor", $config->editor());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\JavaServer", $config->javaServer());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Certificate", $config->certificate());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Soap", $config->soap());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\LearningProgress", $config->learningProgress());
+		$config = $this->parser->read_config($this->yaml_string, "\\CaT\\Ilse\\Config\\General");
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\General", $config);
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Client", $config->client());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\DB", $config->database());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Language", $config->language());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Server", $config->server());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Setup", $config->setup());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Tools", $config->tools());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Log", $config->log());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\GitBranch", $config->git_branch());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Categories", $config->category());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\OrgUnits", $config->orgunit());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Roles", $config->role());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\LDAP", $config->ldap());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Plugins", $config->plugin());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\HTTPSAutoDetect", $config->httpsAutoDetect());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\OrgunitTypes", $config->orgunitType());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\OrgunitTypeAssignments", $config->orgunitTypeAssignment());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Users", $config->user());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\PasswordSettings", $config->passwordSettings());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Editor", $config->editor());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\JavaServer", $config->javaServer());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Certificate", $config->certificate());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Soap", $config->soap());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\LearningProgress", $config->learningProgress());
 	}
 }

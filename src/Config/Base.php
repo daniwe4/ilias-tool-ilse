@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS\Config;
+namespace CaT\Ilse\Config;
 
 /**
  * Base class for all configs.
@@ -124,7 +124,7 @@ abstract class Base {
 			$ok = $this->checkArray($key, $type, $value, $optional);
 		}
 		else {
-			assert('is_subclass_of($type, "\\CaT\\InstILIAS\\Config\\Base")');
+			assert('is_subclass_of($type, "\\CaT\\Ilse\\Config\\Base")');
 			$ok = $value instanceof $type;
 		}
 

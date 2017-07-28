@@ -1,13 +1,13 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS;
+namespace CaT\Ilse;
 /**
  * checks requirements for ILIAS installation
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class IliasRequirementChecker implements \CaT\InstILIAS\interfaces\RequirementChecker {
+class IliasRequirementChecker implements \CaT\Ilse\Interfaces\RequirementChecker {
 	/**
 	 * @inheritdocs
 	 */
@@ -65,7 +65,7 @@ class IliasRequirementChecker implements \CaT\InstILIAS\interfaces\RequirementCh
 		assert('is_string($phpversion)');
 		assert('is_string($branch_name)');
 
-		if($phpversion >= "7.0" && $branch_name != "trunk") {
+		if($phpversion >= "7.1" && $branch_name != "trunk") {
 			return false;
 		}
 

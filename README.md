@@ -1,9 +1,6 @@
-[![Build Status](https://travis-ci.org/conceptsandtraining/InstILIAS.svg?branch=trunk)](https://travis-ci.org/conceptsandtraining/InstILIAS)
-[![Scrutinizer](https://scrutinizer-ci.com/g/conceptsandtraining/InstILIAS/badges/quality-score.png?b=trunk)](https://scrutinizer-ci.com/g/conceptsandtraining/InstILIAS)
-[![Coverage](https://scrutinizer-ci.com/g/conceptsandtraining/InstILIAS/badges/coverage.png?b=trunk)](https://scrutinizer-ci.com/g/conceptsandtraining/InstILIAS)
 [![Software License](https://img.shields.io/aur/license/yaourt.svg?style=round-square)](LICENSE.md)
 
-# InstILIAS
+# ilse
 **A Command Line Installation Script for [ILIAS](https://github.com/ILIAS-eLearning/ILIAS)**
 
 ## Usage
@@ -14,12 +11,13 @@
 * Zip and Unzip
 * ImageMagick
 * Composer
+* git 2.1.4 or higher
 ```
 ### Installation
 ```
 $ cd DESTINATION_FOLDER
-$ git clone https://github.com/conceptsandtraining/InstILIAS.git
-$ cd InstILIAS
+$ git clone https://github.com/conceptsandtraining/ilias-tool-ilse.git ilse
+$ cd ilse
 $ composer install
 ```
 
@@ -47,7 +45,7 @@ For new installation of ILIAS you need these configuration entries.
 ```
 
 ### Re- / Installation of ILIAS
-With InstILIAS it´s possible to install a new ILIAS or drop your old an install in one step.
+With ilse it´s possible to install a new ILIAS or drop your old an install in one step.
 For both it is possible to run the installation in a non interactiv mode.
 If you would use this, just add the second optional parameter. Value of the parameter is "non_interactiv".
 

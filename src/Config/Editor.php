@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS\Config;
+namespace CaT\Ilse\Config;
 
 /**
  * Configuration for TinyMCE.
@@ -9,7 +9,7 @@ namespace CaT\InstILIAS\Config;
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  *
  * @method int enableTinymce()
- * @method \\CaT\\InstILIAS\\Config\\Category repoPageEditor()
+ * @method \\CaT\\Ilse\\Config\\Category repoPageEditor()
  */
 class Editor extends Base {
 	/**
@@ -18,7 +18,7 @@ class Editor extends Base {
 	public static function fields() {
 		return array
 			( "enable_tinymce" => array("int", true)
-			, "repo_page_editor" =>array("\\CaT\\InstILIAS\\Config\\RepoPageEditor", true)
+			, "repo_page_editor" =>array("\\CaT\\Ilse\\Config\\RepoPageEditor", true)
 			);
 	}
 }

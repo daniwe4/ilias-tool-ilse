@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\InstILIAS\Configurators;
+namespace CaT\Ilse\Configurators;
 
 /**
  * Configurate ILIAS editor part
@@ -30,9 +30,9 @@ class Editor {
 	/**
 	 * Activate the TinyMCE Editor
 	 *
-	 * @param \CaT\InstILIAS\Config\Editor $editor
+	 * @param \CaT\Ilse\Config\Editor $editor
 	 */
-	public function tinyMCE(\CaT\InstILIAS\Config\Editor $editor) {
+	public function tinyMCE(\CaT\Ilse\Config\Editor $editor) {
 		$obj_id = $this->getObjIdByType("adve");
 
 		$object = \ilObjectFactory::getInstanceByObjId($obj_id);
@@ -49,9 +49,9 @@ class Editor {
 	/**
 	 * Activate the repository page editor
 	 *
-	 * @param \CaT\InstILIAS\Config\Editor $editor
+	 * @param \CaT\Ilse\Config\Editor $editor
 	 */
-	public function repoPageEditor(\CaT\InstILIAS\Config\Editor $editor) {
+	public function repoPageEditor(\CaT\Ilse\Config\Editor $editor) {
 			$repoPageEdit = $editor->repoPageEditor();
 
 			$buttons = \ilPageContentGUI::_getCommonBBButtons();
