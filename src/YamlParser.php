@@ -105,7 +105,7 @@ class YamlParser implements \CaT\Ilse\Interfaces\Parser {
 			return $baseValue;
 		} else if(!array_key_exists($key, $yaml) && !$optional) {
 			echo "Required configuration entry \"".$path.":".$key."\" was not found. Please check your config.yaml";
-			die(1);
+			exit(1);
 		}
 
 		return $yaml[$key];

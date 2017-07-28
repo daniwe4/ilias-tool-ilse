@@ -187,7 +187,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 			$git->cloneGitTo($git_url, $git_branch, $temp_folder);
 		} catch(\RuntimeException $e) {
 			echo $e->getMessage();
-			die(1);
+			exit(1);
 		}
 	}
 
@@ -252,7 +252,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 
 		if(!is_dir($temp_folder."/".$files[0])) {
 			echo "There is no plugin folder in plugin temp folder.";
-			die(1);
+			exit(1);
 		}
 
 		return $files[0];
