@@ -1,8 +1,8 @@
 <?php
 
-namespace CaT\Ilse\Git;
+namespace CaT\Ilse\GitWrapper;
 
-use CaT\Ilse\Git\GitException;
+use CaT\Ilse\GitWrapper\GitException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -27,11 +27,6 @@ class GitWrapper implements Git
 	 * @var string
 	 */
 	protected $repo_name;
-
-	/**
-	 * @var string[]
-	 */
-	protected $out = array();
 
 	/**
 	 * @var Symfony\Component\Process\Process
@@ -187,7 +182,7 @@ class GitWrapper implements Git
 		{
 			throw new GitException("\nError while executing git command '" . $cmd . "'\n", $result);
 		}
-		$this->out = $this->process->getOutput();
+		return $this->process->getOutput();
 		
 	}
 
@@ -231,12 +226,12 @@ class GitWrapper implements Git
 	{
 		try
 		{
-			$this->gitExec("git branch", array(), $this->repo_name);
+			$out = $this->gitExec("git branch", array(), $this->repo_name);
+			return explode(" ", trim(str_replace("*", " ", $out)));
 		}
 		catch(GitException $e)
 		{
 			echo($e->__toString());
 		}
-		return explode(" ", trim(str_replace("*", " ", $this->out)));
 	}
 }

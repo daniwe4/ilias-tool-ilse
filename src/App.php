@@ -4,7 +4,7 @@
 namespace CaT\Ilse;
 
 use Symfony\Component\Console\Application;
-use CaT\Ilse\GitExecuter;
+use CaT\Ilse\GitWrapperExecuter;
 
 
 /**
