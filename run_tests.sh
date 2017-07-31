@@ -1,3 +1,3 @@
 #!/bin/sh
 
-phpunit --bootstrap=vendor/autoload.php tests
+phpunit --bootstrap=vendor/autoload.php tests/GitStandardTest.php

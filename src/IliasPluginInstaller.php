@@ -181,7 +181,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 		assert('is_string($git_branch)');
 		assert('is_string($temp_folder)');
 
-		$git = new \CaT\Ilse\GitExecuter;
+		$git = new \CaT\Ilse\GitWrapperExecuter;
 
 		try {
 			$git->cloneGitTo($git_url, $git_branch, $temp_folder);
