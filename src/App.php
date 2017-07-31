@@ -4,29 +4,25 @@
 namespace CaT\Ilse;
 
 use Symfony\Component\Console\Application;
-use CaT\Ilse\GitWrapperExecuter;
-
 
 /**
  * Do the main initializing
  */
 class App extends Application
 {
-	const I_P_GLOBAL_CONFIG 	= ".ilse/config";
+	const I_P_GLOBAL_CONFIG 	= ".ilse/ilias-configs";
+	const I_F_CONFIG_REPOS 		= ".ilse/configrepos.yaml";
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_CONFIG			= "https://github.com/conceptsandtraining/ilias-configs.git";
 	const I_R_BRANCH			= "master";
 	const I_D_WEB_DIR			= "data";
 
-	/**
-	 * @var CaT\Ilse\Interfaces\Path
-	 */
-	protected $path;
-
 	public function __construct(Interfaces\CommonPathes $path,
 								Interfaces\Merger $merger,
 								Interfaces\RequirementChecker $checker,
-								Interfaces\Git $git)
+								Interfaces\Git $git,
+								Interfaces\Parser $parser,
+								GitWrapper\Git $gw)
 	{
 		parent::__construct();
 
@@ -34,6 +30,9 @@ class App extends Application
 		$this->merger 	= $merger;
 		$this->checker 	= $checker;
 		$this->git 		= $git;
+		$this->parser 	= $parser;
+		$this->gw 		= $gw;
+
 		$this->initConfigRepo();
 		$this->initCommands();
 	}
@@ -52,7 +51,7 @@ class App extends Application
 	}
 
 	/**
-	 * Initialize the config repo in ~/.ilias-installer/config
+	 * Initialize the config repo in ~/.ilse/config
 	 */
 	protected function initConfigRepo()
 	{
@@ -60,10 +59,37 @@ class App extends Application
 
 		if(!is_dir($this->path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG))
 		{
-			$ge->cloneGitTo(self::I_R_CONFIG,
+			$ge->cloneGitTo($this->getConfigRepo(),
 							self::I_R_BRANCH,
 							$this->path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG
 							);
+		}
+	}
+
+	/**
+	 * Get repos from configrepos file
+	 */
+	protected function getConfigRepos()
+	{
+		if(!is_file($this->path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS))
+		{
+			throw new \Exception("File not found at " . self::I_F_CONFIG_REPOS);
+		}
+
+		return $this->parser->read($this->path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS);
+	}
+
+	/**
+	 * Get the config repo
+	 */
+	protected function getConfigRepo()
+	{
+		foreach($this->getConfigRepos()['repos'] as $repo)
+		{
+			if($this->gw->gitIsRemoteGitRepo($repo) === 0)
+			{
+				return $repo;
+			}
 		}
 	}
 }
