@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\InstILIAS\Configurators;
+namespace CaT\Ilse\Configurators;
 
 /**
  * Configurate ILIAS ldap part
@@ -23,9 +23,9 @@ class LDAP {
 	/**
 	 * configurates the LDAP server settings for login
 	 *
-	 * @param \CaT\InstILIAS\Config\LDAP $ldap_config
+	 * @param \CaT\Ilse\Config\LDAP $ldap_config
 	 */
-	public function configureLDAPServer(\CaT\InstILIAS\Config\LDAP $ldap_config) {
+	public function configureLDAPServer(\CaT\Ilse\Config\LDAP $ldap_config) {
 		$server = new \ilLDAPServer(0);
 
 		$server->toggleActive(1);
@@ -62,7 +62,7 @@ class LDAP {
 		$mapping->save();
 	}
 
-	public function mapLDAPValues(\CaT\InstILIAS\Config\LDAP $ldap_config) {
+	public function mapLDAPValues(\CaT\Ilse\Config\LDAP $ldap_config) {
 		$server_id = \ilLDAPServer::_getFirstServer();
 		$mapping = \ilLDAPAttributeMapping::_getInstanceByServerId($server_id);
 

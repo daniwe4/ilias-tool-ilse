@@ -1,6 +1,6 @@
 <?php
 
-use \CaT\InstILIAS\Config\HTTPSAutoDetect;
+use \CaT\Ilse\Config\HTTPSAutoDetect;
 
 class HTTPSAutoDetectConfigTest extends PHPUnit_Framework_TestCase{
 	public function test_not_enough_params() {

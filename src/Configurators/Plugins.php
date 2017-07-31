@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\InstILIAS\Configurators;
+namespace CaT\Ilse\Configurators;
 
 /**
  * Configurate ILIAS plugins part
@@ -26,8 +26,8 @@ class Plugins {
 	/**
 	 * @inheritdoc
 	 */
-	public function installPlugins(\CaT\InstILIAS\Config\Plugins $plugins) {
-		$plugin_installer = new \CaT\InstILIAS\IliasPluginInstaller($this->absolute_path, $this->gDB);
+	public function installPlugins(\CaT\Ilse\Config\Plugins $plugins) {
+		$plugin_installer = new \CaT\Ilse\IliasPluginInstaller($this->absolute_path, $this->gDB);
 		foreach ($plugins->plugins() as $plugin) {
 			if(!$plugin_installer->isInstalled($plugin)) {
 				$plugin_installer->install($plugin);
@@ -42,8 +42,8 @@ class Plugins {
 	/**
 	 * @inheritdoc
 	 */
-	public function activatePlugins(\CaT\InstILIAS\Config\Plugins $plugins) {
-		$plugin_installer = new \CaT\InstILIAS\IliasPluginInstaller($this->absolute_path, $this->gDB);
+	public function activatePlugins(\CaT\Ilse\Config\Plugins $plugins) {
+		$plugin_installer = new \CaT\Ilse\IliasPluginInstaller($this->absolute_path, $this->gDB);
 		foreach ($plugins->plugins() as $plugin) {
 			$plugin_installer->activate($plugin);
 			$plugin_installer->updateLanguage($plugin);
@@ -54,8 +54,8 @@ class Plugins {
 	/**
 	 * @inheritdoc
 	 */
-	public function updatePlugins(\CaT\InstILIAS\Config\Plugins $plugins) {
-		$plugin_installer = new \CaT\InstILIAS\IliasPluginInstaller($this->absolute_path, $this->gDB);
+	public function updatePlugins(\CaT\Ilse\Config\Plugins $plugins) {
+		$plugin_installer = new \CaT\Ilse\IliasPluginInstaller($this->absolute_path, $this->gDB);
 		foreach ($plugins->plugins() as $plugin) {
 			$plugin_installer->update($plugin);
 			$plugin_installer->updateLanguage($plugin);
@@ -66,10 +66,10 @@ class Plugins {
 	/**
 	 * Uninstalls a plugin
 	 *
-	 * @param \CaT\InstILIAS\Config\Plugins 	$plugins
+	 * @param \CaT\Ilse\Config\Plugins 	$plugins
 	 */
-	public function uninstallPlugins(\CaT\InstILIAS\Config\Plugins $plugins) {
-		$plugin_installer = new \CaT\InstILIAS\IliasPluginInstaller($this->absolute_path, $this->gDB);
+	public function uninstallPlugins(\CaT\Ilse\Config\Plugins $plugins) {
+		$plugin_installer = new \CaT\Ilse\IliasPluginInstaller($this->absolute_path, $this->gDB);
 		$config_plugin = array();
 
 		if($plugins !== null) {

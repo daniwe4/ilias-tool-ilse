@@ -1,7 +1,7 @@
 <?php
 
-use \CaT\InstILIAS\Config\Roles;
-use \CaT\InstILIAS\YamlParser;
+use \CaT\Ilse\Config\Roles;
+use \CaT\Ilse\YamlParser;
 
 class RolesConfigTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
@@ -28,13 +28,13 @@ roles:
 	}
 
 	public function test_createIliasConfig() {
-		$config = $this->parser->read_config($this->yaml_string, "\\CaT\\InstILIAS\\Config\\Roles");
+		$config = $this->parser->read_config($this->yaml_string, "\\CaT\\Ilse\\Config\\Roles");
 
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\Roles", $config);
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Roles", $config);
 		$this->assertInternalType("array", $config->roles());
 
 		foreach ($config->roles() as $key => $value) {
-			$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\role", $value);
+			$this->assertInstanceOf("\\CaT\\Ilse\\Config\\role", $value);
 		}
 	}
 }

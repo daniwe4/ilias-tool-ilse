@@ -1,6 +1,6 @@
 <?php
 
-use \CaT\InstILIAS\Config\Plugin;
+use \CaT\Ilse\Config\Plugin;
 
 class PluginConfigTest extends PHPUnit_Framework_TestCase {
 	public function test_not_enough_params() {
@@ -26,7 +26,7 @@ class PluginConfigTest extends PHPUnit_Framework_TestCase {
 	public function _test_valid_PluginConfig($name, $git) {
 		$config = new Plugin($name, $git);
 		$this->assertEquals($name, $config->name());
-		$this->assertInstanceOf("\\CaT\\InstILIAS\\Config\\GitBranch", $config->git());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\GitBranch", $config->git());
 	}
 
 	public function _test_invalid_PluginConfig($name, $git) {
@@ -51,7 +51,7 @@ class PluginConfigTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function gitBranchProvider() {
-		return array(array(new \CaT\InstILIAS\Config\GitBranch("url", "branch", ""), true)
+		return array(array(new \CaT\Ilse\Config\GitBranch("url", "branch", ""), true)
 					, array(4, false)
 					, array(true, false)
 					, array(array(), false)

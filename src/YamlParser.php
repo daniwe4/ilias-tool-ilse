@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS;
+namespace CaT\Ilse;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -10,7 +10,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class YamlParser implements \CaT\InstILIAS\interfaces\Parser {
+class YamlParser implements \CaT\Ilse\Interfaces\Parser {
 	/**
 	 * @inheritdoc
 	 */
@@ -46,7 +46,7 @@ class YamlParser implements \CaT\InstILIAS\interfaces\Parser {
 			$type_val = $type[0];
 			$optional = $type[1];
 
-			if(is_subclass_of($type_val, "\\CaT\\InstILIAS\\Config\\Base") ) {
+			if(is_subclass_of($type_val, "\\CaT\\Ilse\\Config\\Base") ) {
 				$value = $this->yamlValue($yaml, $key, $path, $optional);
 
 				if(!$optional || ($optional && $value !== null)) {
@@ -66,7 +66,7 @@ class YamlParser implements \CaT\InstILIAS\interfaces\Parser {
 				assert('count($type_val) === 1');
 				$content = $type_val[0];
 				
-				if(is_subclass_of($content, "\\CaT\\InstILIAS\\Config\\Base")) {
+				if(is_subclass_of($content, "\\CaT\\Ilse\\Config\\Base")) {
 					$sub_vals = array();
 					$new_path = ($path == "") ? $key : $path.":".$key;
 					foreach ($this->yamlValue($yaml, $key, $new_path, $optional, array()) as $key => $value) {

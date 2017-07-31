@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS\Config;
+namespace CaT\Ilse\Config;
 
 /**
  * Configuration for Roles.
@@ -16,7 +16,7 @@ class Roles extends Base {
 	 */
 	public static function fields() {
 		return array
-			( "roles"			=> array(array("\\CaT\\InstILIAS\\Config\\Role"), false)
+			( "roles"			=> array(array("\\CaT\\Ilse\\Config\\Role"), false)
 			);
 	}
 }

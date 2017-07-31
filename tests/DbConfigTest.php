@@ -1,6 +1,6 @@
 <?php
 
-use \CaT\InstILIAS\Config\DB;
+use \CaT\Ilse\Config\DB;
 
 class DbConfigTest extends PHPUnit_Framework_TestCase {
 	public function test_not_enough_params() {

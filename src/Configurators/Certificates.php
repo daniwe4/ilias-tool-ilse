@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\InstILIAS\Configurators;
+namespace CaT\Ilse\Configurators;
 
 /**
  * Configurate ILIAS certificate part
@@ -15,9 +15,9 @@ class Certificates {
 	/**
 	 * Enable or disable certifcates
 	 *
-	 * @param \CaT\InstILIAS\Config\Certificate $certificate
+	 * @param \CaT\Ilse\Config\Certificate $certificate
 	 */
-	public function certificate(\CaT\InstILIAS\Config\Certificate $certificate) {
+	public function certificate(\CaT\Ilse\Config\Certificate $certificate) {
 		$certificate_settings = new \ilSetting("certificate");
 		$certificate_settings->set("active", $certificate->enable());
 	}
