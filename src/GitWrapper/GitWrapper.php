@@ -34,12 +34,17 @@ class GitWrapper implements Git
 	protected $process;
 
 	/**
+	 * @var string
+	 */
+	protected $out;
+
+	/**
 	 * Constructor of the class GitWrapper
 	 *
 	 * @param string    $path
 	 * @param string    $repo_url
 	 */
-	public function __construct($path, $repo_url)
+	public function __construct($path = "", $repo_url = "")
 	{
 		assert('is_string($path)');
 		assert('is_string($repo_url)');
@@ -71,7 +76,7 @@ class GitWrapper implements Git
 		}
 		catch(GitException $e)
 		{
-			echo($e->__toString());
+			return false;
 		}
 		return true;
 	}
@@ -147,11 +152,21 @@ class GitWrapper implements Git
 	}
 
 	/**
-	 * Check whethet $this->path is a git repo
+	 * Check whether $this->path is a git repo
 	 */
 	public function gitIsGitRepo()
 	{
 		return is_dir($this->path.'/'.$this->repo_name."/.git");
+	}
+
+	/**
+	 * Check whether $url is a remote git repo
+	 *
+	 * @param string 	$url
+	 */
+	public function gitIsRemoteGitRepo($url)
+	{
+		return $this->gitExec("git ls-remote", array($url, "-h"), "");
 	}
 
 	/**
@@ -177,13 +192,13 @@ class GitWrapper implements Git
 		$this->process->setWorkingDirectory($this->path . '/' . $repo_name);
 		$this->process->setCommandLine($cmd." ".implode(' ', $clean));
 		$this->process->run();
+		$this->out = $this->process->getOutput();
 
 		if(!$this->process->isSuccessful())
 		{
-			throw new GitException("\nError while executing git command '" . $cmd . "'\n", $result);
+			return 1;
 		}
-		return $this->process->getOutput();
-		
+		return 0;
 	}
 
 	/**
@@ -226,8 +241,8 @@ class GitWrapper implements Git
 	{
 		try
 		{
-			$out = $this->gitExec("git branch", array(), $this->repo_name);
-			return explode(" ", trim(str_replace("*", " ", $out)));
+			$this->gitExec("git branch", array(), $this->repo_name);
+			return explode(" ", trim(str_replace("*", " ", $this->out)));
 		}
 		catch(GitException $e)
 		{
