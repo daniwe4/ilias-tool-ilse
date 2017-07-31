@@ -26,12 +26,10 @@ class GitExecuter implements \CaT\Ilse\Interfaces\Git
 		$git = new GitWrapper($installation_path, $git_url);
 
 		$cur_dir = getcwd();
-
 		if(is_dir($installation_path)) {
 			chdir($installation_path);
 			if(!$git->gitIsGitRepo()) {
-				$git->gitClone();
-				return;
+				return $git->gitClone();
 			}
 			$git->gitFetch();
 			$git->gitCheckout($git_branch, false);
@@ -40,5 +38,6 @@ class GitExecuter implements \CaT\Ilse\Interfaces\Git
 			$git->gitClone();;
 		}
 		chdir($cur_dir);
+		return true;
 	}
 }
