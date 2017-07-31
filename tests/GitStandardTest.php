@@ -13,4 +13,9 @@ class GitStandardTest extends GitTest
 	{
 		return new \CaT\Ilse\Git\GitWrapper(sys_get_temp_dir(), "https://github.com/daniel4w/DWLibrary.git");
 	}
+
+	public function getExceptionImplementation()
+	{
+		return new \CaT\Ilse\Git\GitWrapper("www/falscheAdresse/de", "httpsss://testbla");
+	}
 }

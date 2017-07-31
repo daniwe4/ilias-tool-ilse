@@ -71,6 +71,7 @@ class GitWrapper implements Git
 		}
 		try
 		{
+			$this->process->setTty(true);
 			$this->gitExec("git clone", array($this->repo_url), "");
 		}
 		catch(GitException $e)
@@ -177,12 +178,9 @@ class GitWrapper implements Git
 		$clean = array_map(function ($i) {
 				return escapeshellarg(trim($i));
 			}, $params);
+
 		$this->process->setWorkingDirectory($this->path . '/' . $repo_name);
 		$this->process->setCommandLine($cmd." ".implode(' ', $clean));
-		if($cmd === "git clone")
-		{
-			$this->process->setTty(true);
-		}
 		$this->process->run();
 
 		if(!$this->process->isSuccessful())
@@ -239,7 +237,6 @@ class GitWrapper implements Git
 		{
 			echo($e->__toString());
 		}
-		$this->out = explode(" ", trim(str_replace("*", " ", $this->out)));
-		return $this->out;
+		return explode(" ", trim(str_replace("*", " ", $this->out)));
 	}
 }

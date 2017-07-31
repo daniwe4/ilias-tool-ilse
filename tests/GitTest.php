@@ -17,13 +17,15 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	 * @var CaT\Ilse\Git\Git
 	 */
 	protected static $gw;
+	protected static $gwe;
 
 	/**
 	 * Setup the testing environment
 	 */
 	public function setUp()
 	{
-		self::$gw = $this->getImplementation();
+		self::$gw 	= $this->getImplementation();
+		self::$gwe 	= $this->getExceptionImplementation();
 	}
 
 	/**
@@ -72,6 +74,74 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	{
 		$branches = self::$gw->gitGetBranches();
 		$this->assertContains("test", $branches);
+	}
+
+	/**
+	 * Test gitCloneException
+	 */
+	public function test_gitCloneException()
+	{
+		try
+		{
+			self::$gw->gitClone();
+			$this->assertFalse("Should have raised.");
+		}
+		catch(\Cat\Ilse\Git\GitException $e)
+		{
+			$this->assertTrue(true, "throws GitException");
+		}
+	}
+
+	/**
+	 * Test gitFetchException
+	 */
+	public function test_gitFetchException()
+	{
+		try
+		{
+			self::$gwe->gitFetch();
+			$this->assertFalse("Should have raised.");
+		}
+		catch(\Cat\Ilse\Git\GitException $e)
+		{
+			$this->assertTrue(true, "throws GitException");
+		}
+	}
+
+	/**
+	 * Test gitPullException
+	 */
+	public function test_gitPullException()
+	{
+		try
+		{
+			self::$gwe->gitPull();
+			$this->assertFalse("Should have raised.");
+		}
+		catch(\Cat\Ilse\Git\GitException $e)
+		{
+			$this->assertTrue(true, "throws GitException");
+		}
+	}
+
+	/**
+	 * Test gitCheckoutException
+	 */
+	public function test_gitCheckoutException()
+	{
+		try
+		{
+			foreach($this->getCheckoutProvider() as $provider)
+			{
+				$result = self::$gw->gitCheckout($provider[0], $provider[1]);
+				$this->assertEquals($result, $provider[2]);
+			}
+			$this->assertFalse("Should have raised.");
+		}
+		catch(\Cat\Ilse\Git\GitException $e)
+		{
+			$this->assertTrue(true, "throws GitException");
+		}
 	}
 
 	/**
