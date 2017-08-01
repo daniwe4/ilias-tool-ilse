@@ -26,10 +26,17 @@ class App extends Application
 								GitWrapper\Git $gw)
 	{
 		parent::__construct();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9050dfdf54a686a1f04798d25a91ed9cbca9e820
 		$this->initAppFolder($path);
 		$this->initConfigRepo($path, $paser);
 		$this->initCommands($path, $merger, $checker, $git);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9050dfdf54a686a1f04798d25a91ed9cbca9e820
 	}
 
 	/**
@@ -67,11 +74,17 @@ class App extends Application
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Initialize the config repo in ~/.ilias-installer/config
 	 *
 	 * @param string 				$path
 	 * @param GitWrapper\Git 		$gw
 	 * @param Interfaces\Parser 	$parser
+=======
+	 * Initialize the config repo in ~/.ilse/config
+	 *
+	 * @param string 		$path
+>>>>>>> 9050dfdf54a686a1f04798d25a91ed9cbca9e820
 	 */
 	protected function initConfigRepo($path, $gw, $parser)
 	{
