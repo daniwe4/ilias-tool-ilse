@@ -76,11 +76,12 @@ abstract class BaseExecuter
 		$this->checker 			= $checker;
 		$this->git 				= $git;
 		$this->http_path 		= $this->gc->server()->httpPath();
-		$this->absolute_path 	= $this->gc->server()->absolute_path();
+		$this->absolute_path 	= $this->gc->server()->absolutePath();
 		$this->data_path 		= $this->gc->client()->dataDir();
 		$this->client_id 		= $this->gc->client()->name();
 		$this->git_url 			= $this->gc->gitBranch()->url();
 		$this->git_branch_name 	= $this->gc->gitBranch()->branch();
+		$this->error_log 		= $this->gc->log()->errorLog();
 		$this->web_dir 			= App::I_D_WEB_DIR;
 	}
 }

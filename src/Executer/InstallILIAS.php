@@ -49,6 +49,7 @@ class InstallILIAS extends BaseExecuter
 		{
 			include_once $this->absolute_path.'/libs/composer/vendor/autoload.php';
 		}
+
 	}
 
 	/**
@@ -65,6 +66,7 @@ class InstallILIAS extends BaseExecuter
 		$this->applyingUpdates();
 		$this->installLanguages();
 		$this->checkAfterInstall();
+		$this->setWWWData();
 	}
 
 	/**
@@ -184,5 +186,21 @@ class InstallILIAS extends BaseExecuter
 		}
 
 		echo "\nILIAS successfull installed.";
+	}
+
+	/**
+	 * Ensure all directorys owned by www-data
+	 */
+	protected function setWWWData()
+	{
+		$p = new Process("");
+		$pathes = [$this->data_path, $this->absolute_path, $this->error_log];
+
+		array_map(function ($path) use ($p) {
+			$p->setCommandLine("chown -R www-data:www-data ".$path);
+			$p->setTty(true);
+			$p->run();
+		}, $pathes);
+		
 	}
 }
