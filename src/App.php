@@ -28,7 +28,7 @@ class App extends Application
 		parent::__construct();
 
 		$this->initAppFolder($path);
-		$this->initConfigRepo($path, $gw, $paser);
+		$this->initConfigRepo($path, $gw, $parser);
 		$this->initCommands($path, $merger, $checker, $git);
 	}
 
