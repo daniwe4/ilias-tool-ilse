@@ -26,9 +26,8 @@ class App extends Application
 								GitWrapper\Git $gw)
 	{
 		parent::__construct();
-
 		$this->initAppFolder($path);
-		$this->initConfigRepo($path);
+		$this->initConfigRepo($path, $paser);
 		$this->initCommands($path, $merger, $checker, $git);
 
 	}
@@ -70,15 +69,17 @@ class App extends Application
 	/**
 	 * Initialize the config repo in ~/.ilias-installer/config
 	 *
-	 * @param string 		$path
+	 * @param string 				$path
+	 * @param GitWrapper\Git 		$gw
+	 * @param Interfaces\Parser 	$parser
 	 */
-	protected function initConfigRepo($path)
+	protected function initConfigRepo($path, $gw, $parser)
 	{
 		$ge = new GitExecuter();
 
 		if(!is_dir($path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG))
 		{
-			$ge->cloneGitTo($this->getConfigRepo(),
+			$ge->cloneGitTo($this->getConfigRepo($path, $gw, $parser),
 							self::I_R_BRANCH,
 							$path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG
 							);
@@ -87,25 +88,36 @@ class App extends Application
 
 	/**
 	 * Get repos from configrepos file
+	 *
+	 * @param string 				$path
+	 * @param Interfaces\Parser 	$parser
+	 *
+	 * @return string
 	 */
-	protected function getConfigRepos()
+	protected function getConfigRepos($path, $parser)
 	{
-		if(!is_file($this->path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS))
+		if(!is_file($path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS))
 		{
 			throw new \Exception("File not found at " . self::I_F_CONFIG_REPOS);
 		}
 
-		return $this->parser->read($this->path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS);
+		return $parser->read($path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS);
 	}
 
 	/**
 	 * Get the config repo
+	 *
+	 * @param string 				$path
+	 * @param GitWrapper\Git 		$gw
+	 * @param Interfaces\Parser 	$parser
+	 *
+	 * @return string
 	 */
-	protected function getConfigRepo()
+	protected function getConfigRepo($path, $gw, $parser)
 	{
-		foreach($this->getConfigRepos()['repos'] as $repo)
+		foreach($this->getConfigRepos($path, $parser)['repos'] as $repo)
 		{
-			if($this->gw->gitIsRemoteGitRepo($repo) === 0)
+			if($gw->gitIsRemoteGitRepo($repo) === 0)
 			{
 				return $repo;
 			}
