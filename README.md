@@ -22,9 +22,9 @@ $ composer install
 ```
 
 ### Configuration
-Ilias-installer get his config files from a github repo.  
-Specify the repos where ilse search for config files in `$HOMEDIR/.ilse/ilse_config.yaml`.  
-Use `ilse_config_default.yaml` as template.
+The Ilias-installer relies on a github-repository as the source of configuration files.  
+The corresponding repo-paths should be specified in `$HOMEDIR/.ilse/ilse_config.yaml`.  
+Please refer to `ilse_config_default.yaml` for the required layout.
    
 The name of the config file is always `ilse_config.yaml`.  
 Each config file is inside a directory that represents the customomer name.  
