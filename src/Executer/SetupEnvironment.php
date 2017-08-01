@@ -167,50 +167,54 @@ class SetupEnvironment extends BaseExecuter
 
 	/**
 	 * Check for valid php version
+	 *
+	 * @throws \Exception
 	 */
 	protected function checkPHPVersion()
 	{
 		if(!$this->checker->validPHPVersion(phpversion(), "5.4"))
 		{
-			echo "Your PHP Version is too old. Please update to 5.4 or higher.\n";
-			exit(1);
+			throw new \Exception("Your PHP Version is too old. Please update to 5.4 or higher.");
 		}
 	}
 
 	/**
 	 * Check for installed PDO
+	 *
+	 * @throws \Exception
 	 */
 	protected function checkPDO()
 	{
 		if(!$this->checker->pdoExist())
 		{
-			echo "PDO is not installed.\n";
-			exit(1);
+			throw new \Exception("PDO is not installed.");
 		}
 	}
 
 	/**
 	 * Check db connection
+	 *
+	 * @throws \Exception
 	 */
 	protected function checkDBConnection()
 	{
 		if(!$this->checker->databaseConnectable($this->gc->database()->host(), $this->gc->database()->user(), $this->gc->database()->password()))
 		{
-			echo "It's not possible to connect a MySQL database.\n";
-			echo "Please ensure you have a MySQL database installed or started.\n";
-			exit(1);
+
+			throw new \Exception("It's not possible to connect a MySQL database. Please ensure you have a MySQL database installed or started.");
 		}
 	}
 
 	/**
 	 * Check for valid php version for ILIAS branch
+	 *
+	 * @throws \Exception
 	 */
 	protected function validPhpForIliasBranch()
 	{
 		if(!$this->checker->phpVersionILIASBranchCompatible(phpversion(), $this->git_branch_name))
 		{
-			echo "Your PHP Version (".phpversion().") is not compatible to the selected branch (".$this->git_branch_name.").";
-			exit(1);
+			throw new \Exception("Your PHP Version (".phpversion().") is not compatible to the selected branch (".$this->git_branch_name.").");
 		}
 	}
 
@@ -226,7 +230,7 @@ class SetupEnvironment extends BaseExecuter
 			echo "\t\t\tDone!\n";
 		} catch(\RuntimeException $e) {
 			echo $e->getMessage();
-			exit(1);
+			throw $e;
 		}
 	}
 

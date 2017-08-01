@@ -104,18 +104,10 @@ class UpdateILIAS extends BaseExecuter
 	 */
 	protected function cloneILIAS()
 	{
-		try
-		{
-			echo "Updating ILIAS Code from ".$this->git_url;
-			echo " (This could take a few minutes)...\n";
-			$this->git->cloneGitTo($this->git_url, $this->git_branch_name, $this->absolute_path);
-			echo "\t\t\tDone!\n";
-		}
-		catch(\RuntimeException $e)
-		{
-			echo $e->getMessage();
-			exit(1);
-		}
+		echo "Updating ILIAS Code from ".$this->git_url;
+		echo " (This could take a few minutes)...";
+		$this->git->cloneGitTo($this->git_url, $this->git_branch_name, $this->absolute_path);
+		echo "\t\t\tDone!\n";
 	}
 
 	/**

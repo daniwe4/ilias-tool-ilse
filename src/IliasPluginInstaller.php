@@ -183,12 +183,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 
 		$git = new \CaT\Ilse\GitWrapperExecuter;
 
-		try {
-			$git->cloneGitTo($git_url, $git_branch, $temp_folder);
-		} catch(\RuntimeException $e) {
-			echo $e->getMessage();
-			die(1);
-		}
+		$git->cloneGitTo($git_url, $git_branch, $temp_folder);
 	}
 
 	/**
@@ -251,8 +246,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 		assert('count($files) == 1');
 
 		if(!is_dir($temp_folder."/".$files[0])) {
-			echo "There is no plugin folder in plugin temp folder.";
-			die(1);
+			throw new \InvalidArgumentException("There is no plugin folder in plugin temp folder.");
 		}
 
 		return $files[0];
