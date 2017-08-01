@@ -22,7 +22,7 @@ database:
     #ILIAS supports three database engines. InnoDB, MyISAM, .....
     engine: innodb
     #Encoding for database
-    encoding: utf8_general_ci
+    encoding: utf8_unicode_ci
     #Should a database be created. Possible option are 1 = create and 0 = no create
     create_db: 1
 language:
