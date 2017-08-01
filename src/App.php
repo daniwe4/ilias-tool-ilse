@@ -18,8 +18,6 @@ class App extends Application
 	const I_R_CONFIG			= "https://github.com/conceptsandtraining/ilias-configs.git";
 	const I_R_BRANCH			= "master";
 	const I_D_WEB_DIR			= "data";
-	const I_S_SUCCESS 			= 0;
-	const I_S_FAILURE 			= 1;
 
 	/**
 	 * @var CaT\Ilse\Interfaces\Path
@@ -33,55 +31,59 @@ class App extends Application
 	{
 		parent::__construct();
 
-		$this->path 	= $path;
-		$this->merger 	= $merger;
-		$this->checker 	= $checker;
-		$this->git 		= $git;
-
-		$this->initAppFolder();
-		$this->initConfigRepo();
-		$this->initCommands();
+		$this->initAppFolder($path);
+		$this->initConfigRepo($path);
+		$this->initCommands($path, $merger, $checker, $git);
 	}
 
 	/**
 	 * Initialize all commands, and add them to the app
+	 *
+	 * @param Interfaces\CommonPathes 		$path
+	 * @param Interfaces\Merger 			$merger
+	 * @param Interfaces\RequirementChecker $checker
+	 * @param Interfaces\Git 				$git
 	 */
-	protected function initCommands()
+	protected function initCommands(Interfaces\CommonPathes $path,
+									Interfaces\Merger $merger,
+									Interfaces\RequirementChecker $checker,
+									Interfaces\Git $git)
 	{
-		$this->add(new Command\UpdateCommand($this->path, $this->merger, $this->checker, $this->git));
-		$this->add(new Command\DeleteCommand($this->path, $this->merger, $this->checker, $this->git));
-		$this->add(new Command\UpdatePluginsCommand($this->path, $this->merger, $this->checker, $this->git));
-		$this->add(new Command\ReinstallCommand($this->path, $this->merger, $this->checker, $this->git));
-		$this->add(new Command\InstallCommand($this->path, $this->merger, $this->checker, $this->git));
-		$this->add(new Command\ConfigCommand($this->path, $this->merger, $this->checker, $this->git));
+		$this->add(new Command\UpdateCommand($path, $merger, $checker, $git));
+		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git));
+		$this->add(new Command\UpdatePluginsCommand($path, $merger, $checker, $git));
+		$this->add(new Command\ReinstallCommand($path, $merger, $checker, $git));
+		$this->add(new Command\InstallCommand($path, $merger, $checker, $git));
+		$this->add(new Command\ConfigCommand($path, $merger, $checker, $git));
 	}
 
 	/**
 	 * Checks whether the app folder exists otherwise create one
 	 *
-	 * @return int
+	 * @param string 		$path
 	 */
-	protected function initAppFolder()
+	protected function initAppFolder($path)
 	{
-		if(!is_dir($this->path->getHomeDir() . "/" . self::I_P_GLOBAL))
+		if(!is_dir($path->getHomeDir() . "/" . self::I_P_GLOBAL))
 		{
-			mkdir($this->path->getHomeDir() . "/" . self::I_P_GLOBAL, 0755);
+			mkdir($path->getHomeDir() . "/" . self::I_P_GLOBAL, 0755);
 		}
-		return self::I_S_SUCCESS;
 	}
 
 	/**
 	 * Initialize the config repo in ~/.ilias-installer/config
+	 *
+	 * @param string 		$path
 	 */
-	protected function initConfigRepo()
+	protected function initConfigRepo($path)
 	{
 		$ge = new GitExecuter();
 
-		if(!is_dir($this->path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG))
+		if(!is_dir($path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG))
 		{
 			$ge->cloneGitTo(self::I_R_CONFIG,
 							self::I_R_BRANCH,
-							$this->path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG
+							$path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG
 							);
 		}
 	}
