@@ -4,35 +4,31 @@
 namespace CaT\Ilse;
 
 use Symfony\Component\Console\Application;
-use CaT\Ilse\GitWrapperExecuter;
-
 
 /**
  * Do the main initializing
  */
 class App extends Application
 {
+	const I_P_GLOBAL_CONFIG 	= ".ilse/ilias-configs";
+	const I_F_CONFIG_REPOS 		= ".ilse/configrepos.yaml";
 	const I_P_GLOBAL 			= ".ilse";
-	const I_P_GLOBAL_CONFIG 	= ".ilse/config";
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_CONFIG			= "https://github.com/conceptsandtraining/ilias-configs.git";
 	const I_R_BRANCH			= "master";
 	const I_D_WEB_DIR			= "data";
 
-	/**
-	 * @var CaT\Ilse\Interfaces\Path
-	 */
-	protected $path;
-
 	public function __construct(Interfaces\CommonPathes $path,
 								Interfaces\Merger $merger,
 								Interfaces\RequirementChecker $checker,
-								Interfaces\Git $git)
+								Interfaces\Git $git,
+								Interfaces\Parser $parser,
+								GitWrapper\Git $gw)
 	{
 		parent::__construct();
 
 		$this->initAppFolder($path);
-		$this->initConfigRepo($path);
+		$this->initConfigRepo($path, $gw, $paser);
 		$this->initCommands($path, $merger, $checker, $git);
 	}
 
@@ -73,18 +69,58 @@ class App extends Application
 	/**
 	 * Initialize the config repo in ~/.ilias-installer/config
 	 *
-	 * @param string 		$path
+	 * @param string 				$path
+	 * @param GitWrapper\Git 		$gw
+	 * @param Interfaces\Parser 	$parser
 	 */
-	protected function initConfigRepo($path)
+	protected function initConfigRepo($path, $gw, $parser)
 	{
 		$ge = new GitExecuter();
 
 		if(!is_dir($path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG))
 		{
-			$ge->cloneGitTo(self::I_R_CONFIG,
+			$ge->cloneGitTo($this->getConfigRepo($path, $gw, $parser),
 							self::I_R_BRANCH,
 							$path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG
 							);
+		}
+	}
+
+	/**
+	 * Get repos from configrepos file
+	 *
+	 * @param string 				$path
+	 * @param Interfaces\Parser 	$parser
+	 *
+	 * @return string
+	 */
+	protected function getConfigRepos($path, $parser)
+	{
+		if(!is_file($path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS))
+		{
+			throw new \Exception("File not found at " . self::I_F_CONFIG_REPOS);
+		}
+
+		return $parser->read($path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS);
+	}
+
+	/**
+	 * Get the config repo
+	 *
+	 * @param string 				$path
+	 * @param GitWrapper\Git 		$gw
+	 * @param Interfaces\Parser 	$parser
+	 *
+	 * @return string
+	 */
+	protected function getConfigRepo($path, $gw, $parser)
+	{
+		foreach($this->getConfigRepos($path, $parser)['repos'] as $repo)
+		{
+			if($gw->gitIsRemoteGitRepo($repo) === 0)
+			{
+				return $repo;
+			}
 		}
 	}
 }

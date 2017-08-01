@@ -10,9 +10,12 @@ require_once(__DIR__."/vendor/autoload.php");
 
 error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE);
 
-$checker = new \CaT\Ilse\IliasRequirementChecker();
-$merger = new \CaT\Ilse\MergeConfigs();
-$path = new \CaT\Ilse\CommonPathes();
-$git = new \CaT\Ilse\GitExecuter();
-$app = new \CaT\Ilse\App($path, $merger, $checker, $git);
+$checker 	= new \CaT\Ilse\IliasRequirementChecker();
+$merger 	= new \CaT\Ilse\MergeConfigs();
+$path 		= new \CaT\Ilse\CommonPathes();
+$git 		= new \CaT\Ilse\GitExecuter();
+$parser 	= new \CaT\Ilse\YamlParser();
+$gw 		= new \CaT\Ilse\GitWrapper\GitWrapper();
+$app 		= new \CaT\Ilse\App($path, $merger, $checker, $git, $parser, $gw);
+
 $app->run();

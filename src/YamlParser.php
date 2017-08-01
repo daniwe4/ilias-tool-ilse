@@ -109,4 +109,37 @@ class YamlParser implements \CaT\Ilse\Interfaces\Parser {
 
 		return $yaml[$key];
 	}
+
+	/**
+	 * Read a yaml file
+	 * 
+	 * @param string 	$path
+	 * @return array 	'name' => data
+	 */
+	public function read($path)
+	{
+		assert('is_string($path)');
+
+		try
+		{
+			$yaml_array = Yaml::parse(file_get_contents($path));
+		}
+		catch (ParseException $e)
+		{
+			printf("Unable to parse the YAML string %s", $e->getMessage());
+			throw $e;
+		}
+		return $yaml_array;
+	}
+
+	/**
+	 * Convert an array to yaml
+	 * 
+	 * @param array 	'name' => data
+	 * @return string
+	 */
+	public function arr2yaml(array $data)
+	{
+		return Yaml::dump($data);
+	}
 }
