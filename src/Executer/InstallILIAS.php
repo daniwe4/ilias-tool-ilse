@@ -180,8 +180,7 @@ class InstallILIAS extends BaseExecuter
 		$this->iinst->registerNoNic();
 
 		if(!$this->iinst->finishSetup()) {
-			echo "\nSomething went wrong.";
-			exit(1);
+			throw new \RuntimeException("Something went wrong.");
 		}
 
 		echo "\nILIAS successfull installed.";
