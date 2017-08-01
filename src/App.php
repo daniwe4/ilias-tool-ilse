@@ -12,11 +12,14 @@ use CaT\Ilse\GitWrapperExecuter;
  */
 class App extends Application
 {
+	const I_P_GLOBAL 			= ".ilse";
 	const I_P_GLOBAL_CONFIG 	= ".ilse/config";
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_CONFIG			= "https://github.com/conceptsandtraining/ilias-configs.git";
 	const I_R_BRANCH			= "master";
 	const I_D_WEB_DIR			= "data";
+	const I_S_SUCCESS 			= 0;
+	const I_S_FAILURE 			= 1;
 
 	/**
 	 * @var CaT\Ilse\Interfaces\Path
@@ -34,6 +37,8 @@ class App extends Application
 		$this->merger 	= $merger;
 		$this->checker 	= $checker;
 		$this->git 		= $git;
+
+		$this->initAppFolder();
 		$this->initConfigRepo();
 		$this->initCommands();
 	}
@@ -49,6 +54,20 @@ class App extends Application
 		$this->add(new Command\ReinstallCommand($this->path, $this->merger, $this->checker, $this->git));
 		$this->add(new Command\InstallCommand($this->path, $this->merger, $this->checker, $this->git));
 		$this->add(new Command\ConfigCommand($this->path, $this->merger, $this->checker, $this->git));
+	}
+
+	/**
+	 * Checks whether the app folder exists otherwise create one
+	 *
+	 * @return int
+	 */
+	protected function initAppFolder()
+	{
+		if(!is_dir($this->path->getHomeDir() . "/" . self::I_P_GLOBAL))
+		{
+			mkdir($this->path->getHomeDir() . "/" . self::I_P_GLOBAL, 0755);
+		}
+		return self::I_S_SUCCESS;
 	}
 
 	/**
