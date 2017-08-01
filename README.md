@@ -6,7 +6,7 @@
 ## Usage
 ### Software requirements
 ```
-* PHP 5.4 or higher (PHP 7 only works with trunk)
+* PHP 5.4 or higher (PHP 7 works since release_5-2)
 * MySQL 5.0.x or higher
 * Zip and Unzip
 * ImageMagick
@@ -22,7 +22,10 @@ $ composer install
 ```
 
 ### Configuration
-Ilias-installer get the config file from the github repo `https://github.com/conceptsandtraining/ilias-configs.git`  
+Ilias-installer get his config files from a github repo.  
+Specify the repos where ilse search for config files in `$HOMEDIR/.ilse/ilse_config.yaml`.  
+Use `ilse_config_default.yaml` as template.
+   
 The name of the config file is always `ilse_config.yaml`.  
 Each config file is inside a directory that represents the customomer name.  
 
@@ -52,10 +55,25 @@ If you would use this, just add the second optional parameter. Value of the para
 Before you install or reinstall, please switch to your www user, e.g _www or www-data.
 ##### Installation
 ```
-$ php src/bin/install.php src/config.yaml [non_interactiv]
+$ ./ilse.php install $REPO_FOLDER_NAMES [-i]
 ```
-
 ##### Reinstallation
 ```
-$ ./src/bin/reinstall_ilias.sh src/config.yaml [non_interactiv]
+$ ./ilse.php reinstall $REPO_FOLDER_NAMES [-i]
+```
+##### Delete installation
+```
+$ ./ilse.php delete $REPO_FOLDER_NAMES
+```
+##### Update installation
+```
+$ ./ilse.php update $REPO_FOLDER_NAMES
+```
+##### Update plugins
+```
+$ ./ilse.php updateplugins $REPO_FOLDER_NAMES
+```
+##### Update config
+```
+$ ./ilse.php config $REPO_FOLDER_NAMES
 ```
