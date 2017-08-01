@@ -76,7 +76,8 @@ class GitWrapper implements Git
 		}
 		catch(GitException $e)
 		{
-			return false;
+			echo($e->__toString());
+			throw $e;
 		}
 		return true;
 	}
@@ -97,6 +98,7 @@ class GitWrapper implements Git
 		catch(GitException $e)
 		{
 			echo($e->__toString());
+			throw $e;
 		}
 		return true;
 	}
@@ -117,6 +119,7 @@ class GitWrapper implements Git
 		catch(GitException $e)
 		{
 			echo($e->__toString());
+			throw $e;
 		}
 		return true;
 	}
@@ -147,6 +150,7 @@ class GitWrapper implements Git
 		catch(GitException $e)
 		{
 			echo($e->__toString());
+			throw $e;
 		}
 		return true;
 	}
@@ -247,6 +251,7 @@ class GitWrapper implements Git
 		catch(GitException $e)
 		{
 			echo($e->__toString());
+			throw $e;
 		}
 	}
 }
