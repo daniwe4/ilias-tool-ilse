@@ -49,7 +49,6 @@ class GitWrapper implements Git
 		assert('is_string($path)');
 		assert('is_string($repo_url)');
 
-		$path = $this->removeTrailer($path);
 		$this->path = $path;
 		$this->repo_url = $repo_url;
 		$this->repo_name = $this->gitGetName($repo_url);

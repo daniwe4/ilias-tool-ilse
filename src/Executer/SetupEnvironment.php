@@ -43,6 +43,7 @@ class SetupEnvironment extends BaseExecuter
 		$this->checkDataDirPermissions();
 		$this->checkDataDirEmpty();
 		$this->createLogDir();
+		$this->createErrorLogDir();
 		$this->createLogFile();
 		$this->checkPHPVersion();
 		$this->checkPDO();
@@ -154,6 +155,18 @@ class SetupEnvironment extends BaseExecuter
 	}
 
 	/**
+	 * Create error_log dir
+	 */
+	protected function createErrorLogDir()
+	{
+		$check = $this->checker->logDirectoryExists($this->gc->log()->error_log());
+		if(!$check)
+		{
+			mkdir($this->gc->log()->error_log(), 0777, true);
+		}
+	}
+
+	/**
 	 * Create log file
 	 */
 	protected function createLogFile()
@@ -226,7 +239,7 @@ class SetupEnvironment extends BaseExecuter
 		try {
 			echo "Clone repository from ".$this->git_url;
 			echo " (This could take a few minutes)...";
-			$this->git->cloneGitTo($this->git_url, $this->git_branch_name, $this->absolute_path);
+			$this->git->cloneGitTo($this->git_url, $this->git_branch_name, substr($this->absolute_path, 0, strrpos($this->absolute_path, '/')));
 			echo "\t\t\tDone!\n";
 		} catch(\RuntimeException $e) {
 			echo $e->getMessage();

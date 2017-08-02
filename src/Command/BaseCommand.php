@@ -41,7 +41,8 @@ abstract class BaseCommand extends Command
 	public function __construct(\CaT\Ilse\Interfaces\CommonPathes $path,
 								\CaT\Ilse\Interfaces\Merger $merger,
 								\CaT\Ilse\Interfaces\RequirementChecker $checker,
-								\CaT\Ilse\Interfaces\Git $git)
+								\CaT\Ilse\Interfaces\Git $git,
+								array $repos = null)
 	{
 		parent::__construct();
 		$this->process 	= new Process("");
@@ -49,6 +50,7 @@ abstract class BaseCommand extends Command
 		$this->merger 	= $merger;
 		$this->checker 	= $checker;
 		$this->git 		= $git;
+		$this->repos 	= $repos;
 	}
 
 	/**
@@ -64,16 +66,39 @@ abstract class BaseCommand extends Command
 	}
 
 	/**
+	 * Match subdirectory
+	 *
+	 * @param string 	$name
+	 */
+	protected function searchSubDir($name)
+	{
+		foreach ($this->repos as $repo)
+		{
+			$hash = md5($repo);
+			$dir = $this->path->getHomeDir() . "/" . App::I_P_GLOBAL_CONFIG . "/" . $hash . "/" . basename($repo, '.git') . "/" . $name;
+
+			if(is_dir($dir))
+			{
+				return $dir . "/" . App::I_F_CONFIG;
+			}
+		}
+	}
+
+	/**
 	 * Merge all given configs
 	 *
-	 * @param string
+	 * @param string[]
 	 */
 	protected function merge(array $configs)
 	{
 		$arr = array_map(function ($s) {
-			return $this->getConfigPathByName($s);
+			if(preg_match("/[a-zA-Z0-9_\/]+\.y[a]?ml/", $s))
+			{
+				return $s;
+			}
+			return $this->searchSubDir($s);
 		}, $configs);
+
 		return $this->merger->mergeConfigs($arr);
 	}
-
 }
