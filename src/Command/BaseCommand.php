@@ -42,7 +42,7 @@ abstract class BaseCommand extends Command
 								\CaT\Ilse\Interfaces\Merger $merger,
 								\CaT\Ilse\Interfaces\RequirementChecker $checker,
 								\CaT\Ilse\Interfaces\Git $git,
-								array $repos = null)
+								array $repos = array())
 	{
 		parent::__construct();
 		$this->process 	= new Process("");
@@ -51,18 +51,6 @@ abstract class BaseCommand extends Command
 		$this->checker 	= $checker;
 		$this->git 		= $git;
 		$this->repos 	= $repos;
-	}
-
-	/**
-	 * Get the configfile path for a given name
-	 * 
-	 * @param string 	$name
-	 * 
-	 */
-	protected function getConfigPathByName($name)
-	{
-		assert('is_string($name)');
-		return $this->path->getHomeDir() . "/" . App::I_P_GLOBAL_CONFIG . "/" . $name . "/" . App::I_F_CONFIG;
 	}
 
 	/**

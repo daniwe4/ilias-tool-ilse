@@ -225,19 +225,6 @@ class GitWrapper implements Git
 	}
 
 	/**
-	 * Remove the last piece of a url behind the last slash
-	 *
-	 * @param string 		$path
-	 *
-	 * @return string
-	 */
-	protected function removeTrailer($path)
-	{
-		assert('is_string($path)');
-		return substr($path, 0, strrpos($path, '/'));
-	}
-
-	/**
 	 * @inheritdoc
 	 */
 	public function gitGetBranches()

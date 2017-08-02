@@ -32,9 +32,13 @@ class App extends Application
 	{
 		parent::__construct();
 
+		$ge 	= new GitExecuter();
+		$repos 	= $this->getConfigRepos($path, $gw, $parser);
+
 		$this->initAppFolder($path);
-		$this->initConfigRepo($path, $gw, $parser);
-		$this->initCommands($path, $merger, $checker, $git);
+		$this->initConfigRepo($ge, $repos, $path, $gw, $parser);
+		$this->initCommands($path, $merger, $checker, $git, $repos);
+
 	}
 
 	/**
@@ -44,18 +48,20 @@ class App extends Application
 	 * @param Interfaces\Merger 				$merger
 	 * @param Interfaces\RequirementChecker 	$checker
 	 * @param Interfaces\Git 					$git
+	 * @param string[] 							$repos
 	 */
 	protected function initCommands(Interfaces\CommonPathes $path,
 									Interfaces\Merger $merger,
 									Interfaces\RequirementChecker $checker,
-									Interfaces\Git $git)
+									Interfaces\Git $git,
+									array $repos)
 	{
-		$this->add(new Command\UpdateCommand($path, $merger, $checker, $git, $this->repos));
-		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git, $this->repos));
-		$this->add(new Command\UpdatePluginsCommand($path, $merger, $checker, $git, $this->repos));
-		$this->add(new Command\ReinstallCommand($path, $merger, $checker, $git, $this->repos));
-		$this->add(new Command\InstallCommand($path, $merger, $checker, $git, $this->repos));
-		$this->add(new Command\ConfigCommand($path, $merger, $checker, $git, $this->repos));
+		$this->add(new Command\UpdateCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\UpdatePluginsCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\ReinstallCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\InstallCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\ConfigCommand($path, $merger, $checker, $git, $repos));
 	}
 
 	/**
@@ -78,15 +84,13 @@ class App extends Application
 	 * @param GitWrapper\Git 		$gw
 	 * @param Interfaces\Parser 	$parser
 	 */
-	protected function initConfigRepo($path, $gw, $parser)
+	protected function initConfigRepo($ge, $repos, $path, $gw, $parser)
 	{
-		$ge 			= new GitExecuter();
-		$this->repos 	= $this->getConfigRepos($path, $gw, $parser);
-		$path 			= $path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG;
+		$path = $path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG;
 
 		if(!is_dir($path))
 		{
-			foreach ($this->repos as $repo)
+			foreach ($repos as $repo)
 			{
 				$clone_path = $this->createUniqueDir($path, $repo);
 				$ge->cloneGitTo($repo,
@@ -150,9 +154,11 @@ class App extends Application
 		assert('is_string($path)');
 		assert('is_string($url)');
 
-		$hash = md5($url);
-		mkdir($path . "/" . $hash, 0755, true);
-		return $path . "/" . $hash;
+		$hash 	= md5($url);
+		$dir 	= $path . "/" . $hash;
+
+		mkdir($dir, 0755, true);
+		return $dir;
 	}
 
 }
