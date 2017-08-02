@@ -18,11 +18,6 @@ class App extends Application
 	const I_R_BRANCH			= "master";
 	const I_D_WEB_DIR			= "data";
 
-	/**
-	 * @var string
-	 */
-	protected $repos;
-
 	public function __construct(Interfaces\CommonPathes $path,
 								Interfaces\Merger $merger,
 								Interfaces\RequirementChecker $checker,
