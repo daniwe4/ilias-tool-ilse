@@ -49,7 +49,6 @@ class GitWrapper implements Git
 		assert('is_string($path)');
 		assert('is_string($repo_url)');
 
-		$path = $this->removeTrailer($path);
 		$this->path = $path;
 		$this->repo_url = $repo_url;
 		$this->repo_name = $this->gitGetName($repo_url);
@@ -223,19 +222,6 @@ class GitWrapper implements Git
 	public function gitGetName()
 	{
 		return basename($this->repo_url, '.git');
-	}
-
-	/**
-	 * Remove the last piece of a url behind the last slash
-	 *
-	 * @param string 		$path
-	 *
-	 * @return string
-	 */
-	protected function removeTrailer($path)
-	{
-		assert('is_string($path)');
-		return substr($path, 0, strrpos($path, '/'));
 	}
 
 	/**

@@ -230,7 +230,6 @@ class IliasReleaseInstaller implements \CaT\Ilse\Interfaces\Installer {
 			$ret["auto_https_detect_header_name"] = $this->general->httpsAutoDetect()->headerName();
 			$ret["auto_https_detect_header_value"] = $this->general->httpsAutoDetect()->headerValue();
 		}
-
 		return $ret;
 	}
 

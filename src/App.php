@@ -27,30 +27,36 @@ class App extends Application
 	{
 		parent::__construct();
 
+		$ge 	= new GitExecuter();
+		$repos 	= $this->getConfigRepos($path, $gw, $parser);
+
 		$this->initAppFolder($path);
-		$this->initConfigRepo($path, $gw, $parser);
-		$this->initCommands($path, $merger, $checker, $git);
+		$this->initConfigRepo($ge, $repos, $path, $gw, $parser);
+		$this->initCommands($path, $merger, $checker, $git, $repos);
+
 	}
 
 	/**
 	 * Initialize all commands, and add them to the app
 	 *
-	 * @param Interfaces\CommonPathes 		$path
-	 * @param Interfaces\Merger 			$merger
-	 * @param Interfaces\RequirementChecker $checker
-	 * @param Interfaces\Git 				$git
+	 * @param Interfaces\CommonPathes 			$path
+	 * @param Interfaces\Merger 				$merger
+	 * @param Interfaces\RequirementChecker 	$checker
+	 * @param Interfaces\Git 					$git
+	 * @param string[] 							$repos
 	 */
 	protected function initCommands(Interfaces\CommonPathes $path,
 									Interfaces\Merger $merger,
 									Interfaces\RequirementChecker $checker,
-									Interfaces\Git $git)
+									Interfaces\Git $git,
+									array $repos)
 	{
-		$this->add(new Command\UpdateCommand($path, $merger, $checker, $git));
-		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git));
-		$this->add(new Command\UpdatePluginsCommand($path, $merger, $checker, $git));
-		$this->add(new Command\ReinstallCommand($path, $merger, $checker, $git));
-		$this->add(new Command\InstallCommand($path, $merger, $checker, $git));
-		$this->add(new Command\ConfigCommand($path, $merger, $checker, $git));
+		$this->add(new Command\UpdateCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\UpdatePluginsCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\ReinstallCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\InstallCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\ConfigCommand($path, $merger, $checker, $git, $repos));
 	}
 
 	/**
@@ -73,28 +79,32 @@ class App extends Application
 	 * @param GitWrapper\Git 		$gw
 	 * @param Interfaces\Parser 	$parser
 	 */
-	protected function initConfigRepo($path, $gw, $parser)
+	protected function initConfigRepo($ge, $repos, $path, $gw, $parser)
 	{
-		$ge = new GitExecuter();
+		$path = $path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG;
 
-		if(!is_dir($path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG))
+		if(!is_dir($path))
 		{
-			$ge->cloneGitTo($this->getConfigRepo($path, $gw, $parser),
-							self::I_R_BRANCH,
-							$path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG
-							);
+			foreach ($repos as $repo)
+			{
+				$clone_path = $this->createUniqueDir($path, $repo);
+				$ge->cloneGitTo($repo,
+								self::I_R_BRANCH,
+								$clone_path
+								);
+			}
 		}
 	}
 
 	/**
-	 * Get repos from configrepos file
+	 * Read app config file
 	 *
 	 * @param string 				$path
 	 * @param Interfaces\Parser 	$parser
 	 *
 	 * @return string
 	 */
-	protected function getConfigRepos($path, $parser)
+	protected function readAppConfigFile($path, $parser)
 	{
 		if(!is_file($path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS))
 		{
@@ -105,7 +115,7 @@ class App extends Application
 	}
 
 	/**
-	 * Get the config repo
+	 * Get the config repos
 	 *
 	 * @param string 				$path
 	 * @param GitWrapper\Git 		$gw
@@ -113,14 +123,37 @@ class App extends Application
 	 *
 	 * @return string
 	 */
-	protected function getConfigRepo($path, $gw, $parser)
+	protected function getConfigRepos($path, $gw, $parser)
 	{
-		foreach($this->getConfigRepos($path, $parser)['repos'] as $repo)
+		$result = array();
+		foreach($this->readAppConfigFile($path, $parser)['repos'] as $repo)
 		{
 			if($gw->gitIsRemoteGitRepo($repo) === 0)
 			{
-				return $repo;
+				$result[] = $repo;
 			}
 		}
+		return $result;
 	}
+
+	/**
+	 * Create a directory named with md5 hash of url
+	 *
+	 * @param string 		$path
+	 * @param string 		$url
+	 *
+	 * @return striing
+	 */
+	protected function createUniqueDir($path, $url)
+	{
+		assert('is_string($path)');
+		assert('is_string($url)');
+
+		$hash 	= md5($url);
+		$dir 	= $path . "/" . $hash;
+
+		mkdir($dir, 0755, true);
+		return $dir;
+	}
+
 }
