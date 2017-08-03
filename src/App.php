@@ -142,7 +142,7 @@ class App extends Application
 	 * @param string 		$path
 	 * @param string 		$url
 	 *
-	 * @return striing
+	 * @return string
 	 */
 	protected function createUniqueDir($path, $url)
 	{

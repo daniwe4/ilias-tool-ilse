@@ -2,38 +2,43 @@
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
 namespace CaT\Ilse;
+
+use CaT\Ilse\YamlParser;
 /**
  * implementation of plugin interface to install plugins
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
-	const PLUGIN_TMP_FOLDER = "plugin_tmp";
-	const PLUGIN_CLASS_PREFIX_IL = "il";
+class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin
+{
+	const PLUGIN_TMP_FOLDER 		= "plugin_tmp";
+	const PLUGIN_CLASS_PREFIX_IL 	= "il";
 	const PLUGIN_CLASS_PREFIX_CLASS = "class.";
-	const PLUGIN_CLASS_SUFFIX = "Plugin";
-	const CLASSES_FOLDER = "classes";
-	const PLUGIN_MAIN_PATH = "Customizing/global/plugins";
+	const PLUGIN_CLASS_SUFFIX 		= "Plugin";
+	const PLUGIN_REPO_PREFIX 		= "ilias-plugin-";
+	const PLUGIN_MAIN_PATH 			= "Customizing/global/plugins";
+	const PLUGIN_META_DATA 			= "meta.yaml";
+	const CLASSES_FOLDER 			= "classes";
 
-	private static $slot_names = array("ilOrgUnitExtensionPlugin" => "OrgUnitExtension"
-										,"ilOrgUnitTypeHookPlugin" => "OrgUnitTypeHook"
-										,"ilSurveyQuestionsPlugin" => "SurveyQuestions"
-										,"ilExportPlugin" => "Export"
-										,"ilSignaturePlugin" => "Signature"
-										,"ilQuestionsPlugin" => "Questions"
-										,"ilAdvancedMDClaimingPlugin" => "AdvancedMDClaiming"
-										,"ilAuthenticationHookPlugin" => "AuthenticationHook"
+	private static $slot_names = array("ilOrgUnitExtensionPlugin" 				=> "OrgUnitExtension"
+										,"ilOrgUnitTypeHookPlugin" 				=> "OrgUnitTypeHook"
+										,"ilSurveyQuestionsPlugin" 				=> "SurveyQuestions"
+										,"ilExportPlugin" 						=> "Export"
+										,"ilSignaturePlugin" 					=> "Signature"
+										,"ilQuestionsPlugin" 					=> "Questions"
+										,"ilAdvancedMDClaimingPlugin" 			=> "AdvancedMDClaiming"
+										,"ilAuthenticationHookPlugin" 			=> "AuthenticationHook"
 										,"ilShibbolethAuthenticationHookPlugin" => "ShibbolethAuthenticationHook"
-										,"ilPageComponentPlugin" => "PageComponent"
-										,"ilCronHookPlugin" => "CronHook"
-										,"ilEventHookPlugin" => "EventHook"
-										,"ilLDAPHookPlugin" => "LDAPHook"
-										,"ilPersonalDesktopHookPlugin" => "PersonalDesktopHook"
-										,"ilPreviewRendererPlugin" => "PreviewRenderer"
-										,"ilRepositoryObjectPlugin" => "RepositoryObject"
-										,"ilUserInterfaceHookPlugin" => "UserInterfaceHook"
-										,"ilUDFClaimingPlugin" => "UDFClaiming"
-								);
+										,"ilPageComponentPlugin" 				=> "PageComponent"
+										,"ilCronHookPlugin" 					=> "CronHook"
+										,"ilEventHookPlugin" 					=> "EventHook"
+										,"ilLDAPHookPlugin" 					=> "LDAPHook"
+										,"ilPersonalDesktopHookPlugin" 			=> "PersonalDesktopHook"
+										,"ilPreviewRendererPlugin" 				=> "PreviewRenderer"
+										,"ilRepositoryObjectPlugin" 			=> "RepositoryObject"
+										,"ilUserInterfaceHookPlugin" 			=> "UserInterfaceHook"
+										,"ilUDFClaimingPlugin" 					=> "UDFClaiming"
+										);
 
 	protected $gDB;
 	protected $absolute_path;
@@ -41,10 +46,10 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 	protected $installed_plugins;
 
 	public function __construct($absolute_path, $gDB) {
-		$this->gDB = $gDB;
-		$this->absolute_path = $absolute_path;
-		$this->temp_folder = $absolute_path."/".self::PLUGIN_TMP_FOLDER;
-		$this->installed_plugins = array();
+		$this->gDB 					= $gDB;
+		$this->absolute_path 		= $absolute_path;
+		$this->temp_folder 			= $absolute_path."/".self::PLUGIN_TMP_FOLDER;
+		$this->installed_plugins 	= array();
 
 		$this->createTempFolder();
 		$this->readInstalledPlugins();
@@ -58,14 +63,17 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 	 * @inheritdoc
 	 */
 	public function install(\CaT\Ilse\Config\Plugin $plugin) {
-		$this->checkout($plugin->git()->url(), $plugin->git()->branch(), $this->temp_folder."/".$plugin->name());
+		$this->checkout($plugin->git()->url(), $plugin->git()->branch(), $this->temp_folder);
+		$this->chmodRecursive($this->temp_folder, 0755);
+		$this->chownRecursive($this->temp_folder, "www-data");
 
-		$plugin_path = $this->getPluginPath($this->temp_folder, $plugin->name());
+		$meta = $this->getPluginMetaData($plugin->name(), $this->temp_folder);
 
-		$this->movePlugin($this->temp_folder."/".$plugin->name(), $this->absolute_path."/".$plugin_path);
+		$plugin_path = $this->getPluginPath($meta, $plugin->name());
 
-		$this->createPluginRecord($plugin->name());
+		$this->movePlugin($this->temp_folder."/".self::PLUGIN_REPO_PREFIX.$plugin->name(), $this->absolute_path."/".$plugin_path);
 
+		$this->createPluginRecord($plugin->name(), $meta);
 		$this->installed_plugins[$plugin->name()] = $this->absolute_path."/".$plugin_path;
 
 		return true;
@@ -148,6 +156,8 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 		assert('is_string($plugin_name)');
 		$full_class_name = self::PLUGIN_CLASS_PREFIX_IL.$plugin_name.self::PLUGIN_CLASS_SUFFIX;
 
+		$cur = getcwd();
+		chdir($this->absolute_path);
 		if(!class_exists($full_class_name)) {
 			require_once($this->getInstalledPluginPath($plugin_name)."/".self::CLASSES_FOLDER."/".self::PLUGIN_CLASS_PREFIX_CLASS.$full_class_name.".php");
 		}
@@ -158,7 +168,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 		} else {
 			return $class->newInstanceWithoutConstructor();
 		}
-		
+		chdir($cur);
 	}
 
 	/**
@@ -181,7 +191,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 		assert('is_string($git_branch)');
 		assert('is_string($temp_folder)');
 
-		$git = new \CaT\Ilse\GitWrapperExecuter;
+		$git = new \CaT\Ilse\GitExecuter();
 
 		$git->cloneGitTo($git_url, $git_branch, $temp_folder);
 	}
@@ -262,26 +272,15 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 		return $last_update < $curr_version;
 	}
 
-	protected function getPluginPath($temp_folder, $plugin_name) {
-
-		assert('is_string($temp_folder)');
-		assert('is_string($plugin_name)');
-
-		$full_class_name = self::PLUGIN_CLASS_PREFIX_IL.$plugin_name.self::PLUGIN_CLASS_SUFFIX;
-
-		require_once($temp_folder."/".$plugin_name."/".self::CLASSES_FOLDER."/".self::PLUGIN_CLASS_PREFIX_CLASS.$full_class_name.".php");
-		$class = new \ReflectionClass($full_class_name);
-		$plugin = $class->newInstanceWithoutConstructor();
-		$path = self::PLUGIN_MAIN_PATH."/".$plugin->getComponentType()."/".$plugin->getComponentName()."/".$plugin->getSlot()."/".$plugin_name;
-
+	protected function getPluginPath($meta, $plugin_name) {
+		$path = self::PLUGIN_MAIN_PATH."/".$meta["ComponentType"]."/".$meta["ComponentName"]."/".$meta["Slot"]."/".$plugin_name;
 		return $path;
 	}
 
-	protected function getPluginSlotData($parent_name) {
-		$query = "SELECT component, id, name FROM il_pluginslot WHERE name = ".$this->gDB->quote(self::$slot_names[$parent_name], "text");
-		echo $query;
-		$res = $this->gDB->query($query);
-		return $this->gDB->fetchAssoc($res);
+	protected function getPluginMetaData($plugin_name, $path)
+	{
+		$parser = new YamlParser();
+		return $parser->read($path."/".self::PLUGIN_REPO_PREFIX.$plugin_name."/".self::PLUGIN_META_DATA);
 	}
 
 	protected function getInstalledPluginPath($plugin_name) {
@@ -315,16 +314,34 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin {
 		}
 	}
 
-	public function createPluginRecord($plugin_name) {
-		$pl = $this->getPluginObject($plugin_name, false);
-
+	public function createPluginRecord($plugin_name, $meta) {
 		require_once($this->absolute_path."/Services/Component/classes/class.ilPlugin.php");
-		\ilPlugin::createPluginRecord($pl->getComponentType(), $pl->getComponentName(), $pl->getSlotId(), $plugin_name);
+		\ilPlugin::createPluginRecord($meta["ComponentType"], $meta["ComponentName"], $meta["SlotId"], $plugin_name);
 	}
 
 	public function removeFiles($plugin_name) {
 		$path = $this->installed_plugins[$plugin_name];
 		$this->clearDirectory($path);
+	}
+
+	protected function chmodRecursive($pathname, $filemode)
+	{
+		$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pathname));
+
+		foreach($iterator as $item)
+		{
+			chmod($item, $filemode);
+		}
+	}
+
+	protected function chownRecursive($pathname, $owner)
+	{
+		$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pathname));
+
+		foreach($iterator as $item)
+		{
+			chown($item, $owner);
+		}
 	}
 
 	protected function clearDirectory($dir) {
