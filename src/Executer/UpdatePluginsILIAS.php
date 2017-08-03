@@ -66,7 +66,7 @@ class UpdatePluginsILIAS extends BaseExecuter
 		{
 			echo "\nUpdating plugins...";
 			$this->pc->installPlugins($this->gc->plugin());
-			$this->pc->activatePlugins($this->gc->plugin());
+			$this->pc->updatePlugins($this->gc->plugin());
 			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 		}
 	}
