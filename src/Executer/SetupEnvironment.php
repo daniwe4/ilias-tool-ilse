@@ -61,7 +61,7 @@ class SetupEnvironment extends BaseExecuter
 		if($this->interactive && !$check)
 		{
 			echo "Data directory does not exist. Create the directory (yes|no)? ";
-			$line = getUserInput();
+			$line = $this->getUserInput();
 			if(strtolower($line) != "yes") {
 				echo "Aborted by user.";
 				exit(1);
@@ -88,7 +88,7 @@ class SetupEnvironment extends BaseExecuter
 		if($this->interactive && !$check)
 		{
 			echo "Not enough permissions on data directory. Set permissions (yes|no)? ";
-			$line = getUserInput();
+			$line = $this->getUserInput();
 			if(strtolower($line) != "yes") {
 				echo "Aborted by user.";
 				exit(1);
@@ -115,14 +115,14 @@ class SetupEnvironment extends BaseExecuter
 		if($this->interactive && !$check)
 		{
 			echo "Data directory is not empty. Clean the directory (yes|no)? ";
-			$line = getUserInput();
+			$line = $this->getUserInput();
 			if(strtolower($line) != "yes") {
 				echo "Aborted by user.";
 				exit(1);
 			}
 
 			echo "Cleaning the directory ".$this->data_path."/".$this->client_id."...";
-			clearDirectory($this->data_path."/".$this->client_id);
+			$this->clearDirectory($this->data_path."/".$this->client_id);
 			echo "\t\t\t\t\t\tDone!\n";
 		}
 	}
@@ -136,7 +136,7 @@ class SetupEnvironment extends BaseExecuter
 		if($this->interactive && !$check)
 		{
 			echo "Log directory does not exist. Create the directory (yes|no)? ";
-			$line = getUserInput();
+			$line = $this->getUserInput();
 			if(strtolower($line) != "yes") {
 				echo "Aborted by user.";
 				exit(1);
@@ -266,7 +266,7 @@ class SetupEnvironment extends BaseExecuter
 	{
 		$files = array_diff(scandir($dir), array('.','..'));
 		foreach ($files as $file) {
-			(is_dir("$dir/$file")) ? clearDirectory("$dir/$file") : unlink("$dir/$file");
+			(is_dir("$dir/$file")) ? $this->clearDirectory("$dir/$file") : unlink("$dir/$file");
 		}
 
 		rmdir($dir);
