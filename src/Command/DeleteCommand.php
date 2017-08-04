@@ -25,6 +25,7 @@ class DeleteCommand extends BaseCommand
 			->setName("delete")
 			->setDescription("Delete the Ilias-Environment.")
 			->addArgument("config_names", InputArgument::IS_ARRAY, "Name of the Ilias Config Files.")
+			->addOption("all", "a", InputOption::VALUE_NONE, "Also delete log files and the data folder.")
 			;
 	}
 
@@ -38,6 +39,7 @@ class DeleteCommand extends BaseCommand
 	{
 		$config_names = $in->getArgument("config_names");
 		$args["config"] = $this->merge($config_names);
+		$args["all"] = $in->getOption("all");
 
 		$this->delete($args);
 		$out->writeln("\t\t\t\tDone!");
@@ -49,6 +51,6 @@ class DeleteCommand extends BaseCommand
 	protected function delete(array $args)
 	{
 		$ri = new Executer\DeleteILIAS($args['config'], $this->checker, $this->git);
-		$ri->run();
+		$ri->run($args['all']);
 	}
 }
