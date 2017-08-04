@@ -8,7 +8,7 @@
 require_once(__DIR__."/vendor/autoload.php");
 
 
-error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE);
+error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE && ~E_WARNING);
 
 $checker 	= new \CaT\Ilse\IliasRequirementChecker();
 $merger 	= new \CaT\Ilse\MergeConfigs();

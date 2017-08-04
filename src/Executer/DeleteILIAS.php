@@ -34,6 +34,7 @@ class DeleteILIAS extends BaseExecuter
 		$this->dropDatabase();
 		$this->deleteILIASFolder();
 		$this->deleteDataFolder();
+		$this->deleteErrorLog();
 	}
 
 	/**
@@ -80,6 +81,15 @@ class DeleteILIAS extends BaseExecuter
 	protected function deleteDataFolder() {
 		echo "Deleting data folder...";
 		$this->clearDirectory($this->gc->client()->dataDir()."/".$this->gc->client()->name());
+		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+	}
+
+	/**
+	 * Delete the error_log
+	 */
+	protected function deleteErrorLog() {
+		echo "Deleteing error_log folder...";
+		$this->clearDirectory($this->gc->log()->error_log());
 		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 	}
 
