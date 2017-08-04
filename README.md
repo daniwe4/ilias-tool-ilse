@@ -52,19 +52,20 @@ With ilse it´s possible to install a new ILIAS or drop your old an install in o
 For both it is possible to run the installation in a non interactiv mode.
 If you would use this, just add the parameter -i in your command.
 
-Before you install or reinstall, please switch to your www user, e.g _www or www-data.
 ##### Installation
 ```
 $ ./ilse.php install $REPO_FOLDER_NAMES [-i]
 ```
 ##### Reinstallation
 ```
-$ ./ilse.php reinstall $REPO_FOLDER_NAMES [-i]
+$ ./ilse.php reinstall $REPO_FOLDER_NAMES [-i][-a]
 ```
+With the option -a ilse will delete all log files and the whole data folder before installing ILIAS again. 
 ##### Delete installation
 ```
-$ ./ilse.php delete $REPO_FOLDER_NAMES
+$ ./ilse.php delete $REPO_FOLDER_NAMES [-a]
 ```
+With the option -a ilse will also delete all log files and the whole data folder. 
 ##### Update installation
 ```
 $ ./ilse.php update $REPO_FOLDER_NAMES

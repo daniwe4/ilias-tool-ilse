@@ -28,13 +28,22 @@ class DeleteILIAS extends BaseExecuter
 
 	/**
 	 * Start the deinstallation process
+	 *
+	 * @param bool 		$complete
 	 */
-	public function run() {
+	public function run($complete) {
+		assert('is_bool($complete)');
+
 		$this->connectDB();
 		$this->dropDatabase();
 		$this->deleteILIASFolder();
-		$this->deleteDataFolder();
-		$this->deleteErrorLog();
+		$this->deleteClientFolder();
+
+		if($complete) {
+			$this->deleteErrorLog();
+			$this->deleteDataFolder();
+			$this->deleteLogFile();
+		}
 	}
 
 	/**
@@ -78,9 +87,18 @@ class DeleteILIAS extends BaseExecuter
 	/**
 	 * Delete the data folder
 	 */
+	protected function deleteClientFolder() {
+		echo "Deleting client folder...";
+		$this->clearDirectory($this->gc->client()->dataDir()."/".$this->gc->client()->name());
+		echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+	}
+
+	/**
+	 * Delete the data folder
+	 */
 	protected function deleteDataFolder() {
 		echo "Deleting data folder...";
-		$this->clearDirectory($this->gc->client()->dataDir()."/".$this->gc->client()->name());
+		$this->clearDirectory($this->gc->client()->dataDir());
 		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 	}
 
@@ -90,7 +108,17 @@ class DeleteILIAS extends BaseExecuter
 	protected function deleteErrorLog() {
 		echo "Deleteing error_log folder...";
 		$this->clearDirectory($this->gc->log()->error_log());
-		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+	}
+
+	/**
+	 * Delete ilias log file
+	 */
+	protected function deleteLogFile()
+	{
+		echo "Deleting log file...";
+		unlink($this->gc->log()->path()."/".$this->gc->log()->file_name());
+		echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 	}
 
 	/**
