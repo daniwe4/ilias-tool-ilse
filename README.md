@@ -23,8 +23,8 @@ $ composer install
 
 ### Configuration
 The Ilias-installer relies on a github-repository as the source of configuration files.  
-The corresponding repo-paths should be specified in `$HOMEDIR/.ilse/ilse_config.yaml`.  
-Please refer to `ilse_config_default.yaml` for the required layout.
+The corresponding repo-paths should be specified in `$HOMEDIR/.ilse/config_repos.yaml`.  
+Please refer to `config_repos_default.yaml` for the required layout.
    
 The name of the config file is always `ilse_config.yaml`.  
 Each config file is inside a directory that represents the customomer name.  
@@ -50,7 +50,7 @@ For new installation of ILIAS you need these configuration entries.
 ### Re- / Installation of ILIAS
 With ilse it´s possible to install a new ILIAS or drop your old an install in one step.
 For both it is possible to run the installation in a non interactiv mode.
-If you would use this, just add the second optional parameter. Value of the parameter is "non_interactiv".
+If you would use this, just add the parameter -i in your command.
 
 Before you install or reinstall, please switch to your www user, e.g _www or www-data.
 ##### Installation

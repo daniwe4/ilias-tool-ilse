@@ -11,7 +11,7 @@ use Symfony\Component\Console\Application;
 class App extends Application
 {
 	const I_P_GLOBAL_CONFIG 	= ".ilse/ilias-configs";
-	const I_F_CONFIG_REPOS 		= ".ilse/ilse_config.yaml";
+	const I_F_CONFIG_REPOS 		= ".ilse/config_repos.yaml";
 	const I_P_GLOBAL 			= ".ilse";
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_BRANCH			= "master";
