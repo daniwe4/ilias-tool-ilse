@@ -1,43 +1,43 @@
 <?php
 
-use \CaT\Ilse\Config\GitBranch;
+use \CaT\Ilse\Config\Git;
 
-class GitBranchConfigTest extends PHPUnit_Framework_TestCase {
+class GitConfigTest extends PHPUnit_Framework_TestCase {
 	public function test_not_enough_params() {
 		try {
-			$config = new GitBranch();
+			$config = new Git();
 			$this->assertFalse("Should have raised.");
 		}
 		catch (\InvalidArgumentException $e) {}
 	}
 
 	/**
-	 * @dataProvider	GitBranchConfigValueProvider
+	 * @dataProvider	GitConfigValueProvider
 	 */
 	public function test_DBConfig($url, $branch, $valid) {
 		if ($valid) {
-			$this->_test_valid_GitBranchConfig($url, $branch);
+			$this->_test_valid_GitConfig($url, $branch);
 		}
 		else {
-			$this->_test_invalid_GitBranchConfig($url, $branch);
+			$this->_test_invalid_GitConfig($url, $branch);
 		}
 	}
 
-	public function _test_valid_GitBranchConfig($url, $branch) {
-		$config = new GitBranch($url, $branch, '');
+	public function _test_valid_GitConfig($url, $branch) {
+		$config = new Git($url, $branch, '');
 		$this->assertEquals($url, $config->url());
 		$this->assertEquals($branch, $config->branch());
 	}
 
-	public function _test_invalid_GitBranchConfig($url, $branch) {
+	public function _test_invalid_GitConfig($url, $branch) {
 		try {
-			$config = new GitBranch($url, $branch, '');
+			$config = new Git($url, $branch, '');
 			$this->assertFalse("Should have raised.");
 		}
 		catch (\InvalidArgumentException $e) {}
 	}
 
-	public function GitBranchConfigValueProvider() {
+	public function GitConfigValueProvider() {
 		$ret = array();
 		$take_it = 0;
 		$take_every_Xth = 10;

@@ -8,8 +8,8 @@ namespace CaT\Ilse\Config;
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  *
- * @method \CaT\Ilse\Config\GitBranch name()
- * @method \CaT\Ilse\Config\GitBranch git()
+ * @method \CaT\Ilse\Config\Git name()
+ * @method \CaT\Ilse\Config\Git git()
  */
 class Plugin extends Base {
 	/**
@@ -18,7 +18,7 @@ class Plugin extends Base {
 	public static function fields() {
 		return array
 			("name" => array("string", false)
-			, "git" => array("\\CaT\\Ilse\\Config\\GitBranch", false)
+			, "git" => array("\\CaT\\Ilse\\Config\\Git", false)
 			);
 	}
 }

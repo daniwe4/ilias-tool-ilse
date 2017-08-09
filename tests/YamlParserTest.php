@@ -72,9 +72,9 @@ create_db: 1';
 url: https://github.com/
 branch: ilias';
 
-		$obj = $this->parser->read_config($json_string, "\\CaT\\Ilse\\Config\\GitBranch");
+		$obj = $this->parser->read_config($json_string, "\\CaT\\Ilse\\Config\\Git");
 
-		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\GitBranch", $obj);
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Git", $obj);
 		
 		$this->assertEquals($obj->url(), "https://github.com/");
 		$this->assertInternalType("string", $obj->url());
@@ -186,7 +186,7 @@ branch: ilias';
 		return array
 			( array($json_string, "\\CaT\\Ilse\\Config\\Client")
 			, array($json_string, "\\CaT\\Ilse\\Config\\DB")
-			, array($json_string, "\\CaT\\Ilse\\Config\\GitBranch")
+			, array($json_string, "\\CaT\\Ilse\\Config\\Git")
 			, array($json_string, "\\CaT\\Ilse\\Config\\Language")
 			, array($json_string, "\\CaT\\Ilse\\Config\\Server")
 			, array($json_string, "\\CaT\\Ilse\\Config\\Setup")
