@@ -92,7 +92,8 @@ class App extends Application
 				$clone_path = $this->createUniqueDir($path, $repo);
 				$ge->cloneGitTo($repo,
 								self::I_R_BRANCH,
-								$clone_path
+								$clone_path,
+								""
 								);
 			}
 		}

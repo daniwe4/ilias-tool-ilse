@@ -205,7 +205,6 @@ class GitWrapper implements Git
 
 		$this->process->setWorkingDirectory($this->path . '/' . $repo_name);
 		$this->process->setCommandLine($cmd." ".implode(' ', $clean));
-		$this->process->setTty(true);
 		$this->process->run();
 		$this->out = $this->process->getOutput();
 

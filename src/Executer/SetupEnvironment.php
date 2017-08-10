@@ -239,7 +239,11 @@ class SetupEnvironment extends BaseExecuter
 		try {
 			echo "Clone repository from ".$this->git_url;
 			echo " (This could take a few minutes)...";
-			$this->git->cloneGitTo($this->git_url, $this->git_branch_name, substr($this->absolute_path, 0, strrpos($this->absolute_path, '/')));
+			$this->git->cloneGitTo($this->git_url,
+								   $this->git_branch_name,
+								   substr($this->absolute_path, 0, strrpos($this->absolute_path, '/')),
+								   ""
+								   );
 			echo "\t\t\tDone!\n";
 		} catch(\RuntimeException $e) {
 			echo $e->getMessage();
