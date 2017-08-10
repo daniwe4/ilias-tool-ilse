@@ -15,7 +15,7 @@ class LDAP {
 	 */
 	protected $gDB;
 
-	public function __construct($absolute_path, \ilDB $db) {
+	public function __construct($absolute_path, \ilDBInterface $db) {
 		require_once($absolute_path."/Services/LDAP/classes/class.ilLDAPServer.php");
 		require_once($absolute_path."/Services/LDAP/classes/class.ilLDAPAttributeMapping.php");
 		$this->gDB = $db;

@@ -13,7 +13,7 @@ class OrgUnits {
 	 */
 	protected $gDB;
 
-	public function __construct($absolute_path, \ilDB $db) {
+	public function __construct($absolute_path, \ilDBInterface $db) {
 		require_once($absolute_path."/Modules/OrgUnit/classes/class.ilObjOrgUnit.php");
 		require_once($absolute_path."/Modules/OrgUnit/classes/Types/class.ilOrgUnitType.php");
 		$this->gDB = $db;

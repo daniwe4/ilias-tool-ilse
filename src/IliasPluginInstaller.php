@@ -85,6 +85,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin
 
 	public function updateBranch(\CaT\Ilse\Config\Plugin $plugin) {
 		$plugin_path = $this->installed_plugins[$plugin->name()];
+		echo "Update from " . $plugin->git()->url() . "\n";
 		$this->checkout($plugin->git()->url(), $plugin->git()->branch(), $plugin_path);
 	}
 

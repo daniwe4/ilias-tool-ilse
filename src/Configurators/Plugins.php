@@ -18,7 +18,7 @@ class Plugins {
 	 */
 	protected $absolute_path;
 
-	public function __construct($absolute_path, \ilDB $db) {
+	public function __construct($absolute_path, \ilDBInterface $db) {
 		$this->gDB = $db;
 		$this->absolute_path = $absolute_path;
 	}
