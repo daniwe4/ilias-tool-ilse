@@ -68,13 +68,13 @@ class SetupEnvironment extends BaseExecuter
 			}
 
 			echo "Creating data directory...";
-			mkdir($this->data_path, 0777, true);
+			mkdir($this->data_path, 0640, true);
 			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 		}
 		else if(!$this->interactive && !$check)
 		{
 			echo "Creating data directory...";
-			mkdir($this->data_path, 0777, true);
+			mkdir($this->data_path, 0640, true);
 			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 		}
 	}
@@ -95,13 +95,13 @@ class SetupEnvironment extends BaseExecuter
 			}
 
 			echo "Setting permission to required...";
-			chmod($this->data_path, 0777);
+			chmod($this->data_path, 0640);
 			echo "\t\t\t\t\t\tDone!\n";
 		}
 		else if(!$this->interactive && !$check)
 		{
 			echo "Setting permission to required...";
-			chmod($this->data_path, 0777);
+			chmod($this->data_path, 0640);
 			echo "\t\t\t\t\t\tDone!\n";
 		}
 	}
@@ -143,13 +143,13 @@ class SetupEnvironment extends BaseExecuter
 			}
 
 			echo "Creating log directory...";
-			mkdir($this->gc->log()->path(), 0777, true);
+			mkdir($this->gc->log()->path(), 0640, true);
 			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 		}
 		else if(!$this->interactive && !$check)
 		{
 			echo "Creating log directory...";
-			mkdir($this->gc->log()->path(), 0777, true);
+			mkdir($this->gc->log()->path(), 0640, true);
 			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 		}
 	}
@@ -162,7 +162,7 @@ class SetupEnvironment extends BaseExecuter
 		$check = $this->checker->logDirectoryExists($this->gc->log()->error_log());
 		if(!$check)
 		{
-			mkdir($this->gc->log()->error_log(), 0777, true);
+			mkdir($this->gc->log()->error_log(), 0640, true);
 		}
 	}
 
@@ -174,7 +174,7 @@ class SetupEnvironment extends BaseExecuter
 		if(!$this->checker->logFileExists($this->gc->log()->path(), $this->gc->log()->fileName()))
 		{
 			touch($this->gc->log()->path()."/".$this->gc->log()->fileName());
-			chmod($this->gc->log()->path()."/".$this->gc->log()->fileName(), 0777);
+			chmod($this->gc->log()->path()."/".$this->gc->log()->fileName(), 0640);
 		}
 	}
 

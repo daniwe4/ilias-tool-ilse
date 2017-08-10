@@ -17,20 +17,21 @@ class GitExecuter implements \CaT\Ilse\Interfaces\Git
 	/**
 	 * @inhertidoc
 	 */
-	public function cloneGitTo($git_url, $git_branch, $installation_path)
+	public function cloneGitTo($git_url, $git_branch, $installation_path, $name)
 	{
 		assert('is_string($git_url)');
 		assert('is_string($git_branch)');
 		assert('is_string($installation_path)');
 
-		$git = new GitWrapper($installation_path, $git_url);
+		$git = new GitWrapper($installation_path, $git_url, $name);
 
 		$cur_dir = getcwd();
-		if(is_dir($installation_path)) {
-			chdir($installation_path);
+		if(is_dir($installation_path."/".$name)) {
+			chdir($installation_path."/".$name);
 			if(!$git->gitIsGitRepo()) {
 				return $git->gitClone();
 			}
+			$git->gitIgnoreFileModeChanges();
 			$git->gitFetch();
 			$git->gitCheckout($git_branch, false);
 			$git->gitPull("origin", $git_branch);

@@ -25,7 +25,6 @@ class App extends Application
 								GitWrapper\Git $gw)
 	{
 		parent::__construct();
-
 		$ge 	= new GitExecuter();
 		$repos 	= $this->getConfigRepos($path, $gw, $parser);
 
