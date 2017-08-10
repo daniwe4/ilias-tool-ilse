@@ -26,7 +26,7 @@ class PluginConfigTest extends PHPUnit_Framework_TestCase {
 	public function _test_valid_PluginConfig($name, $git) {
 		$config = new Plugin($name, $git);
 		$this->assertEquals($name, $config->name());
-		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\GitBranch", $config->git());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Git", $config->git());
 	}
 
 	public function _test_invalid_PluginConfig($name, $git) {
@@ -40,7 +40,7 @@ class PluginConfigTest extends PHPUnit_Framework_TestCase {
 	public function PluginConfigValueProvider() {
 		$ret = array();
 		foreach ($this->nameProvider() as $name) {
-			foreach ($this->gitBranchProvider() as $git) {
+			foreach ($this->gitProvider() as $git) {
 				$ret[] = array
 					( $name[0], $git[0]
 					, $name[1] && $git[1]);
@@ -50,8 +50,8 @@ class PluginConfigTest extends PHPUnit_Framework_TestCase {
 		return $ret;
 	}
 
-	public function gitBranchProvider() {
-		return array(array(new \CaT\Ilse\Config\GitBranch("url", "branch", ""), true)
+	public function gitProvider() {
+		return array(array(new \CaT\Ilse\Config\Git("url", "branch", ""), true)
 					, array(4, false)
 					, array(true, false)
 					, array(array(), false)

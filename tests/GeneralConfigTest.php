@@ -228,7 +228,7 @@ learning_progress:
 		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Setup", $config->setup());
 		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Tools", $config->tools());
 		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Log", $config->log());
-		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\GitBranch", $config->git_branch());
+		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Git", $config->git());
 		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Categories", $config->category());
 		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\OrgUnits", $config->orgunit());
 		$this->assertInstanceOf("\\CaT\\Ilse\\Config\\Roles", $config->role());

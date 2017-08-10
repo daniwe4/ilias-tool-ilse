@@ -11,7 +11,7 @@ namespace CaT\Ilse\Config;
  * @method string gitUrl()
  * @method string gitBranchName()
  */
-class GitBranch extends Base {
+class Git extends Base {
 	/**
 	 * @inheritdocs
 	 */
