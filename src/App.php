@@ -30,7 +30,7 @@ class App extends Application
 		$repos 	= $this->getConfigRepos($path, $gw, $parser);
 
 		$this->initAppFolder($path);
-		$this->initConfigRepo($ge, $repos, $path, $gw, $parser);
+		$this->initConfigRepo($path, $gw, $parser, $repos, $ge);
 		$this->initCommands($path, $merger, $checker, $git, $repos);
 
 	}
@@ -65,6 +65,8 @@ class App extends Application
 	 */
 	protected function initAppFolder($path)
 	{
+		assert('is_string($path)');
+
 		if(!is_dir($path->getHomeDir() . "/" . self::I_P_GLOBAL))
 		{
 			mkdir($path->getHomeDir() . "/" . self::I_P_GLOBAL, 0755);
@@ -77,8 +79,10 @@ class App extends Application
 	 * @param string 				$path
 	 * @param GitWrapper\Git 		$gw
 	 * @param Interfaces\Parser 	$parser
+	 * @param string 				$repos
+	 * @param GitExecuter 			$ge
 	 */
-	protected function initConfigRepo($ge, $repos, $path, $gw, $parser)
+	protected function initConfigRepo($path, GitWrapper\Git $gw, Interfaces\Parser $parser, $repos, GitExecuter $ge)
 	{
 		$path = $path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG;
 
@@ -122,8 +126,10 @@ class App extends Application
 	 *
 	 * @return string
 	 */
-	protected function getConfigRepos($path, $gw, $parser)
+	protected function getConfigRepos($path, GitWrapper\Git $gw, Interfaces\Parser $parser)
 	{
+		assert('is_string($path)');
+
 		$result = array();
 		foreach($this->readAppConfigFile($path, $parser)['repos'] as $repo)
 		{
