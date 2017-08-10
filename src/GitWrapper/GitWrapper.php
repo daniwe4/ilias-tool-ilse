@@ -43,15 +43,17 @@ class GitWrapper implements Git
 	 *
 	 * @param string    $path
 	 * @param string    $repo_url
+	 * @param string 	$name
 	 */
-	public function __construct($path = "", $repo_url = "")
+	public function __construct($path = "", $repo_url = "", $name = "")
 	{
 		assert('is_string($path)');
 		assert('is_string($repo_url)');
+		assert('is_string($name)');
 
 		$this->path = $path;
 		$this->repo_url = $repo_url;
-		$this->repo_name = $this->gitGetName($repo_url);
+		$this->repo_name = $name;
 		$this->process = new Process("");
 	}
 
@@ -72,6 +74,7 @@ class GitWrapper implements Git
 		{
 			$this->process->setTty(true);
 			$this->gitExec("git clone", array($this->repo_url), "");
+			$this->gitIgnoreFileModeChanges();
 		}
 		catch(GitException $e)
 		{
@@ -79,6 +82,14 @@ class GitWrapper implements Git
 			throw $e;
 		}
 		return true;
+	}
+
+	/**
+	 * Set ignore file mode permission change 
+	 */
+	public function gitIgnoreFileModeChanges()
+	{
+		$this->gitExec("git config core.fileMode false", array(), $this->repo_name);
 	}
 
 	/**

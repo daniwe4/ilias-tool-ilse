@@ -63,7 +63,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin
 	 * @inheritdoc
 	 */
 	public function install(\CaT\Ilse\Config\Plugin $plugin) {
-		$this->checkout($plugin->git()->url(), $plugin->git()->branch(), $this->temp_folder);
+		$this->checkout($plugin->git()->url(), $plugin->git()->branch(), $this->temp_folder, $plugin->name());
 		$this->chmodRecursive($this->temp_folder, 0755);
 		$this->chownRecursive($this->temp_folder, "www-data");
 
@@ -74,7 +74,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin
 		$this->movePlugin($this->temp_folder."/".self::PLUGIN_REPO_PREFIX.$plugin->name(), $this->absolute_path."/".$plugin_path);
 
 		$this->createPluginRecord($plugin->name(), $meta);
-		$this->installed_plugins[$plugin->name()] = $this->absolute_path."/".$plugin_path;
+		$this->installed_plugins[$plugin->name()] = $this->absolute_path;
 
 		return true;
 	}
@@ -86,7 +86,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin
 	public function updateBranch(\CaT\Ilse\Config\Plugin $plugin) {
 		$plugin_path = $this->installed_plugins[$plugin->name()];
 		echo "Update from " . $plugin->git()->url() . "\n";
-		$this->checkout($plugin->git()->url(), $plugin->git()->branch(), $plugin_path);
+		$this->checkout($plugin->git()->url(), $plugin->git()->branch(), $plugin_path, $plugin->name());
 	}
 
 	/**
@@ -187,14 +187,13 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin
 	 * @param string $git_branch
 	 * @param string $temp_folder
 	 */
-	protected function checkout($git_url, $git_branch, $temp_folder) {
+	protected function checkout($git_url, $git_branch, $temp_folder, $name) {
 		assert('is_string($git_url)');
 		assert('is_string($git_branch)');
 		assert('is_string($temp_folder)');
-
 		$git = new \CaT\Ilse\GitExecuter();
 
-		$git->cloneGitTo($git_url, $git_branch, $temp_folder);
+		$git->cloneGitTo($git_url, $git_branch, $temp_folder, $name);
 	}
 
 	/**
@@ -285,7 +284,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin
 	}
 
 	protected function getInstalledPluginPath($plugin_name) {
-		return $this->installed_plugins[$plugin_name];
+		return $this->installed_plugins[$plugin_name]."/".$plugin_name;
 	}
 
 	protected function readInstalledPlugins() {
@@ -311,7 +310,7 @@ class IliasPluginInstaller implements \CaT\Ilse\Interfaces\Plugin
 	protected function readPlugins($path) {
 		$plugins = array_diff(scandir($path), array('.','..'));
 		foreach ($plugins as $key => $plugin) {
-			$this->installed_plugins[$plugin] = $path."/".$plugin;
+			$this->installed_plugins[$plugin] = $path;
 		}
 	}
 

@@ -25,7 +25,6 @@ class App extends Application
 								GitWrapper\Git $gw)
 	{
 		parent::__construct();
-
 		$ge 	= new GitExecuter();
 		$repos 	= $this->getConfigRepos($path, $gw, $parser);
 
@@ -93,7 +92,8 @@ class App extends Application
 				$clone_path = $this->createUniqueDir($path, $repo);
 				$ge->cloneGitTo($repo,
 								self::I_R_BRANCH,
-								$clone_path
+								$clone_path,
+								""
 								);
 			}
 		}
