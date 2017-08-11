@@ -25,6 +25,7 @@ class App extends Application
 								GitWrapper\Git $gw)
 	{
 		parent::__construct();
+
 		$ge 	= new GitExecuter();
 		$repos 	= $this->getConfigRepos($path, $gw, $parser);
 
@@ -83,19 +84,25 @@ class App extends Application
 	 */
 	protected function initConfigRepo($path, GitWrapper\Git $gw, Interfaces\Parser $parser, $repos, GitExecuter $ge)
 	{
+		$name = "";
 		$path = $path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG;
 
-		if(!is_dir($path))
+		foreach ($repos as $repo)
 		{
-			foreach ($repos as $repo)
+			$dir = $this->getUniqueDirName($path, $repo);
+			if(!is_dir($dir))
 			{
-				$clone_path = $this->createUniqueDir($path, $repo);
-				$ge->cloneGitTo($repo,
-								self::I_R_BRANCH,
-								$clone_path,
-								""
-								);
+				mkdir($dir, 0755, true);
 			}
+			else
+			{
+				$name = basename($repo, '.git');
+			}
+			$ge->cloneGitTo($repo,
+							self::I_R_BRANCH,
+							$dir,
+							$name
+							);
 		}
 	}
 
@@ -142,14 +149,14 @@ class App extends Application
 	}
 
 	/**
-	 * Create a directory named with md5 hash of url
+	 * Get a name from md5 hash of path + url
 	 *
 	 * @param string 		$path
 	 * @param string 		$url
 	 *
 	 * @return string
 	 */
-	protected function createUniqueDir($path, $url)
+	protected function getUniqueDirName($path, $url)
 	{
 		assert('is_string($path)');
 		assert('is_string($url)');
@@ -157,7 +164,6 @@ class App extends Application
 		$hash 	= md5($url);
 		$dir 	= $path . "/" . $hash;
 
-		mkdir($dir, 0755, true);
 		return $dir;
 	}
 

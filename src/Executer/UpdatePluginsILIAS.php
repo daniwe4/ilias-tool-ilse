@@ -54,7 +54,7 @@ class UpdatePluginsILIAS extends BaseExecuter
 		$ic = new \CaT\Ilse\IliasReleaseConfigurator($this->absolute_path, $this->client_id);
 		$this->pc = $ic->getPluginsConfigurator();
 		echo "Initialize plugin configurator...";
-		echo "\t\t\t\t\t\t\t\t\tDone!\n";
+		echo "\tDone!\n";
 	}
 
 	/**
@@ -64,11 +64,11 @@ class UpdatePluginsILIAS extends BaseExecuter
 	{
 		if($this->gc->plugin() !== null)
 		{
-			echo "\nUpdating plugins...";
+			echo "\nUpdating plugins...\n";
 			$this->pc->installPlugins($this->gc->plugin());
 			$this->pc->updatePlugins($this->gc->plugin());
 			$this->pc->activatePlugins($this->gc->plugin());
-			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+			echo "\t\t\t\t\tDone!\n";
 		}
 	}
 
@@ -79,6 +79,6 @@ class UpdatePluginsILIAS extends BaseExecuter
 	{
 		echo "\nUninstalling plugins...";
 		$this->pc->uninstallPlugins($this->gc->plugin());
-		echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		echo "\t\t\tDone!\n";
 	}
 }
