@@ -83,7 +83,7 @@ class UpdateILIAS extends BaseExecuter
 								$this->client_id);
 		$this->lng = $sh->initLanguage();
 		$sh->init();
-		echo "\t\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		echo "\t\t\tDone!\n";
 	}
 
 	/**
@@ -96,7 +96,7 @@ class UpdateILIAS extends BaseExecuter
 		$this->iinst = new \CaT\Ilse\IliasReleaseInstaller($setup, $this->gc);
 		$this->iinst->newClient($this->client_id);
 		$this->iinst->connectDatabase();
-		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		echo "\t\tDone!\n";
 	}
 
 	/**
@@ -104,10 +104,10 @@ class UpdateILIAS extends BaseExecuter
 	 */
 	protected function cloneILIAS()
 	{
-		echo "Updating ILIAS Code from ".$this->git_url;
-		echo " (This could take a few minutes)...";
+		echo "Updating ILIAS Code from\n";
+		echo "(This could take a few minutes)...";
 		$this->git->cloneGitTo($this->git_url, $this->git_branch_name, $this->absolute_path, "");
-		echo "\t\t\tDone!\n";
+		echo "\tDone!\n";
 	}
 
 	/**
@@ -118,7 +118,7 @@ class UpdateILIAS extends BaseExecuter
 		echo "\nUpdating database...";
 		$this->db = $this->iinst->getDatabaseHandle();
 		$this->db_updater = new \ilDBUpdate($this->db);
-		echo "\t\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		echo "\t\t\tDone!\n";
 	}
 
 	/**
@@ -128,7 +128,7 @@ class UpdateILIAS extends BaseExecuter
 	{
 		echo "Applying updates...";
 		$this->iinst->applyUpdates($this->db_updater);
-		echo "\t\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		echo "\t\t\tDone!\n";
 	}
 
 	/**
@@ -138,7 +138,7 @@ class UpdateILIAS extends BaseExecuter
 	{
 		echo "Applying hotfixes...";
 		$this->iinst->applyHotfixes($this->db_updater);
-		echo "\t\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		echo "\t\t\tDone!\n";
 	}
 
 	/**
@@ -149,6 +149,6 @@ class UpdateILIAS extends BaseExecuter
 		echo "Updating languages...";
 		$this->lng->setDbHandler($this->db);
 		$this->iinst->installLanguages($this->lng);
-		echo "\t\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		echo "\t\t\tDone!\n";
 	}
 }
