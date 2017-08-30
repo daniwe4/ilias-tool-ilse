@@ -41,34 +41,6 @@ class DbConfigTest extends PHPUnit_Framework_TestCase {
 		catch (\InvalidArgumentException $e) {}
 	}
 
-	public function DBConfigValueProvider() {
-		$ret = array();
-		$take_it = 0;
-		$take_every_Xth = 10;
-		foreach ($this->hostProvider() as $host) {
-			foreach ($this->databaseProvider() as $database) {
-				foreach ($this->userProvider() as $user) {
-					foreach ($this->passwordProvider() as $password) {
-						foreach ($this->engineProvider() as $engine) {
-							foreach ($this->encodingProvider() as $encoding) {
-								foreach ($this->createDbProvider() as $create_db) {
-									$take_it++;
-									if (($take_it % $take_every_Xth) != 0) {
-										continue;
-									}
-									$ret[] = array
-										( $host[0], $database[0], $user[0], $password[0], $engine[0], $encoding[0], $create_db[0]
-										, $host[1] && $database[1] && $user[1] && $password[1] && $engine[1] && $encoding[1] && $create_db[1]);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return $ret;
-	}
-
 	public function hostProvider() {
 		return array
 			( array("localhost", true)
@@ -140,5 +112,126 @@ class DbConfigTest extends PHPUnit_Framework_TestCase {
 			, array("ja_mach", false)
 			, array(array(), false)
 			);
+	}
+
+	public function DBConfigValueProvider() {
+		$host_provider = $this->hostProvider();
+		$default_host = $host_provider[0];
+		assert($default_host[1]);
+
+		$database_provider = $this->databaseProvider();
+		$default_database = $database_provider[0];
+		assert($default_database[1]);
+
+		$user_provider = $this->userProvider();
+		$default_user = $user_provider[0];
+		assert($default_user[1]);
+
+		$password_provider = $this->passwordProvider();
+		$default_password = $password_provider[0];
+		assert($default_password[1]);
+
+		$engine_provider = $this->engineProvider();
+		$default_engine = $engine_provider[0];
+		assert($default_engine[1]);
+
+		$encoding_provider = $this->encodingProvider();
+		$default_encoding = $encoding_provider[0];
+		assert($default_encoding[1]);
+
+		$create_db_provider = $this->createDbProvider();
+		$default_create_db = $create_db_provider[0];
+		assert($default_create_db[1]);
+
+		foreach ($host_provider as $host) {
+			yield 
+				[ $host[0]
+				, $default_database[0]
+				, $default_user[0]
+				, $default_password[0]
+				, $default_engine[0]
+				, $default_encoding[0]
+				, $default_create_db[0]
+			 	, $host[1] && $default_database[1] && $default_user[1] && $default_password[1] && $default_engine[1] && $default_encoding[1] && $default_create_db[1]
+				];
+		}
+
+		foreach ($database_provider as $database) {
+			yield 
+				[ $default_host[0]
+				, $database[0]
+				, $default_user[0]
+				, $default_password[0]
+				, $default_engine[0]
+				, $default_encoding[0]
+				, $default_create_db[0]
+			 	, $default_host[1] && $database[1] && $default_user[1] && $default_password[1] && $default_engine[1] && $default_encoding[1] && $default_create_db[1]
+				];
+		}
+
+		foreach ($user_provider as $user) {
+			yield 
+				[ $default_host[0]
+				, $default_database[0]
+				, $user[0]
+				, $default_password[0]
+				, $default_engine[0]
+				, $default_encoding[0]
+				, $default_create_db[0]
+			 	, $default_host[1] && $default_database[1] && $user[1] && $default_password[1] && $default_engine[1] && $default_encoding[1] && $default_create_db[1]
+				];
+		}
+
+		foreach ($password_provider as $password) {
+			yield 
+				[ $default_host[0]
+				, $default_database[0]
+				, $default_user[0]
+				, $password[0]
+				, $default_engine[0]
+				, $default_encoding[0]
+				, $default_create_db[0]
+			 	, $default_host[1] && $default_database[1] && $default_user[1] && $password[1] && $default_engine[1] && $default_encoding[1] && $default_create_db[1]
+				];
+		}
+
+		foreach ($engine_provider as $engine) {
+			yield 
+				[ $default_host[0]
+				, $default_database[0]
+				, $default_user[0]
+				, $default_password[0]
+				, $engine[0]
+				, $default_encoding[0]
+				, $default_create_db[0]
+			 	, $default_host[1] && $default_database[1] && $default_user[1] && $default_password[1] && $engine[1] && $default_encoding[1] && $default_create_db[1]
+				];
+		}
+
+		foreach ($encoding_provider as $encoding) {
+			yield 
+				[ $default_host[0]
+				, $default_database[0]
+				, $default_user[0]
+				, $default_password[0]
+				, $default_engine[0]
+				, $encoding[0]
+				, $default_create_db[0]
+			 	, $default_host[1] && $default_database[1] && $default_user[1] && $default_password[1] && $default_engine[1] && $encoding[1] && $default_create_db[1]
+				];
+		}
+
+		foreach ($create_db_provider as $create_db) {
+			yield 
+				[ $default_host[0]
+				, $default_database[0]
+				, $default_user[0]
+				, $default_password[0]
+				, $default_engine[0]
+				, $default_encoding[0]
+				, $create_db[0]
+			 	, $default_host[1] && $default_database[1] && $default_user[1] && $default_password[1] && $default_engine[1] && $default_encoding[1] && $create_db[1]
+				];
+		}
 	}
 }
