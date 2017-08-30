@@ -2,7 +2,7 @@
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
 namespace CaT\Ilse;
-use CaT\Ilse\GitWrapper\GitWrapper;
+use CaT\Ilse\Git\GitWrapper;
 /**
  * Implementation of the git interface.
  *
@@ -23,7 +23,7 @@ class GitExecuter implements \CaT\Ilse\Interfaces\Git
 		assert('is_string($git_branch)');
 		assert('is_string($installation_path)');
 
-		$git = new GitWrapper($installation_path, $git_url, $name);
+		$git = new Git($installation_path, $git_url, $name);
 
 		$cur_dir = getcwd();
 		if(is_dir($installation_path."/".$name)) {
