@@ -7,7 +7,7 @@ require_once("GitTest.php");
  * 
  * @author Daniel Weise <daniel.weise@concepts-and-training.de>
  */
-class GitStandardTest extends GitTest
+class GitWrapperTest extends GitTest
 {
 	public function getImplementation()
 	{
