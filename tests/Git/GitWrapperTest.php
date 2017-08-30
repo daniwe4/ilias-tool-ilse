@@ -11,6 +11,7 @@ class GitWrapperTest extends GitTest
 {
 	public function getImplementation()
 	{
+		// TODO: this should not rely on connectivity to github. it could use this repo instead.
 		return new \CaT\Ilse\Git\GitWrapper(sys_get_temp_dir(), "https://github.com/daniel4w/DWLibrary.git");
 	}
 
