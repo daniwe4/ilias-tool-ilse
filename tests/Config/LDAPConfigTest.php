@@ -1,9 +1,13 @@
 <?php
 
+require_once(__DIR__."/ConfigTestHelper.php");
+
 use \CaT\Ilse\Config\LDAP;
 use \CaT\Ilse\Config\LDAPMappings;
 
 class LDAPConfigTest extends PHPUnit_Framework_TestCase{
+	use ConfigTestHelper;
+
 	public function test_not_enough_params() {
 		try {
 			$config = new LDAP();
@@ -57,38 +61,6 @@ class LDAPConfigTest extends PHPUnit_Framework_TestCase{
 			$this->assertFalse("Should have raised.");
 		}
 		catch (\InvalidArgumentException $e) {}
-	}
-
-	public function buildProviderCombinations($provider_names) {
-		$providers = [];
-		$defaults = [];
-
-		foreach ($provider_names as $provider) {
-			$providers[$provider] = $this->$provider();
-			$defaults[$provider] = $providers[$provider][0];
-			if (!$defaults[$provider][1]) {
-				throw new \LogicException("Problem in test: First provided value should be ok.");
-			}
-		}
-
-		foreach ($provider_names as $current_provider) {
-			foreach ($providers[$current_provider] as $val) {
-				$vals = [];
-				$is_ok = true;
-				foreach ($provider_names as $provider) {
-					if ($current_provider == $provider) {
-						$vals[] = $val[0];
-						$is_ok = $is_ok && $val[1];
-					}
-					else {
-						$vals[] = $defaults[$provider][0];
-						$is_ok = $is_ok && $defaults[$provider][1];
-					}
-				}
-				$vals[] = $is_ok;
-				yield $vals;
-			}
-		}
 	}
 
 	public function LDAPConfigValueProvider() {
