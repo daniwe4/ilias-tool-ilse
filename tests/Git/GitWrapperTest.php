@@ -1,6 +1,5 @@
 <?php
-require_once(__DIR__ . "/../vendor/autoload.php");
-require_once("GitTest.php");
+require_once(__DIR__."/GitTest.php");
 
 /**
  * Test class for git commands
