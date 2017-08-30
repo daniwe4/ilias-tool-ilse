@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Extended GPL, see LICENSE */
+/* Copyright (c) 2017 Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
 namespace CaT\Ilse\Command;
 
@@ -8,9 +8,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Implementation of the config command
+ * Implementation of the example config command
  *
- * @author Daniel Weise 	<daniel.weise@concepts-and-training.de>
+ * @author Richard Klees <richard.klees@concepts-and-training.de>
  */
 class ExampleConfigCommand extends Command
 {
