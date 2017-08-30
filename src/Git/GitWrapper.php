@@ -1,8 +1,8 @@
 <?php
 
-namespace CaT\Ilse\GitWrapper;
+namespace CaT\Ilse\Git;
 
-use CaT\Ilse\GitWrapper\GitException;
+use CaT\Ilse\Git\GitException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
