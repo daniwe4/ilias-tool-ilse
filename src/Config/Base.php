@@ -132,7 +132,7 @@ abstract class Base {
 			$ok = $this->checkValueContent($key, $value);
 		}
 
-		if (!$ok && !$optional) {
+		if (!$ok) {
 			throw new \InvalidArgumentException
 						( "Error in field $key: Expected "
 						. print_r($type, true)." found ".print_r($value, true));
