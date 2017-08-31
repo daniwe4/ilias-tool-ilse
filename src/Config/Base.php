@@ -191,6 +191,8 @@ abstract class Base {
 	/**
 	 * is value in array
 	 *
+	 * TODO: remove this and just use "in_array"
+	 *
 	 * @param string|int 	$value 		entered value
 	 * @param array 		$valids		valid entries for the key
 	 *
