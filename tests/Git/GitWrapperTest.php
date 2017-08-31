@@ -8,14 +8,9 @@ require_once(__DIR__."/GitTest.php");
  */
 class GitWrapperTest extends GitTest
 {
-	public function getImplementation()
+	public function getImplementation($target_dir, $remote_url, $repo_name)
 	{
 		// TODO: this should not rely on connectivity to github. it could use this repo instead.
-		return new \CaT\Ilse\Git\GitWrapper(sys_get_temp_dir(), "https://github.com/daniel4w/DWLibrary.git");
-	}
-
-	public function getExceptionImplementation()
-	{
-		return new \CaT\Ilse\Git\GitWrapper("www/falscheAdresse/de", "httpsss://testbla");
+		return new \CaT\Ilse\Git\GitWrapper($target_dir, $remote_url, $repo_name);
 	}
 }

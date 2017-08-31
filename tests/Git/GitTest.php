@@ -1,5 +1,17 @@
 <?php
 
+/* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
+
+function tempdir() {
+	$name = tempnam(sys_get_temp_dir(), "ilse");
+	if (file_exists($name)) {
+		unlink($name);
+	}
+	mkdir($name);
+	assert('is_dir($name)');
+	return $name;
+}
+
 /**
  * Test class for git commands
  * 
@@ -10,21 +22,21 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @return CaT\Ilse\Git\Git
 	 */
-	abstract public function getImplementation();
+	abstract public function getImplementation($target_dir, $remote_url, $repo_name);
 
 	/**
 	 * @var CaT\Ilse\Git\Git
 	 */
-	protected static $gw;
-	protected static $gwe;
+	protected $gw;
+	protected $gwe;
 
 	/**
 	 * Setup the testing environment
 	 */
 	public function setUp()
 	{
-		self::$gw 	= $this->getImplementation();
-		self::$gwe 	= $this->getExceptionImplementation();
+		$this->gw 	= $this->getImplementation(tempdir(), __DIR__."/../..", "ilias-tool-ilse");
+		$this->gwe 	= $this->getImplementation("www/falscheAdresse/de", "httpsss://testbla", "testbla");
 	}
 
 	/**
@@ -32,8 +44,8 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_gitClone()
 	{
-		self::$gw->gitClone();
-		$this->assertFileExists(self::$gw->gitGetPath() . "/DWLibrary/run_tests.sh");
+		$this->gw->gitClone();
+		$this->assertFileExists($this->gw->gitGetPath() . "/ilias-tool-ilse/run_tests.sh");
 	}
 
 	/**
@@ -41,7 +53,8 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_gitFetch()
 	{
-		$result = self::$gw->gitFetch();
+		$this->gw->gitClone();
+		$result = $this->gw->gitFetch();
 		$this->assertEquals($result, 1);
 	}
 
@@ -50,20 +63,34 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_gitPull()
 	{
-		$result = self::$gw->gitPull();
+		$this->gw->gitClone();
+		$result = $this->gw->gitPull("release_5-2");
 		$this->assertEquals($result, 1);
 	}
 
 	/**
 	 * Test the gitCheckout method
+	 *
+	 * @dataProvider checkoutProvider
 	 */
-	public function test_gitCheckout()
+	public function test_gitCheckout($branch, $new, $is_ok)
 	{
-		foreach($this->getCheckoutProvider() as $provider)
-		{
-			$result = self::$gw->gitCheckout($provider[0], $provider[1]);
-			$this->assertEquals($result, $provider[2]);
+		$this->gw->gitClone();
+		$correct_control_flow = false;
+		if ($is_ok) {
+			$this->gw->gitCheckout($branch, $new);
+			$correct_control_flow = true;
 		}
+		else {
+			try {
+				$this->gw->gitCheckout($branch, $new);
+				$this->assertFalse("Should not get here...");
+			}
+			catch (GitException $e) {
+				$correct_control_flow = true;
+			}
+		}
+		$this->assertTrue($correct_control_flow);
 	}
 
 	/**
@@ -71,8 +98,10 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_gitGetBranches()
 	{
-		$branches = self::$gw->gitGetBranches();
-		$this->assertContains("test", $branches);
+		$this->gw->gitClone();
+		$this->gw->gitCheckout("release_5-2");
+		$branches = $this->gw->gitGetBranches();
+		$this->assertContains("release_5-2", $branches);
 	}
 
 	/**
@@ -82,7 +111,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	{
 		try
 		{
-			self::$gw->gitClone();
+			$this->gwe->gitClone();
 			$this->assertFalse("Should have raised.");
 		}
 		catch(\Cat\Ilse\Git\GitException $e)
@@ -98,7 +127,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	{
 		try
 		{
-			self::$gwe->gitFetch();
+			$this->gwe->gitFetch();
 			$this->assertFalse("Should have raised.");
 		}
 		catch(\Cat\Ilse\Git\GitException $e)
@@ -114,7 +143,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	{
 		try
 		{
-			self::$gwe->gitPull();
+			$this->gwe->gitPull("release_5-2");
 			$this->assertFalse("Should have raised.");
 		}
 		catch(\Cat\Ilse\Git\GitException $e)
@@ -125,16 +154,14 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Test gitCheckoutException
+	 *
+	 * @dataProvider checkoutProvider
 	 */
-	public function test_gitCheckoutException()
+	public function test_gitCheckoutException($branch, $new, $_)
 	{
 		try
 		{
-			foreach($this->getCheckoutProvider() as $provider)
-			{
-				$result = self::$gw->gitCheckout($provider[0], $provider[1]);
-				$this->assertEquals($result, $provider[2]);
-			}
+			$result = $this->gwe->gitCheckout($branch, $new);
 			$this->assertFalse("Should have raised.");
 		}
 		catch(\Cat\Ilse\Git\GitException $e)
@@ -146,19 +173,8 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Provides data for the gitCheckout test
 	 */
-	protected function getCheckoutProvider()
+	public function checkoutProvider()
 	{
-		return [["test", true, true],
-				["blow", true, true],
-				["test", false, true]];
-	}
-
-	/**
-	 * Do cleanup
-	 */
-	public static function tearDownAfterClass()
-	{
-		echo "\nRemoving ". self::$gw->gitGetPath().'/'.self::$gw->gitGetName();
-		exec("rm -rf " . self::$gw->gitGetPath().'/'.self::$gw->gitGetName());
+		return [["release_5-2", true, true]];
 	}
 }
