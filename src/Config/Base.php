@@ -128,7 +128,7 @@ abstract class Base {
 			$ok = $value instanceof $type;
 		}
 
-		if ($ok && !is_array($type)) {
+		if ($ok and $key !== null) {
 			$ok = $this->checkValueContent($key, $value);
 		}
 
@@ -165,7 +165,7 @@ abstract class Base {
 					// checks on input values, but i would call checkValue with a
 					// specific key with array($type) and $type as well.
 					foreach ($value as $v) {
-						$this->checkValue($key, $content, $v, $optional);
+						$this->checkValue(null, $content, $v, $optional);
 					}
 					return true;
 				}
