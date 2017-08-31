@@ -156,8 +156,8 @@ abstract class Base {
 			return false;
 		}
 		else {
-			if(empty($value)){
-				return false;
+			if(count($value) == 0){
+				return true;
 			} else {
 				try {
 					// TODO: This is not very nice. I introduced $key to make
