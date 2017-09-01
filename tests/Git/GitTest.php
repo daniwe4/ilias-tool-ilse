@@ -64,7 +64,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	public function test_gitPull()
 	{
 		$this->gw->gitClone();
-		$result = $this->gw->gitPull("release_5-2");
+		$result = $this->gw->gitPull("master");
 		$this->assertEquals($result, 1);
 	}
 
@@ -99,9 +99,9 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	public function test_gitGetBranches()
 	{
 		$this->gw->gitClone();
-		$this->gw->gitCheckout("release_5-2");
+		$this->gw->gitCheckout("master");
 		$branches = $this->gw->gitGetBranches();
-		$this->assertContains("release_5-2", $branches);
+		$this->assertContains("master", $branches);
 	}
 
 	/**
@@ -143,7 +143,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	{
 		try
 		{
-			$this->gwe->gitPull("release_5-2");
+			$this->gwe->gitPull("master");
 			$this->assertFalse("Should have raised.");
 		}
 		catch(\Cat\Ilse\Git\GitException $e)
@@ -175,6 +175,6 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	 */
 	public function checkoutProvider()
 	{
-		return [["release_5-2", true, true]];
+		return [["master", true, true]];
 	}
 }
