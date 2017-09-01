@@ -6,8 +6,11 @@ php:
     - hhvm
 install:
     - "composer install"
+    - "export MY_CURRENT_COMMIT=$(git rev-parse HEAD)"
     - "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
     - "git fetch --unshallow"
+    - "git checkout master"
+    - "git checkout $MY_CURRENT_COMMIT"
 script: ./run_tests.sh
 before_deploy:
     - "rm -rf vendor"
