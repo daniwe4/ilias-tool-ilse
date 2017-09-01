@@ -6,7 +6,8 @@ php:
     - hhvm
 install:
     - "composer install"
-    - "git pull --all"
+    - "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
+    - "git fetch --unshallow"
 script: ./run_tests.sh
 before_deploy:
     - "rm -rf vendor"
