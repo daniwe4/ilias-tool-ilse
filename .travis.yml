@@ -5,8 +5,8 @@ php:
     - 7.1
     - hhvm
 install:
-	- "composer install"
-	- "git pull --all"
+    - "composer install"
+    - "git pull --all"
 script: ./run_tests.sh
 before_deploy:
     - "rm -rf vendor"
