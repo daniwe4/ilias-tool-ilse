@@ -175,6 +175,6 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	 */
 	public function checkoutProvider()
 	{
-		return [["master", true, true]];
+		return [["master", false, true]];
 	}
 }
