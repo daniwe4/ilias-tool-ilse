@@ -1,8 +1,22 @@
 language: php 
+dist: trusty
 php:
     - 5.6
     - 7.0
     - hhvm
-install:
-    composer install
+install: composer install
 script: ./run_tests.sh
+before_deploy:
+    - "rm -rf vendor"
+    - "composer install --no-dev"
+	- "./build_phar.php"
+deploy:
+    provider: releases
+    api-key:
+        secure: "t71CTqhIrs8kxYJ5a+nF2D7vnkLimkOd949/ozfVJL4Jc0/1pFLs3puCrmot1+x3l3LWxJNOLTjoWFyJLD52Cx2hBNflza8zRvlzBiiIDa2U0xl/NkkwSK3Dy7bPTZxSMluI7axTOf8mwDkFvQwh8S8pne4Zri+mUO/ybIHyF8xgFwYXHpkAtS2BmW2f3y0t/6mTsVyQbTxjcniFspd8Z39qjDOu7OZZc4b3I8d3NFMQqdjW9PTSX4CopebU4ve0BVbdsZPUE1we0s4Z7k9G4FzVc6guaVWwi8MmfWpVG6NeSMrX8db9OUbhOXGkGkUvY2G9YZFKDEEMv58o8kYBWY0R//fDHTv35mJsov6j9LkChQTMJaYcYtUlHrV6s/ACT7Y8vO1I2eZCa32KqFMYqxSjIIjzbmj+9snI6nwUq1LzshYObd7dvVdy/eGxvnAZVpZF5KQIVpQxz0oqYJ3Vf5GQZFFccq2ZTXJlbPJZTUsW6l6T1R/JM0w0L0bLNx3tj7L+uavBp0hRuGUmeN2kRDyhPjJecihsau1C0wlBF+ljOwNl1i0erJf7DslEXjqrBLBuEzTVi6buKM6JdV3nswZfjeE6To+LriTbuitg1S/yv5E09bZ2AoJFtOsfK6/jk56Vz0w/kR4vG/+EriYWYdsY0izrSczDJatknb6xwLM="
+    file: ilse.phar
+    skip_cleanup: true
+    on:
+        php: 5.6
+        tags: true
+        repo: conceptsandtraining/ilias-tool-ilse
