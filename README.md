@@ -3,7 +3,7 @@
 # ilse
 **A Command Line Installation Script for [ILIAS](https://github.com/ILIAS-eLearning/ILIAS)**
 
-**Contact:** [Stefan Hecken](https://github.com/shecken)
+**Contact:** [Daniel Weise](https://github.com/daniwe4), [Richard Klees](https://github.com/klees)
 
 ## Usage
 ### Software requirements
