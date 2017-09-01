@@ -15,7 +15,7 @@ $merger 	= new \CaT\Ilse\MergeConfigs();
 $path 		= new \CaT\Ilse\CommonPathes();
 $git 		= new \CaT\Ilse\GitExecuter();
 $parser 	= new \CaT\Ilse\YamlParser();
-$gw 		= new \CaT\Ilse\GitWrapper\GitWrapper();
+$gw 		= new \CaT\Ilse\Git\GitWrapper();
 $app 		= new \CaT\Ilse\App($path, $merger, $checker, $git, $parser, $gw);
 
 $app->run();

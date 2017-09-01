@@ -22,7 +22,7 @@ class App extends Application
 								Interfaces\RequirementChecker $checker,
 								Interfaces\Git $git,
 								Interfaces\Parser $parser,
-								GitWrapper\Git $gw)
+								Git\Git $gw)
 	{
 		parent::__construct();
 
@@ -78,12 +78,12 @@ class App extends Application
 	 * Initialize the config repo in ~/.ilias-installer/config
 	 *
 	 * @param string 				$path
-	 * @param GitWrapper\Git 		$gw
+	 * @param Git\Git 		$gw
 	 * @param Interfaces\Parser 	$parser
 	 * @param string 				$repos
 	 * @param GitExecuter 			$ge
 	 */
-	protected function initConfigRepo($path, GitWrapper\Git $gw, Interfaces\Parser $parser, $repos, GitExecuter $ge)
+	protected function initConfigRepo($path, Git\Git $gw, Interfaces\Parser $parser, $repos, GitExecuter $ge)
 	{
 		$name = "";
 		$path = $path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG;
@@ -129,12 +129,12 @@ class App extends Application
 	 * Get the config repos
 	 *
 	 * @param string 				$path
-	 * @param GitWrapper\Git 		$gw
+	 * @param Git\Git 		$gw
 	 * @param Interfaces\Parser 	$parser
 	 *
 	 * @return string
 	 */
-	protected function getConfigRepos($path, GitWrapper\Git $gw, Interfaces\Parser $parser)
+	protected function getConfigRepos($path, Git\Git $gw, Interfaces\Parser $parser)
 	{
 		assert('is_string($path)');
 
