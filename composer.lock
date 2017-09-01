@@ -4,63 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3144d7f557b0219ca9e43e8a0a4e5da8",
-    "content-hash": "5028ae87774e382a006ef6402e66bcf5",
+    "hash": "4a38b6fae93244866978fadf9d1a1cfd",
+    "content-hash": "73c5f9da34c6c4599eb9b0f28bb16609",
     "packages": [
-        {
-            "name": "gitonomy/gitlib",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/gitonomy/gitlib.git",
-                "reference": "f575b8f7da917ade7890c6aa705fa22545690389"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/gitonomy/gitlib/zipball/f575b8f7da917ade7890c6aa705fa22545690389",
-                "reference": "f575b8f7da917ade7890c6aa705fa22545690389",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/process": "^2.3|^3.0"
-            },
-            "require-dev": {
-                "psr/log": "^1.0"
-            },
-            "suggest": {
-                "psr/log": "Add some log"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Gitonomy\\Git\\": "src/Gitonomy/Git/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexandre Salomé",
-                    "email": "alexandre.salome@gmail.com",
-                    "homepage": "http://alexandre-salome.fr"
-                },
-                {
-                    "name": "Julien DIDIER",
-                    "email": "genzo.wm@gmail.com",
-                    "homepage": "http://www.jdidier.net"
-                }
-            ],
-            "description": "Library for accessing git",
-            "homepage": "http://gitonomy.com",
-            "time": "2015-12-01 22:25:57"
-        },
         {
             "name": "psr/log",
             "version": "1.0.2",

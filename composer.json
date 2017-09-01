@@ -17,7 +17,6 @@
     "require": {
         "symfony/console" : "3.2.*",
         "symfony/yaml" : "2.8",
-        "gitonomy/gitlib": "1.0.0",
         "symfony/process": "2.4.*"
     },
     "require-dev" : {
