@@ -23,7 +23,7 @@ class GitExecuter implements \CaT\Ilse\Interfaces\Git
 		assert('is_string($git_branch)');
 		assert('is_string($installation_path)');
 
-		$git = new Git($installation_path, $git_url, $name);
+		$git = new GitWrapper($installation_path, $git_url, $name);
 
 		$cur_dir = getcwd();
 		if(is_dir($installation_path."/".$name)) {
