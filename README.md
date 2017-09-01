@@ -1,20 +1,17 @@
 [![Software License](https://img.shields.io/aur/license/yaourt.svg?style=round-square)](LICENSE.md)
+[![Build Status](https://travis-ci.com/conceptsandtraining/ilias-tool-ilse.svg?branch=master)](https://travis-ci.org/conceptsandtraining/ilse-tool-ilse)
 
 # ilse
 **A Command Line Installation Script for [ILIAS](https://github.com/ILIAS-eLearning/ILIAS)**
 
-**Contact:** [Stefan Hecken](https://github.com/shecken)
+**Contact:** [Daniel Weise](https://github.com/daniwe4), [Richard Klees](https://github.com/klees)
 
 ## Usage
 ### Software requirements
-```
-* PHP 5.4 or higher (PHP 7 works since release_5-2)
-* MySQL 5.0.x or higher
-* Zip and Unzip
-* ImageMagick
-* Composer
+* PHP 5.6 or higher (PHP 7 works since release_5-2)
 * git 2.1.4 or higher
-```
+* [ILIAS requirements](https://github.com/ILIAS-eLearning/ILIAS/blob/trunk/docs/configuration/install.md)
+
 ### Installation
 ```
 $ cd DESTINATION_FOLDER
@@ -38,6 +35,7 @@ Each config file is inside a directory that represents the customomer name.
 
 ### Required configuration entries
 For new installation of ILIAS you need these configuration entries.
+
 ```
 * client
 * database

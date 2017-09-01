@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /**
  * Main entry point for Ilse
@@ -18,4 +17,8 @@ $parser 	= new \CaT\Ilse\YamlParser();
 $gw 		= new \CaT\Ilse\Git\GitWrapper();
 $app 		= new \CaT\Ilse\App($path, $merger, $checker, $git, $parser, $gw);
 
-$app->run();
+// Do not run in unit testing context
+if (stripos($_SERVER["SCRIPT_NAME"], "phpunit") === false) {
+	$app->run();
+}
+
