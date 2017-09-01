@@ -9,7 +9,7 @@ script: ./run_tests.sh
 before_deploy:
     - "rm -rf vendor"
     - "composer install --no-dev"
-	- "./build_phar.php"
+    - "./build_phar.php"
 deploy:
     provider: releases
     api-key:
