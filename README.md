@@ -1,4 +1,5 @@
 [![Software License](https://img.shields.io/aur/license/yaourt.svg?style=round-square)](LICENSE.md)
+[![Build Status](https://travis-ci.com/conceptsandtraining/ilias-tool-ilse.svg?branch=master)](https://travis-ci.org/conceptsandtraining/ilse-tool-ilse)
 
 # ilse
 **A Command Line Installation Script for [ILIAS](https://github.com/ILIAS-eLearning/ILIAS)**
