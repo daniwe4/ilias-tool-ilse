@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS;
+namespace CaT\Ilse;
 
 /**
 * implementation of an ilias installer
@@ -9,13 +9,13 @@ namespace CaT\InstILIAS;
 * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
 */
 
-class IliasReleaseInstaller implements \CaT\InstILIAS\interfaces\Installer {
+class IliasReleaseInstaller implements \CaT\Ilse\Interfaces\Installer {
 	protected $ilias_setup;
 	protected $general;
 
 	const SESSION_EXPIRE_VALUE = 7200;
 
-	public function __construct(\ilSetup $ilias_setup, \CaT\InstILIAS\Config\General $general) {
+	public function __construct(\ilSetup $ilias_setup, \CaT\Ilse\Config\General $general) {
 		$this->ilias_setup = $ilias_setup;
 		$this->general = $general;
 	}
@@ -48,6 +48,8 @@ class IliasReleaseInstaller implements \CaT\InstILIAS\interfaces\Installer {
 		$this->ilias_setup->getClient()->setDSN();
 		$this->ilias_setup->getClient()->ini->setVariable("session", "expire", ($ret["session_expire"] * 60));
 
+		define("SYSTEM_FOLDER_ID", $this->ilias_setup->getClient()->ini->readVariable('system', 'SYSTEM_FOLDER_ID'));
+
 		if(!$this->ilias_setup->saveNewClient()) {
 			throw new \Exception($this->ilias_setup->getError());
 		}
@@ -78,7 +80,10 @@ class IliasReleaseInstaller implements \CaT\InstILIAS\interfaces\Installer {
 	 * @inheritdoc
 	 */
 	public function installDatabase() {
-		$this->ilias_setup->createDatabase($this->general->database()->encoding());
+		if((bool)$this->general->database()->createDb()) {
+			$this->ilias_setup->createDatabase($this->general->database()->encoding());
+		}
+
 		$this->ilias_setup->installDatabase();
 	}
 
@@ -213,6 +218,7 @@ class IliasReleaseInstaller implements \CaT\InstILIAS\interfaces\Installer {
 
 		$ret["datadir_path"] = $this->general->client()->dataDir();
 		$ret["log_path"] = $this->general->log()->path()."/".$this->general->log()->fileName();
+		$ret["error_log_path"] = $this->general->log()->errorLog();
 		$ret["time_zone"] = $this->general->server()->timezone();
 		$ret["convert_path"] = $this->general->tools()->convert();
 		$ret["zip_path"] = $this->general->tools()->zip();
@@ -224,7 +230,6 @@ class IliasReleaseInstaller implements \CaT\InstILIAS\interfaces\Installer {
 			$ret["auto_https_detect_header_name"] = $this->general->httpsAutoDetect()->headerName();
 			$ret["auto_https_detect_header_value"] = $this->general->httpsAutoDetect()->headerValue();
 		}
-
 		return $ret;
 	}
 

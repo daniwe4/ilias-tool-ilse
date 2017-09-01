@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS\Config;
+namespace CaT\Ilse\Config;
 
 /**
  * Configuration for the log of ILIAS.
@@ -10,6 +10,7 @@ namespace CaT\InstILIAS\Config;
  *
  * @method string path()
  * @method string fileName()
+ * @method string errorLog()
  */
 class Log extends Base {
 	/**
@@ -19,6 +20,7 @@ class Log extends Base {
 		return array
 			( "path"			=> array("string", false)
 			, "file_name"		=> array("string", false)
+			, "error_log"		=> array("string", false)
 			);
 	}
 }

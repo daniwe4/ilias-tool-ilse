@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS\Config;
+namespace CaT\Ilse\Config;
 
 /**
  * Configuration for one client of ILIAS.
@@ -21,7 +21,7 @@ namespace CaT\InstILIAS\Config;
  * @method string protocolVersion()
  * @method string userSearchScope()
  * @method string registerRoleName()
- * @method CaT\\InstILIAS\\Config\\LDAPMappings mappings()
+ * @method CaT\\Ilse\\Config\\LDAPMappings mappings()
  */
 class LDAP extends Base {
 	const SERVER_REGEX = "/^(ldap:\/\/)/";
@@ -44,7 +44,7 @@ class LDAP extends Base {
 			, "protocol_version"	=> array("int", false)
 			, "user_search_scope"	=> array("int", false)
 			, "register_role_name"	=> array("string", false)
-			, "mappings"	=> array("CaT\\InstILIAS\\Config\\LDAPMappings", true)
+			, "mappings"	=> array("CaT\\Ilse\\Config\\LDAPMappings", true)
 			);
 	}
 

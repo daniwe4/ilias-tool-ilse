@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\InstILIAS\Configurators;
+namespace CaT\Ilse\Configurators;
 
 /**
  * Configurate ILIAS java server part
@@ -20,9 +20,9 @@ class JavaServer {
 	/**
 	 * Activate java server
 	 *
-	 * @param \CaT\InstILIAS\Config\JavaServer $java_server
+	 * @param \CaT\Ilse\Config\JavaServer $java_server
 	 */
-	public function javaServer(\CaT\InstILIAS\Config\JavaServer $java_server) {
+	public function javaServer(\CaT\Ilse\Config\JavaServer $java_server) {
 		$this->gSetting->set("rpc_server_host", trim($java_server->host()));
 		$this->gSetting->set("rpc_server_port", trim($java_server->port()));
 

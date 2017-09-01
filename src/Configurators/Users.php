@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\InstILIAS\Configurators;
+namespace CaT\Ilse\Configurators;
 
 /**
  * Configurate ILIAS user part
@@ -34,7 +34,7 @@ class Users {
 	 */
 	protected $gDB;
 
-	public function __construct($absolute_path, \ILIAS $ilias, \ilObjUser $user, \ilRbacadmin $rbacadmin, \ilDB $db) {
+	public function __construct($absolute_path, \ILIAS $ilias, \ilObjUser $user, \ilRbacadmin $rbacadmin, $db) {
 		require_once($absolute_path."/Services/User/classes/class.ilObjUser.php");
 		require_once($absolute_path."/Services/PrivacySecurity/classes/class.ilSecuritySettings.php");
 		require_once($absolute_path."/Services/Utilities/classes/class.ilUtil.php");
@@ -48,9 +48,9 @@ class Users {
 	/**
 	 * Configurate the type of self registration
 	 *
-	 * @param \CaT\InstILIAS\Config\Users $users
+	 * @param \CaT\Ilse\Config\Users $users
 	 */
-	public function registration(\CaT\InstILIAS\Config\Users $users) {
+	public function registration(\CaT\Ilse\Config\Users $users) {
 		require_once './Services/Registration/classes/class.ilRegistrationSettings.php';
 		$this->registration_settings = new \ilRegistrationSettings();
 
@@ -63,9 +63,9 @@ class Users {
 	/**
 	 *
 	 *
-	 * @param \CaT\InstILIAS\Config\Users $users
+	 * @param \CaT\Ilse\Config\Users $users
 	 */
-	public function createUserAccounts(\CaT\InstILIAS\Config\Users $users) {
+	public function createUserAccounts(\CaT\Ilse\Config\Users $users) {
 		foreach ($users->users() as $user) {
 			echo "\nCreating user account for :".$user->email()."...";
 			$password = $this->createUser($user);
@@ -73,7 +73,7 @@ class Users {
 		}
 	}
 
-	protected function createUser(\CaT\InstILIAS\Config\User $user) {
+	protected function createUser(\CaT\Ilse\Config\User $user) {
 
 		if(!\ilObjUser::_lookupId($user->login())) {
 			$new_user = new \ilObjUser();
@@ -112,9 +112,9 @@ class Users {
 	/**
 	 * Change the settings of required basic user fields.
 	 *
-	 * @param \CaT\InstILIAS\Config\User $user
+	 * @param \CaT\Ilse\Config\User $user
 	 */
-	public function changeRequirementSettings(\CaT\InstILIAS\Config\Users $user) {
+	public function changeRequirementSettings(\CaT\Ilse\Config\Users $user) {
 		$required_fields = $user->requiredFields();
 
 		foreach ($user->getBasicFields() as $field) {
@@ -127,15 +127,16 @@ class Users {
 	}
 
 	protected function generatePasswort() {
-		return \ilUtil::generatePasswords(1)[0];
+		$pwd = \ilUtil::generatePasswords(1);
+		return $pwd[0];
 	}
 
 	/**
 	 * Configurate the passwort settings
 	 *
-	 * @param \CaT\InstILIAS\Config\PasswordSettings $password_settings
+	 * @param \CaT\Ilse\Config\PasswordSettings $password_settings
 	 */
-	public function passwordSettings(\CaT\InstILIAS\Config\PasswordSettings $password_settings) {
+	public function passwordSettings(\CaT\Ilse\Config\PasswordSettings $password_settings) {
 			$security = \ilSecuritySettings::_getInstance();
 
 			// account security settings

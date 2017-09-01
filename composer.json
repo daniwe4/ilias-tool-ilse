@@ -1,5 +1,5 @@
 {
-    "name": "cat/instilias",
+    "name": "cat/ilse",
     "description": "Installation tool for easier Installation of ILIAS",
     "type": "executable",
     "license": "GPL V3",
@@ -11,12 +11,13 @@
     ],
     "autoload" : {
         "psr-4" : {
-            "CaT\\InstILIAS\\" : "./src"
+            "CaT\\Ilse\\" : "./src"
         }
     },
     "require": {
+        "symfony/console" : "3.2.*",
         "symfony/yaml" : "2.8",
-        "gitonomy/gitlib": "1.0.*",
+        "gitonomy/gitlib": "1.0.0",
         "symfony/process": "2.4.*"
     }
 }

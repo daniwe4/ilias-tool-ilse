@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\InstILIAS\Configurators;
+namespace CaT\Ilse\Configurators;
 
 /**
  * Configurate ILIAS org unit part
@@ -13,7 +13,7 @@ class OrgUnits {
 	 */
 	protected $gDB;
 
-	public function __construct($absolute_path, \ilDB $db) {
+	public function __construct($absolute_path, \ilDBInterface $db) {
 		require_once($absolute_path."/Modules/OrgUnit/classes/class.ilObjOrgUnit.php");
 		require_once($absolute_path."/Modules/OrgUnit/classes/Types/class.ilOrgUnitType.php");
 		$this->gDB = $db;
@@ -23,9 +23,9 @@ class OrgUnits {
 	 * creates organisational units according to defined structur
 	 * recursive
 	 *
-	 * @param \CaT\InstILIAS\Config\OrgUnits $install_orgunits
+	 * @param \CaT\Ilse\Config\OrgUnits $install_orgunits
 	 */
-	public function createOrgUnits(\CaT\InstILIAS\Config\OrgUnits $install_orgunits) {
+	public function createOrgUnits(\CaT\Ilse\Config\OrgUnits $install_orgunits) {
 		
 		foreach ($install_orgunits->orgunits() as $key => $value) {
 			$this->createOrgunit($value, \ilObjOrgUnit::getRootOrgRefId());
@@ -57,9 +57,9 @@ class OrgUnits {
 	/**
 	 *
 	 *
-	 * @param \CaT\InstILIAS\Config\OrgunitTypes $orgunit_types
+	 * @param \CaT\Ilse\Config\OrgunitTypes $orgunit_types
 	 */
-	public function createOrgunitTypes(\CaT\InstILIAS\Config\OrgunitTypes $orgunit_types) {
+	public function createOrgunitTypes(\CaT\Ilse\Config\OrgunitTypes $orgunit_types) {
 		foreach ($orgunit_types->orgunitTypes() as $orgunit_type) {
 			$this->createOrgunitType($orgunit_type);
 		}
@@ -67,9 +67,9 @@ class OrgUnits {
 
 	/**
 	 *
-	 * @param \CaT\InstILIAS\Config\OrgunitType $orgunit_type
+	 * @param \CaT\Ilse\Config\OrgunitType $orgunit_type
 	 */
-	protected function createOrgunitType(\CaT\InstILIAS\Config\OrgunitType $orgunit_type) {
+	protected function createOrgunitType(\CaT\Ilse\Config\OrgunitType $orgunit_type) {
 		$type = new \ilOrgUnitType();
 
 		$type->setDefaultLang($orgunit_type->defaultLanguage());
@@ -87,9 +87,9 @@ class OrgUnits {
 	/**
 	 *
 	 *
-	 * @param \CaT\InstILIAS\Config\OrgunitTypeAssignment $orgunit_type_assignments
+	 * @param \CaT\Ilse\Config\OrgunitTypeAssignment $orgunit_type_assignments
 	 */
-	public function assignOrgunitTypesToOrgunits(\CaT\InstILIAS\Config\OrgunitTypeAssignments $orgunit_type_assignments) {
+	public function assignOrgunitTypesToOrgunits(\CaT\Ilse\Config\OrgunitTypeAssignments $orgunit_type_assignments) {
 		foreach ($orgunit_type_assignments->orgunitTypeAssignments() as $orgunit_type_assignment) {
 			$this->orgunitTypeAssignment($orgunit_type_assignment);
 		}
@@ -98,9 +98,9 @@ class OrgUnits {
 	/**
 	 *
 	 *
-	 * @param \CaT\InstILIAS\Config\OrgunitTypeAssignment $orgunit_type_assignment
+	 * @param \CaT\Ilse\Config\OrgunitTypeAssignment $orgunit_type_assignment
 	 */
-	protected function orgunitTypeAssignment(\CaT\InstILIAS\Config\OrgunitTypeAssignment $orgunit_type_assignment) {
+	protected function orgunitTypeAssignment(\CaT\Ilse\Config\OrgunitTypeAssignment $orgunit_type_assignment) {
 		$orgunit_id = $this->getOrgunitId($orgunit_type_assignment->orgunitTitle());
 		$orgunit_type_id = $this->getOrgunitTypeId($orgunit_type_assignment->orgunitTypeTitle(),$orgunit_type_assignment->orgunitTypeDefaultLanguage());
 
@@ -128,7 +128,8 @@ class OrgUnits {
 				 ."    AND type = 'orgu'";
 		$res = $this->gDB->query($select);
 		if($this->gDB->numRows($res) == 1) {
-			return $this->gDB->fetchAssoc($res)["obj_id"];
+			$row = $this->gDB->fetchAssoc($res);
+			return $row["obj_id"];
 		}
 
 		return null;
@@ -152,7 +153,8 @@ class OrgUnits {
 
 		$res = $this->gDB->query($select);
 		if($this->gDB->numRows($res) == 1) {
-			return $this->gDB->fetchAssoc($res)["id"];
+			$row = $this->gDB->fetchAssoc($res);
+			return $row["id"];
 		}
 
 		return null;

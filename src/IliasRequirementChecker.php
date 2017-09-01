@@ -1,13 +1,13 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS;
+namespace CaT\Ilse;
 /**
  * checks requirements for ILIAS installation
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class IliasRequirementChecker implements \CaT\InstILIAS\interfaces\RequirementChecker {
+class IliasRequirementChecker implements \CaT\Ilse\Interfaces\RequirementChecker {
 	/**
 	 * @inheritdocs
 	 */
@@ -65,7 +65,7 @@ class IliasRequirementChecker implements \CaT\InstILIAS\interfaces\RequirementCh
 		assert('is_string($phpversion)');
 		assert('is_string($branch_name)');
 
-		if($phpversion >= "7.0" && $branch_name != "trunk") {
+		if($phpversion >= "7.1" && $branch_name != "trunk") {
 			return false;
 		}
 
@@ -75,8 +75,8 @@ class IliasRequirementChecker implements \CaT\InstILIAS\interfaces\RequirementCh
 	/**
 	 * @inheritdocs
 	 */
-	public function mysqliExist() {
-		return class_exists("mysqli");
+	public function pdoExist() {
+		return class_exists("PDO");
 	}
 
 	/**
@@ -87,9 +87,10 @@ class IliasRequirementChecker implements \CaT\InstILIAS\interfaces\RequirementCh
 		assert('is_string($user)');
 		assert('is_string($passwd)');
 
-		$mysqli = new \mysqli($host, $user, $passwd);
-
-		if ($mysqli->connect_error) {
+		try{
+			$dsn = 'mysql:host=' . $host . ';charset=utf8';
+			$this->pdo = new \PDO($dsn, $user, $passwd, array(3=>2, 10000=>true, 2=>18000));
+		} catch(Exception $e) {
 			return false;
 		}
 
