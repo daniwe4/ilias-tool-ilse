@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS\Config;
+namespace CaT\Ilse\Config;
 
 /**
  * Config for the languages to be used in ILIAS.
@@ -23,9 +23,34 @@ class Language extends Base {
 	}
 
 	protected static $valid_languages = array(
-		"de"
+		"ar"
+		,"bg"
+		,"cs"
+		,"da"
+		,"de"
+		,"el"
 		,"en"
-		,"nl");
+		,"es"
+		,"et"
+		,"fa"
+		,"fr"
+		,"hu"
+		,"it"
+		,"ja"
+		,"ka"
+		,"lt"
+		,"nl"
+		,"pl"
+		,"pt"
+		,"ro"
+		,"ru"
+		,"sk"
+		,"sq"
+		,"sr"
+		,"tr"
+		,"uk"
+		,"vi"
+		,"zh");
 
 	/**
 	 * @inheritdocs
@@ -33,6 +58,15 @@ class Language extends Base {
 	protected function checkValueContent($key, $value) {
 		switch($key) {
 			case "available":
+				if (count($value) == 0) {
+					return false;
+				}
+				foreach ($value as $lang) {
+					if (!$this->checkContentValueInArray($lang, self::$valid_languages)) {
+						return false;
+					}
+				}
+				return true;
 			case "default":
 				return $this->checkContentValueInArray($value, self::$valid_languages);
 			default:

@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\InstILIAS\Config;
+namespace CaT\Ilse\Config;
 
 /**
  * Configuration for an ILIAS Plugin.
@@ -16,7 +16,7 @@ class OrgunitTypes extends Base {
 	 */
 	public static function fields() {
 		return array
-			("orgunit_types" => array(array("\\CaT\\InstILIAS\\Config\\OrgunitType"), false)
+			("orgunit_types" => array(array("\\CaT\\Ilse\\Config\\OrgunitType"), false)
 			);
 	}
 }

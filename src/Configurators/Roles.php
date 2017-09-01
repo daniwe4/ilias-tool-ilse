@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\InstILIAS\Configurators;
+namespace CaT\Ilse\Configurators;
 
 /**
  * Configurate ILIAS role part
@@ -20,9 +20,9 @@ class Roles {
 	/**
 	 * creates global roles
 	 *
-	 * @param \CaT\InstILIAS\Config\Roles $install_roles
+	 * @param \CaT\Ilse\Config\Roles $install_roles
 	 */
-	public function createRoles(\CaT\InstILIAS\Config\Roles $install_roles) {
+	public function createRoles(\CaT\Ilse\Config\Roles $install_roles) {
 		foreach ($install_roles->roles() as $role => $value) {
 			$newObj = new \ilObjRole();
 			$newObj->setTitle($value->title());

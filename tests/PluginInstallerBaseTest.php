@@ -1,8 +1,8 @@
 <?php
 
-use \CaT\InstILIAS\Config\Plugins;
-use \CaT\InstILIAS\YamlParser;
-use \CaT\InstILIAS\mocks\IliasPluginInstallerMock;
+use \CaT\Ilse\Config\Plugins;
+use \CaT\Ilse\YamlParser;
+use \CaT\Ilse\mocks\IliasPluginInstallerMock;
 
 class PluginInstallerBaseTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
@@ -18,27 +18,31 @@ plugins:
             url: Bernd
             branch: master";
 
-        $this->config = $this->parser->read_config($this->yaml_string, "\\CaT\\InstILIAS\\Config\\Plugins");
+        $this->config = $this->parser->read_config($this->yaml_string, "\\CaT\\Ilse\\Config\\Plugins");
         $this->plugin_installer = new IliasPluginInstallerMock();
 	}
 
 	public function test_installPlugin() {
-		$result = $this->plugin_installer->install($this->config->plugins()[0], "pfad_zu_ilias");
+		$val = $this->config->plugins();
+		$result = $this->plugin_installer->install($val[0], "pfad_zu_ilias");
 		$this->assertTrue($result);
 	}
 
 	public function test_updatePlugin() {
-		$result = $this->plugin_installer->update($this->config->plugins()[0]);
+		$val = $this->config->plugins();
+		$result = $this->plugin_installer->update($val[0]);
 		$this->assertTrue($result);
 	}
 
 	public function test_activatePlugin() {
-		$result = $this->plugin_installer->activate($this->config->plugins()[0]);
+		$val = $this->config->plugins();
+		$result = $this->plugin_installer->activate($val[0]);
 		$this->assertTrue($result);
 	}
 
 	public function test_deactivatePlugin() {
-		$result = $this->plugin_installer->deactivate($this->config->plugins()[0]);
+		$val = $this->config->plugins();
+		$result = $this->plugin_installer->deactivate($val[0]);
 		$this->assertTrue($result);
 	}
 }

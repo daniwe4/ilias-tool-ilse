@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\InstILIAS\Configurators;
+namespace CaT\Ilse\Configurators;
 
 /**
  * Configurate ILIAS editor part
@@ -18,7 +18,7 @@ class Editor {
 	 */
 	protected $gSetting;
 
-	public function __construct($absolute_path, \ilDB $db, \ilSetting $settings) {
+	public function __construct($absolute_path, $db, \ilSetting $settings) {
 		require_once($absolute_path."/Services/Object/classes/class.ilObjectFactory.php");
 		require_once($absolute_path."/Services/COPage/classes/class.ilPageEditorSettings.php");
 		require_once($absolute_path."/Services/COPage/classes/class.ilPageContentGUI.php");
@@ -30,17 +30,17 @@ class Editor {
 	/**
 	 * Activate the TinyMCE Editor
 	 *
-	 * @param \CaT\InstILIAS\Config\Editor $editor
+	 * @param \CaT\Ilse\Config\Editor $editor
 	 */
-	public function tinyMCE(\CaT\InstILIAS\Config\Editor $editor) {
+	public function tinyMCE(\CaT\Ilse\Config\Editor $editor) {
 		$obj_id = $this->getObjIdByType("adve");
 
 		$object = \ilObjectFactory::getInstanceByObjId($obj_id);
 
 		if((bool)$editor->enableTinymce()) {
-			$object->_setRichTextEditor("tinymce");
+			$object->setRichTextEditor("tinymce");
 		} else {
-			$object->_setRichTextEditor("");
+			$object->setRichTextEditor("");
 		}
 
 		$object->update();
@@ -49,9 +49,9 @@ class Editor {
 	/**
 	 * Activate the repository page editor
 	 *
-	 * @param \CaT\InstILIAS\Config\Editor $editor
+	 * @param \CaT\Ilse\Config\Editor $editor
 	 */
-	public function repoPageEditor(\CaT\InstILIAS\Config\Editor $editor) {
+	public function repoPageEditor(\CaT\Ilse\Config\Editor $editor) {
 			$repoPageEdit = $editor->repoPageEditor();
 
 			$buttons = \ilPageContentGUI::_getCommonBBButtons();
