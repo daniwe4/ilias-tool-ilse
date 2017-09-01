@@ -1,4 +1,4 @@
-{
+
     "name": "cat/ilse",
     "description": "Installation tool for easier Installation of ILIAS",
     "type": "executable",
@@ -19,5 +19,8 @@
         "symfony/yaml" : "2.8",
         "gitonomy/gitlib": "1.0.0",
         "symfony/process": "2.4.*"
-    }
+    },
+    "require" : {
+		"phpunit/phpunit" : "^5.7"
+	}
 }
