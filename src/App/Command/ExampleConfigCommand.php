@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2017 Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse\Command;
+namespace CaT\Ilse\App\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,6 +43,6 @@ class ExampleConfigCommand extends Command
 	 */
 	protected function dumpExampleConfig(OutputInterface $out)
 	{
-		$out->write(file_get_contents(__DIR__."/../../assets/example_config.yaml"));
+		$out->write(file_get_contents(__DIR__."/../../../assets/example_config.yaml"));
 	}
 }

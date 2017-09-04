@@ -2,7 +2,7 @@
 
 /* Copyright (c) 2017 Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-use \CaT\Ilse\Command\ExampleConfigCommand;
+use \CaT\Ilse\App\Command\ExampleConfigCommand;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
