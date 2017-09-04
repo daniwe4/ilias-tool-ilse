@@ -3,8 +3,6 @@
 
 namespace CaT\Ilse\Executer;
 
-use CaT\Ilse\App;
-
 /**
  * Base class for all executers
  */
@@ -60,6 +58,8 @@ abstract class BaseExecuter
 	 */
 	protected $web_dir;
 
+	const I_D_WEB_DIR			= "data";
+
 	/**
 	 * Constructor of the BaseExecuter class
 	 *
@@ -82,6 +82,6 @@ abstract class BaseExecuter
 		$this->git_url 			= $this->gc->git()->url();
 		$this->git_branch_name 	= $this->gc->git()->branch();
 		$this->error_log 		= $this->gc->log()->errorLog();
-		$this->web_dir 			= App::I_D_WEB_DIR;
+		$this->web_dir 			= self::I_D_WEB_DIR;
 	}
 }

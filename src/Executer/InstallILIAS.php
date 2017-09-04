@@ -5,7 +5,6 @@ namespace CaT\Ilse\Executer;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use CaT\Ilse\App;
 
 /**
  * Run the ILIAS installation process

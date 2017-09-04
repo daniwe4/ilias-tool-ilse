@@ -1,7 +1,11 @@
 <?php
 /* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse;
+namespace CaT\Ilse\App;
+
+use CaT\Ilse\Interfaces;
+use CaT\Ilse\Git;
+use CaT\Ilse\GitExecuter;
 
 use Symfony\Component\Console\Application;
 
@@ -15,7 +19,6 @@ class App extends Application
 	const I_P_GLOBAL 			= ".ilse";
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_BRANCH			= "master";
-	const I_D_WEB_DIR			= "data";
 
 	public function __construct(Interfaces\CommonPathes $path,
 								Interfaces\Merger $merger,

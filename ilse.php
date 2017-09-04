@@ -15,7 +15,7 @@ $path 		= new \CaT\Ilse\CommonPathes();
 $git 		= new \CaT\Ilse\GitExecuter();
 $parser 	= new \CaT\Ilse\YamlParser();
 $gw 		= new \CaT\Ilse\Git\GitWrapper();
-$app 		= new \CaT\Ilse\App($path, $merger, $checker, $git, $parser, $gw);
+$app 		= new \CaT\Ilse\App\App($path, $merger, $checker, $git, $parser, $gw);
 
 // Do not run in unit testing context
 if (stripos($_SERVER["SCRIPT_NAME"], "phpunit") === false) {
