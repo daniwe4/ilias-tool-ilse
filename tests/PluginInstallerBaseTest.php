@@ -2,7 +2,10 @@
 
 use \CaT\Ilse\Config\Plugins;
 use \CaT\Ilse\YamlParser;
-use \CaT\Ilse\mocks\IliasPluginInstallerMock;
+
+require_once(__DIR__."/mocks/IliasPluginInstallerMock.php");
+
+
 
 class PluginInstallerBaseTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {

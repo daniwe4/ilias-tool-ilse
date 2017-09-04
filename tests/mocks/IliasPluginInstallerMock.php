@@ -1,7 +1,6 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse\mocks;
 /**
  * implementation of plugin interface to install plugins
  *
