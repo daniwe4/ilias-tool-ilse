@@ -5,6 +5,7 @@ namespace CaT\Ilse\Action;
 
 use CaT\Ilse\Config;
 use CaT\Ilse\Filesystem;
+use CaT\Ilse\TaskLogger;
 
 /**
  * Delete an ILIAS instance
@@ -36,13 +37,19 @@ class DeleteILIAS
 	 */
 	protected $filesystem;
 
-	public function __construct(Config\DB $db_config, Config\Server $server_config, Config\Client $client_config, Config\Log $log_config, Filesystem $filesystem)
+	/**
+	 * @var	TaskLogger
+	 */
+	protected $task_logger;
+
+	public function __construct(Config\DB $db_config, Config\Server $server_config, Config\Client $client_config, Config\Log $log_config, Filesystem $filesystem, TaskLogger $task_logger)
 	{
 		$this->db_config = $db_config;
 		$this->server_config = $server_config;
 		$this->client_config = $client_config;
 		$this->log_config = $log_config;
-		$this->filesystem = $filesystem;	
+		$this->filesystem = $filesystem;
+		$this->task_logger = $task_logger;
 	}
 
 	/**
@@ -66,15 +73,15 @@ class DeleteILIAS
 	 * @return	\mysqli
 	 */
 	protected function connectDB() {
-		echo "Connecting to MySQL...";
-		$host = $this->db_config->host();
-		$user = $this->db_config->user();
-		$passwd = $this->db_config->password();
+		$this->task_logger->eventually("Connecting to Database", function () {
+			$host = $this->db_config->host();
+			$user = $this->db_config->user();
+			$passwd = $this->db_config->password();
 
-	 	//TODO: This should be using PDO instead.
-		$connection = new \mysqli($host, $user, $passwd);
-		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
-		return $con;
+			//TODO: This should be using PDO instead.
+			$connection = new \mysqli($host, $user, $passwd);
+			return $con;
+		});
 	}
 
 	/**
@@ -82,44 +89,43 @@ class DeleteILIAS
 	 */
 	protected function dropDatabase() {
 		$connection = $this->connectDB();
-
 		$database = $this->db_config->database();
-		echo "Droping database '$database'...";
 
-		if($this->databaseExist($connection, $database)) {
-			$drop_query = "DROP DATABASE ".$database;
-			if(!$con->query($drop_query)) {
-				throw new Exception("Database could not be deleted. (Error: )");
+		$this->task_logger->eventually("Droping database '$database'", function () {
+			if($this->databaseExist($connection, $database)) {
+				$drop_query = "DROP DATABASE ".$database;
+				if(!$con->query($drop_query)) {
+					throw new Exception("Database could not be deleted. (Error: )");
+				}
 			}
-		}
-		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		});
 	}
 
 	/**
 	 * Delete ILIAS folder
 	 */
 	protected function deleteILIASFolder() {
-		echo "Deleting ILIAS files...";
-		$this->filesystem->remove($this->server_config->absolutePath());
-		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		$this->task_logger->eventually("Deleting ILIAS files", function () {
+			$this->filesystem->remove($this->server_config->absolutePath());
+		});
 	}
 
 	/**
 	 * Delete the data folder
 	 */
 	protected function deleteDataFolder() {
-		echo "Deleting data folder...";
-		$this->filesystem->remove($this->client_config->dataDir());
-		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		$this->task_logger->eventually("Deleting data folder", function () {
+			$this->filesystem->remove($this->client_config->dataDir());
+		});
 	}
 
 	/**
 	 * Delete the error_log
 	 */
 	protected function deleteErrorLog() {
-		echo "Deleting error_log folder...";
-		$this->filesystem->remove($this->log_config->error_log());
-		echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		$this->task_logger->eventually("Deleting error_log folder", function () {
+			$this->filesystem->remove($this->log_config->error_log());
+		});
 	}
 
 	/**
@@ -127,9 +133,9 @@ class DeleteILIAS
 	 */
 	protected function deleteLogFile()
 	{
-		echo "Deleting log file...";
-		$this->filesystem->remove($this->log_config->path()."/".$this->log_config->file_name());
-		echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
+		$this->task_logger->eventually("Deleting log file", function () {
+			$this->filesystem->remove($this->log_config->path()."/".$this->log_config->file_name());
+		});
 	}
 
 	/**

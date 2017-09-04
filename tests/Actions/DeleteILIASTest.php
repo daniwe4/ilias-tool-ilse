@@ -5,6 +5,7 @@
 use \CaT\Ilse\Action\DeleteILIAS;
 use \CaT\Ilse\Config;
 use \CaT\Ilse\Filesystem;
+use \CaT\Ilse\TaskLogger;
 
 // If database had it own interface like filesystem, we could
 // drop this and write a proper test instead.
@@ -22,8 +23,9 @@ class DeleteILIASTest extends PHPUnit_Framework_TestCase {
 		$client_config = new Config\Client("data_dir", "name", "bcrypt", 32);
 		$log_config = new Config\Log("path", "filename", "error_log");
 		$filesystem = $this->createMock(Filesystem::class);
+		$task_logger = $this->createMock(TaskLogger::class);
 
-		$action = new DeleteILIASForTest($db_config, $server_config, $client_config, $log_config, $filesystem);
+		$action = new DeleteILIASForTest($db_config, $server_config, $client_config, $log_config, $filesystem, $task_logger);
 
 		$filesystem
 			->expects($this->exactly(4))
@@ -34,6 +36,13 @@ class DeleteILIASTest extends PHPUnit_Framework_TestCase {
 				, ["path/filename"]
 				, ["error_log"]
 				);
+
+		$task_logger
+			->expects($this->exactly(4))
+			->method("eventually")
+			->will($this->returnCallback(function($s, $c) {
+				$c();
+			}));
 
 		$action->run();
 
