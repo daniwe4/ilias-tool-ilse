@@ -1,5 +1,5 @@
 <?php
-namespace CaT\Ilse;
+namespace CaT\Ilse\Aux;
 
 use Symfony\Component\Console\Output\OutputInterface;
 
