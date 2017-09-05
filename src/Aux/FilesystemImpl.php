@@ -7,14 +7,13 @@ namespace CaT\Ilse\Aux;
 /**
  * Some filesystem functions.
  */
-class FilesystemImpl {
+class FilesystemImpl implements Filesystem {
 	/**
-	 * Remove file or directory.
-	 *
-	 * @param	string	$path
-	 * @return	void
+	 * @inheritdoc
 	 */
 	public function remove($path) {
+		assert('is_string($path)');
+
 		if (is_file($path)) {
 			unlink($path);
 		}
@@ -26,5 +25,45 @@ class FilesystemImpl {
 			}
 			rmdir($dir);
 		}
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function exists($path) {
+		assert('is_string($path)');
+		return file_exists($path);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function makeDirectory($path) {
+		assert('is_string($path)');
+		mkdir($path, "755", true);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function homeDirectory() {
+		return getenv("HOME");
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function read($path) {
+		assert('is_string($path)');
+		return file_get_contents($path);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function write($path, $content) {
+		assert('is_string($path)');
+		assert('is_string($content)');
+		file_put_contents($path, $content);
 	}
 }

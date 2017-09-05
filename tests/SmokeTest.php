@@ -5,6 +5,7 @@
 use CaT\Ilse\Setup\CoreInstaller52;
 use CaT\Ilse\Config;
 use CaT\Ilse\Aux\TaskLogger;
+use CaT\Ilse\Aux;
 
 class SmokeTest extends PHPUnit_Framework_TestCase {
 	// TODO: currently this does not worl because ilse relies on some config file in the
@@ -19,5 +20,10 @@ class SmokeTest extends PHPUnit_Framework_TestCase {
 
 		$core_installer = new CoreInstaller52($config, $task_logger);
 		$this->assertInstanceOf(CoreInstaller52::class, $core_installer);
+	}
+
+	public function test_filesystem_impl() {
+		$fs = new Aux\FilesystemImpl();
+		$this->assertInstanceOf(Aux\Filesystem::class, $fs);
 	}
 }
