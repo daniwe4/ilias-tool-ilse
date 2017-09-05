@@ -3,10 +3,10 @@
 
 namespace CaT\Ilse\App;
 
-use CaT\Ilse\Interfaces;
-use CaT\Ilse\Git;
-use CaT\Ilse\GitExecuter;
+use CaT\Ilse\Action;
+use CaT\Ilse\Aux;
 
+use Pimple\Container;
 use Symfony\Component\Console\Application;
 
 /**
@@ -20,38 +20,67 @@ class App extends Application
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_BRANCH			= "master";
 
-	public function __construct(Interfaces\CommonPathes $path,
-								Interfaces\Merger $merger,
-								Interfaces\RequirementChecker $checker,
-								Interfaces\Git $git,
-								Interfaces\Parser $parser,
-								Git\Git $gw)
-	{
-		parent::__construct();
+	/**
+	 * Initialize the dependency injection container.
+	 *
+	 * @return Container
+	 */
+	public function getDIC() {
+		$container = new Container();
 
-		$ge 	= new GitExecuter();
-		$repos 	= $this->getConfigRepos($path, $gw, $parser);
+		// Actions
 
-		$this->initAppFolder($path);
-		$this->initConfigRepo($path, $gw, $parser, $repos, $ge);
-		$this->initCommands($path, $merger, $checker, $git, $repos);
+		$container["action.deleteILIAS"] = function($c) {
+			$config = $container["config.ilias"];
+			return new Action\DeleteILIAS
+						( $config->database()
+						, $config->server()
+						, $config->client()
+						, $config->log()
+						, $c["aux.filesystem"]
+						, $c["aux.task_logger"]
+						);
+		};
 
+		$container["action.installILIAS"] = function($c) {
+			return new Action\InstallILIAS
+						( $c["config.ilias"]
+						, $c["setup.core_installer_factory"]
+						, $c["aux.task_logger"]
+						);
+		};
+
+		// Configs
+
+		$container["config.ilias"] = function($c) {
+			throw new \RuntimeException("Expected command to initialized ILIAS config.");
+		};
+		$container["config.ilse"] = function($c) {
+			throw new \RuntimeException("Don't know how to build");
+		};
+
+		// Auxiliary Services
+
+		$container["aux.filesystem"] = function($c) {
+			return new Aux\FilesystemImpl();
+		};
+		$container["aux.task_logger"] = function($c) {
+			throw new \RuntimeException("Expected command to initialize task logger.");
+		};
+
+		// Setup
+
+		$container["setup.core_installer_factory"] = function($c) {
+			return new CoreInstallerFactory();
+		};
 	}
 
 	/**
-	 * Initialize all commands, and add them to the app
+	 * Initialize commands and add them to the app.
 	 *
-	 * @param Interfaces\CommonPathes 			$path
-	 * @param Interfaces\Merger 				$merger
-	 * @param Interfaces\RequirementChecker 	$checker
-	 * @param Interfaces\Git 					$git
-	 * @param string[] 							$repos
+	 * @return	void
 	 */
-	protected function initCommands(Interfaces\CommonPathes $path,
-									Interfaces\Merger $merger,
-									Interfaces\RequirementChecker $checker,
-									Interfaces\Git $git,
-									array $repos)
+	protected function initCommands()
 	{
 		$this->add(new Command\UpdateCommand($path, $merger, $checker, $git, $repos));
 		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git, $repos));
