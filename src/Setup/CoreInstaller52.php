@@ -3,196 +3,274 @@
 
 namespace CaT\Ilse\Setup;
 
+use CaT\Ilse\Config;
+use CaT\Ilse\TaskLogger;
+
 /**
-* implementation of an ilias installer
-*
-* @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
-* @author Richard Klees <richard.klees@concepts-and-training.de>
-*/
+ * implementation of an ilias installer
+ *
+ * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
+ * @author Richard Klees <richard.klees@concepts-and-training.de>
+ */
 
 class CoreInstaller52 implements CoreInstaller {
-	protected $ilias_setup;
-	protected $general;
+	/**
+	 * @var	Config\General
+	 */
+	protected $config;
+
+	/**
+	 * @var	TaskLogger
+	 */
+	protected $task_logger;
+
+	/**
+	 * @var	bool
+	 */
+	protected $ilias_env_initialized = false;
+
+	/**
+	 * @var bool
+	 */
+	protected $ilias_db_connected = false;
+
+	/**
+	 * @var \ilSetup|null
+	 */
+	protected $ilias_setup = null;
+
+	/**
+	 * @var	\ilDBUpdate|null
+	 */
+	protected $db_update = null;
 
 	const SESSION_EXPIRE_VALUE = 7200;
 
-	public function __construct(\ilSetup $ilias_setup, \CaT\Ilse\Config\General $general) {
-		$this->ilias_setup = $ilias_setup;
-		$this->general = $general;
+	public function __construct(Config\General $config, TaskLogger $logger) {
+		$this->config= $config;
+		$this->task_logger = $logger;
+	}
+
+	/**
+	 * @return	\ilSetup
+	 */
+	protected function getILIASSetup() {
+		if ($this->ilias_setup === null) {
+			$this->initEnvironment();
+			$this->ilias_setup = new \ilSetup(true,"admin");
+		}
+		return $this->ilias_setup;
+	}
+
+
+	/**
+	 * @return	\ilDBUpdate
+	 */
+	protected function getDBUpdate() {
+		if ($this->db_update === null) {
+			$this->initEnvironment();
+			$this->db_update = new \ilDBUpdate($this->getDatabaseHandle());
+		}
+		return $this->db_update;
+	}
+
+	/**
+	 * @return	\ilDB
+	 */
+	protected function getDatabaseHandle() {
+		$this->connectDatabase();
+
+		global $ilDB;
+		return $ilDB;
+	}
+
+	/**
+	 * @return \ilLanguage
+	 */
+	protected function getLanguage() { 
+		$this->initEnvironment();
+		global $lng;
+		$lng->setDbHandler($this->getDatabaseHandle());
+		return $lng;
+	}
+
+	/**
+	 * @return \ilCtrlStructureReader
+	 */
+	protected function getCtrlStructureReader() { 
+		$this->initEnvironment();
+		global $ilCtrlStructureReader;
+		return $ilCtrlStructureReader;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	protected function initEnvironment() {
+		if ($this->ilias_env_initialized) {
+			return;
+		}
+		$env = new SetupEnvironment52
+					( $config->server()->httpPath()
+					, $config->server()->absolutePath()
+					, $config->client->dataDir()
+					, $config->client->name()
+					);
+
+		$this->task_logger->always("Initialize PHP Error Reporting for ILIAS", [$env, "initPHPErrorReporting"]);
+		$this->task_logger->always("Defining Constants and Superglobals for ILIAS", [$env, "defineConstantsAndSuperglobals"]);
+		$this->task_logger->always("Change to ILIAS Root Dir", [$env, "changeDirToILIASRoot"]);
+		$this->task_logger->always("Include required ILIAS Source", [$env, "includeSource"]);
+		$this->task_logger->always("Initialize ILIAS Error Handling", [$env, "setErrorHandling"]);
+		$this->task_logger->always("Initialize ILIAS Logging", [$env, "initLog"]);
+		$this->task_logger->always("Initialize ILIAS Structure Reader", [$env, "initStructureReader"]);
+		$this->task_logger->always("Initialize ILIAS Benchmarking", [$env, "initBenchmark"]);
+		$this->task_logger->always("Initialize ILIAS ini", [$env, "initIni"]);
+
+		$this->ilias_env_initialized = true;
 	}
 
 	/**
 	 * @inheritdoc
 	 */
 	public function writeIliasIni() {
-		global $ilCtrlStructureReader;
-		$this->ilias_setup->saveMasterSetup($this->getIliasIniData());
-		$ilCtrlStructureReader->setIniFile($this->ilias_setup->ini);
-		$this->ilias_setup->ini_ilias_exists = true;
+		$setup = $this->getILIASSetup();
+		$ilCtrlStructureReader = $this->getCtrlStructureReader();
+		$setup->saveMasterSetup($this->getIliasIniData());
+		$ilCtrlStructureReader->setIniFile($setup->ini);
+		$setup->ini_ilias_exists = true;
 	}
 
 	/**
 	 * @inheritdoc
 	 */
 	public function writeClientIni() {
-		$ret = $this->getClientIniData();
+		$setup = $this->getILIASSetup();
+		$setup->ini_client_exists = $this->ilias_setup->newClient($this->config->client()->name());
 
-		$this->ilias_setup->ini_client_exists = $this->newClient($ret["client_id"]);
-		$this->ilias_setup->getClient()->setId($ret["client_id"]);
-		$this->ilias_setup->getClient()->setName($ret["client_id"]);
-		$this->ilias_setup->getClient()->setDbHost($ret["db_host"]);
-		$this->ilias_setup->getClient()->setDbName($ret["db_name"]);
-		$this->ilias_setup->getClient()->setDbUser($ret["db_user"]);
-		$this->ilias_setup->getClient()->setDbPort($ret["db_port"]);
-		$this->ilias_setup->getClient()->setDbPass($ret["db_pass"]);
-		$this->ilias_setup->getClient()->setDbType($ret["db_type"]);
-		$this->ilias_setup->getClient()->setDSN();
-		$this->ilias_setup->getClient()->ini->setVariable("session", "expire", ($ret["session_expire"] * 60));
+		$client_ini_data = $this->getClientIniData();
+		$client = $setup->getClient();
+		$client->setId($ret["client_id"]);
+		$client->setName($ret["client_id"]);
+		$client->setDbHost($ret["db_host"]);
+		$client->setDbName($ret["db_name"]);
+		$client->setDbUser($ret["db_user"]);
+		$client->setDbPort($ret["db_port"]);
+		$client->setDbPass($ret["db_pass"]);
+		$client->setDbType($ret["db_type"]);
+		$client->setDSN();
+		$client->ini->setVariable("session", "expire", ($ret["session_expire"] * 60));
 
-		define("SYSTEM_FOLDER_ID", $this->ilias_setup->getClient()->ini->readVariable('system', 'SYSTEM_FOLDER_ID'));
+		define("SYSTEM_FOLDER_ID", $client->ini->readVariable('system', 'SYSTEM_FOLDER_ID'));
 
-		if(!$this->ilias_setup->saveNewClient()) {
-			throw new \Exception($this->ilias_setup->getError());
+		if(!$setup->saveNewClient()) {
+			throw new \RuntimeException($this->ilias_setup->getError());
 		}
 
-		$this->setClientIniSetupFinsihed();
-	}
-
-	public function newClient($client_id) {
-		return $this->ilias_setup->newClient($client_id);
-	}
-
-	public function checkSessionLifeTime() {
-		$ilias_session_lifetime = ($this->general->client()->sessionExpire() * 60);
-		$php_session_lifetime = ini_get('session.gc_maxlifetime');
-
-		if($php_session_lifetime < $ilias_session_lifetime) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	protected function setClientIniSetupFinsihed() {
-		$this->ilias_setup->getClient()->status["ini"]["status"] = true;
+		$client->status["ini"]["status"] = true;
 	}
 
 	/**
 	 * @inheritdoc
 	 */
 	public function installDatabase() {
-		if((bool)$this->general->database()->createDb()) {
-			$this->ilias_setup->createDatabase($this->general->database()->encoding());
+		$setup = $this->getILIASSetup();
+		if((bool)$this->config->database()->createDb()) {
+			$setup->createDatabase($this->config->database()->encoding());
 		}
 
-		$this->ilias_setup->installDatabase();
+		$setup->installDatabase();
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function connectDatabase() {
-		$this->ilias_setup->getClient()->connect();
+	protected function connectDatabase() {
+		if ($this->ilias_db_connected) {
+			return;
+		}
+
+		$this->task_logger->always("Connecting to Database", [$this->getILIASSetup()->getClient(), "connect"]);
+
+		$this->ilias_db_connected = true;
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getDatabaseHandle() {
-		global $ilDB;
-		return $ilDB;
-	}
+	public function applyHotfixes() {
+		$setup = $this->getILIASSetup();
+		$client = $setup->getClient();
+		$db_updater = $this->getDBUpdate();
 
-	public function applyHotfixes(\ilDBUpdate $db_updater) {
-		global $ilCtrlStructureReader;
+		$ilCtrlStructureReader = $this->getCtrlStructureReader();
+		$ilCtrlStructureReader->setIniFile($client->ini);
 
-		$ilCtrlStructureReader->setIniFile($this->ilias_setup->getClient()->ini);
 		$db_updater->applyHotfix();
-		$this->setDBSetupFinished();
+		$client->status["db"]["status"] = true;
 	}
 
-	public function applyUpdates(\ilDBUpdate $db_updater) {
-		global $ilCtrlStructureReader;
+	public function applyUpdates() {
+		$setup = $this->getILIASSetup();
+		$client = $setup->getClient();
+		$db_updater = $this->getDBUpdate();
 
-		$ilCtrlStructureReader->setIniFile($this->ilias_setup->getClient()->ini);
+		$ilCtrlStructureReader = $this->getCtrlStructureReader();
+		$ilCtrlStructureReader->setIniFile($client->ini);
+
 		$db_updater->applyUpdate();
 	}
 
-	protected function setDBSetupFinished() {
-		$this->ilias_setup->getClient()->status["db"]["status"] = true;
-	}
-
 	/**
 	 * @inheritdoc
 	 */
-	public function installLanguages(\ilLanguage $lng) {
-		$done = $lng->installLanguages($this->general->language()->available(), array());
+	public function installLanguages() {
+		$setup = $this->getILIASSetup();
+		$client = $setup->getClient();
+
+		$lng = $this->getLanguage();
+		$done = $lng->installLanguages($this->config->language()->available(), array());
 		
 		if($done !== true) {
 			throw new \Exception("Error installing languages");
 		}
 
-		$this->setDefaultLanguage();
-		$this->ilias_setup->getClient()->status["lang"]["status"] = true;
-	}
-
-	protected function setDefaultLanguage() {
-		$this->ilias_setup->getClient()->setDefaultLanguage($this->general->language()->default());
+		$client->setDefaultLanguage($this->config->language()->default());
+		$client->status["lang"]["status"] = true;
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function setProxy() {
-		$this->setProxySetupFinished();
-	}
+	public function setProxySettings() {
+		$setup = $this->getILIASSetup();
+		$client = $setup->getClient();
 
-	protected function setProxySetupFinished() {
-		$this->ilias_setup->getClient()->status["proxy"]["status"] = true;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function registerNoNic() {
-		$this->ilias_setup->getClient()->setSetting("inst_id","0");
-		$this->ilias_setup->getClient()->setSetting("nic_enabled","0");
-		$this->setRegisterSetupFinished();
-	}
-
-	protected function setRegisterSetupFinished() {
-		$this->ilias_setup->getClient()->status["nic"]["status"] = true;
-	}
-
-	/**
-	 * @inhertidoc
-	 */
-	public function setPasswordEncoder(\ilUserPasswordEncoderFactory $encoder_factory) {
-		$default_encoder = $encoder_factory->getEncoderByName(trim($this->general->client()->passwordEncoder()));
-		$default_encoder->onSelection();
-		$encoder = array('default_encoder' => $default_encoder->getName());
-		$this->ilias_setup->savePasswordSettings($encoder);
+		$client->status["proxy"]["status"] = true;
 	}
 
 	/**
 	 * @inhertidoc
 	 */
 	public function finishSetup() {
-		if($this->validatesetup()) {
-			$this->ilias_setup->ini->setVariable("clients","default",$this->ilias_setup->getClient()->getId());
-			$this->ilias_setup->ini->write();
+		$setup = $this->getILIASSetup();
+		$client = $setup->getClient();
 
-			$this->ilias_setup->getClient()->ini->setVariable("client","access",1);
-			$this->ilias_setup->getClient()->ini->write();
+		$client->setSetting("inst_id","0");
+		$client->setSetting("nic_enabled","0");
+		$client->status["nic"]["status"] = true;
 
-			$this->ilias_setup->getClient()->reconnect();
-			$this->ilias_setup->getClient()->setSetting("setup_ok",1);
-			$this->ilias_setup->getClient()->status["finish"]["status"] = true;
-			
-			return true;
+		if (!$this->validateSetup()) {
+			throw new \RuntimeException("An unexpected error occured during setup.");
 		}
 
-		return false;
+
+		$setup->ini->setVariable("clients","default",$client->getId());
+		$setup->ini->write();
+
+		$client->ini->setVariable("client","access",1);
+		$client->ini->write();
+
+		$client->reconnect();
+		$client->setSetting("setup_ok",1);
+		$client->status["finish"]["status"] = true;
 	}
 
 	/**
@@ -200,6 +278,7 @@ class CoreInstaller52 implements CoreInstaller {
 	 * and set access mode of the first client to online
 	 */
 	protected function validateSetup() {
+		// TODO: this suspicously looks as if it only reads the "nic"-status we have set before...
 		foreach ($this->ilias_setup->getClient()->status as $key => $val)
 		{
 			if ($key != "finish" && $key != "access")
@@ -217,33 +296,33 @@ class CoreInstaller52 implements CoreInstaller {
 	protected function getIliasIniData() {
 		$ret = array();
 
-		$ret["datadir_path"] = $this->general->client()->dataDir();
-		$ret["log_path"] = $this->general->log()->path()."/".$this->general->log()->fileName();
-		$ret["error_log_path"] = $this->general->log()->errorLog();
-		$ret["time_zone"] = $this->general->server()->timezone();
-		$ret["convert_path"] = $this->general->tools()->convert();
-		$ret["zip_path"] = $this->general->tools()->zip();
-		$ret["unzip_path"] = $this->general->tools()->unzip();
-		$ret["java_path"] = $this->general->tools()->java();
-		$ret["setup_pass"] = $this->general->setup()->masterPassword();
-		if($this->general->httpsAutoDetect()) {
-			$ret["auto_https_detect_enabled"] = $this->general->httpsAutoDetect()->enabled();
-			$ret["auto_https_detect_header_name"] = $this->general->httpsAutoDetect()->headerName();
-			$ret["auto_https_detect_header_value"] = $this->general->httpsAutoDetect()->headerValue();
+		$ret["datadir_path"] = $this->config->client()->dataDir();
+		$ret["log_path"] = $this->config->log()->path()."/".$this->config->log()->fileName();
+		$ret["error_log_path"] = $this->config->log()->errorLog();
+		$ret["time_zone"] = $this->config->server()->timezone();
+		$ret["convert_path"] = $this->config->tools()->convert();
+		$ret["zip_path"] = $this->config->tools()->zip();
+		$ret["unzip_path"] = $this->config->tools()->unzip();
+		$ret["java_path"] = $this->config->tools()->java();
+		$ret["setup_pass"] = $this->config->setup()->masterPassword();
+		if($this->config->httpsAutoDetect()) {
+			$ret["auto_https_detect_enabled"] = $this->config->httpsAutoDetect()->enabled();
+			$ret["auto_https_detect_header_name"] = $this->config->httpsAutoDetect()->headerName();
+			$ret["auto_https_detect_header_value"] = $this->config->httpsAutoDetect()->headerValue();
 		}
 		return $ret;
 	}
 
 	protected function getClientIniData() {
 		$ret = array();
-		$ret["datadir_path"] = $this->general->client()->dataDir();
-		$ret["client_id"] = $this->general->client()->name();
-		$ret["db_host"] = $this->general->database()->host();
-		$ret["db_name"] = $this->general->database()->database();
-		$ret["db_user"] = $this->general->database()->user();
-		$ret["db_pass"] = $this->general->database()->password();
-		$ret["db_type"] = $this->general->database()->engine();
-		$ret["session_expire"] = $this->general->client()->sessionExpire();
+		$ret["datadir_path"] = $this->config->client()->dataDir();
+		$ret["client_id"] = $this->config->client()->name();
+		$ret["db_host"] = $this->config->database()->host();
+		$ret["db_name"] = $this->config->database()->database();
+		$ret["db_user"] = $this->config->database()->user();
+		$ret["db_pass"] = $this->config->database()->password();
+		$ret["db_type"] = $this->config->database()->engine();
+		$ret["session_expire"] = $this->config->client()->sessionExpire();
 
 		return $ret;
 	}
