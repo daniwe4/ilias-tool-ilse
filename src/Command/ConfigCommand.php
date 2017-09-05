@@ -50,7 +50,7 @@ class ConfigCommand extends BaseCommand
 	 */
 	protected function config(array $args)
 	{
-		$ci = new Executer\ConfigurateILIAS($args['config'], $this->checker, $this->git);
+		$ci = new Executer\ConfigurateILIAS($args['config'], $this->checker, $this->git, $this->path);
 		$ci->run();
 	}
 }

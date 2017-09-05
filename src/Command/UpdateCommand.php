@@ -50,7 +50,7 @@ class UpdateCommand extends BaseCommand
 	 */
 	protected function setup(array $args)
 	{
-		$sp = new Executer\SetupEnvironment($args['config'], $this->checker, $this->git, false);
+		$sp = new Executer\SetupEnvironment($args['config'], $this->checker, $this->git, false, $this->path);
 		$sp->run();
 	}
 
@@ -61,7 +61,7 @@ class UpdateCommand extends BaseCommand
 	 */
 	protected function update(array $args)
 	{
-		$u = new Executer\UpdateILIAS($args['config'], $this->checker, $this->git);
+		$u = new Executer\UpdateILIAS($args['config'], $this->checker, $this->git, $this->path);
 		$u->run();
 	}
 }

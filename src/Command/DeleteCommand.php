@@ -50,7 +50,7 @@ class DeleteCommand extends BaseCommand
 	 */
 	protected function delete(array $args)
 	{
-		$ri = new Executer\DeleteILIAS($args['config'], $this->checker, $this->git);
+		$ri = new Executer\DeleteILIAS($args['config'], $this->checker, $this->git, $this->path);
 		$ri->run($args['all']);
 	}
 }

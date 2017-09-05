@@ -18,4 +18,12 @@ interface CommonPathes
 	 * @return string
 	 */
 	public function getHomeDir();
+
+	/**
+	 * Convert ~ to actual home path
+	 *
+	 * @param string 		$path
+	 * @return string
+	 */
+	public function expandHomePath($path);
 }
