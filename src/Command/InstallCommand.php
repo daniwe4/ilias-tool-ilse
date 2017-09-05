@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use CaT\Ilse\Executer;
+use CaT\Ilse\Executor;
 
 /**
  * Implementation of the install command
@@ -54,7 +54,7 @@ class InstallCommand extends BaseCommand
 	 */
 	protected function setup(array $args)
 	{
-		$sp = new Executer\SetupEnvironment($args['config'], $this->checker, $this->git, $args['interactive'], $this->path);
+		$sp = new Executor\SetupEnvironment($args['config'], $this->checker, $this->git, $args['interactive'], $this->path);
 		$sp->run();
 	}
 
@@ -65,12 +65,12 @@ class InstallCommand extends BaseCommand
 	 */
 	protected function start(array $args)
 	{
-		$ii = new Executer\InstallILIAS($args['config'], $this->checker, $this->git, $this->path);
+		$ii = new Executor\InstallILIAS($args['config'], $this->checker, $this->git, $this->path);
 		$ii->run();
 	}
 
 	/**
-	 * Configurate the ILIAS environment
+	 * Configure the ILIAS environment
 	 *
 	 * @param string 		$cmd
 	 */

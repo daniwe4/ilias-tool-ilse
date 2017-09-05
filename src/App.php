@@ -26,7 +26,7 @@ class App extends Application
 	{
 		parent::__construct();
 
-		$ge 	= new GitExecuter();
+		$ge 	= new GitExecutor();
 		$repos 	= $this->getConfigRepos($path, $gw, $parser);
 
 		$this->initAppFolder($path);
@@ -81,9 +81,9 @@ class App extends Application
 	 * @param Git\Git 		$gw
 	 * @param Interfaces\Parser 	$parser
 	 * @param string 				$repos
-	 * @param GitExecuter 			$ge
+	 * @param GitExecutor 			$ge
 	 */
-	protected function initConfigRepo($path, Git\Git $gw, Interfaces\Parser $parser, $repos, GitExecuter $ge)
+	protected function initConfigRepo($path, Git\Git $gw, Interfaces\Parser $parser, $repos, GitExecutor $ge)
 	{
 		$name = "";
 		$path = $path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG;

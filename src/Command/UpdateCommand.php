@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use CaT\Ilse\Executer;
+use CaT\Ilse\Executor;
 
 /**
  * Implementation of the update command
@@ -50,7 +50,7 @@ class UpdateCommand extends BaseCommand
 	 */
 	protected function setup(array $args)
 	{
-		$sp = new Executer\SetupEnvironment($args['config'], $this->checker, $this->git, false, $this->path);
+		$sp = new Executor\SetupEnvironment($args['config'], $this->checker, $this->git, false, $this->path);
 		$sp->run();
 	}
 
@@ -61,7 +61,7 @@ class UpdateCommand extends BaseCommand
 	 */
 	protected function update(array $args)
 	{
-		$u = new Executer\UpdateILIAS($args['config'], $this->checker, $this->git, $this->path);
+		$u = new Executor\UpdateILIAS($args['config'], $this->checker, $this->git, $this->path);
 		$u->run();
 	}
 }
