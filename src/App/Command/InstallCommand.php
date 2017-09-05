@@ -40,8 +40,11 @@ class InstallCommand extends BaseCommand
 		$init_app_folder = $this->dic["action.initAppFolder"];
 		$init_app_folder->perform();
 
-		$setup_environment = $this->dic["action.setupEnvironment"];
-		$setup_environment->perform();
+		$build_installation_environment = $this->dic["action.buildInstallationEnvironment"];
+		$build_installation_environment->perform();
+
+		$check_requirements = $this->dic["action.checkRequirements"];
+		$check_requirements->perform();
 
 		return;
 
