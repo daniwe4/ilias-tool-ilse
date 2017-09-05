@@ -25,12 +25,47 @@ interface Filesystem {
 	public function exists($path);
 
 	/**
+	 * Check if given path is a directory.
+	 *
+	 * @param 	string	$path
+	 * @return	bool
+	 */
+	public function isDirectory($path);
+
+	/**
+	 * Check if given path is writeable for the current user.
+	 *
+	 * @param 	string	$path
+	 * @return	bool
+	 */
+	public function isWriteable($path);
+
+	/**
+	 * Check if directory at given path is empty.
+	 *
+	 * @param	string	$path
+	 * @return	bool
+	 */
+	public function isEmpty($path);
+
+	/**
 	 * Create a directory.
 	 *
 	 * @param	string	$path
 	 * @return	void
 	 */
 	public function makeDirectory($path);
+
+	/**
+	 * Change access permissions.
+	 *
+	 * ATTENTION: second parameter is an integer, i.e. use 0755 e.g.
+	 *
+	 * @param	string	$path
+	 * @param	int		$perms
+	 * @return	void
+	 */
+	public function chmod($path, $perms);
 
 	/**
 	 * Get the home directory of the current user.

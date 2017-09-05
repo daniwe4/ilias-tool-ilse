@@ -40,9 +40,43 @@ class FilesystemImpl implements Filesystem {
 	/**
 	 * @inheritdoc
 	 */
+	public function isDirectory($path) {
+		assert('is_string($path)');
+		return is_dir($path);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function isWriteable($path) {
+		assert('is_string($path)');
+		return is_writeable($path);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function isEmpty($path) {
+		assert('is_string($path)');
+		assert('is_dir($path)');
+		return scandir($path) == [".", ".."];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function makeDirectory($path) {
 		assert('is_string($path)');
 		mkdir($path, 0755, true);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function chmod($path, $perms) {
+		assert('is_string($path)');
+		assert('is_int($perms)');
+		chmod($path, $perms);
 	}
 
 	/**
