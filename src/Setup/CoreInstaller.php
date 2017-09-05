@@ -6,9 +6,9 @@ namespace CaT\Ilse\Setup;
 /**
  * Interface for installing ILIAS with a client.
  *
- * TODO: We might want to add comments for the methods which are allowed
- *       to use the global $ilDB to at least document the steps in the dance
- *       in comments.
+ * TODO: If the methods in this class are parametrized on their
+ * inputs (instead of using the config, which is invisible in this
+ * interface) we could write test for proper usage of the config.
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  * @author Richard Klees <richard.klees@concepts-and-training.de>
@@ -26,7 +26,7 @@ interface CoreInstaller {
 	 *
 	 * @return void
 	 */
-	public function writeIliasIni();
+	public function writeILIASIni();
 
 	/**
 	 * Install Database.
@@ -40,14 +40,14 @@ interface CoreInstaller {
 	 *
 	 * @return void
 	 */
-	public function applyUpdates();
+	public function applyDatabaseUpdates();
 
 	/**
 	 * Apply hotfixes to the database.
 	 *
 	 * @return void
 	 */
-	public function applyHotfixes();
+	public function applyDatabaseHotfixes();
 
 	/**
 	 * Install languages.

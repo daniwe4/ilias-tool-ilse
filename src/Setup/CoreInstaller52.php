@@ -133,7 +133,7 @@ class CoreInstaller52 implements CoreInstaller {
 	/**
 	 * @inheritdoc
 	 */
-	public function writeIliasIni() {
+	public function writeILIASIni() {
 		$setup = $this->getILIASSetup();
 		$ilCtrlStructureReader = $this->getCtrlStructureReader();
 		$setup->saveMasterSetup($this->getIliasIniData());
@@ -195,7 +195,10 @@ class CoreInstaller52 implements CoreInstaller {
 		$this->ilias_db_connected = true;
 	}
 
-	public function applyHotfixes() {
+	/**
+	 * @inheritdoc
+	 */
+	public function applyDatabaseHotfixes() {
 		$setup = $this->getILIASSetup();
 		$client = $setup->getClient();
 		$db_updater = $this->getDBUpdate();
@@ -207,7 +210,10 @@ class CoreInstaller52 implements CoreInstaller {
 		$client->status["db"]["status"] = true;
 	}
 
-	public function applyUpdates() {
+	/**
+	 * @inheritdoc
+	 */
+	public function applyDatabaseUpdates() {
 		$setup = $this->getILIASSetup();
 		$client = $setup->getClient();
 		$db_updater = $this->getDBUpdate();
