@@ -8,6 +8,8 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * Wrapper for git commands
+ *
+ * TODO: make this expand ~ to home.
  * 
  * @author Daniel Weise <daniel.weise@concepts-and-training.de>
  */
