@@ -13,17 +13,17 @@ interface TaskLogger {
 	 * to go on.
 	 *
 	 * @param	string		$title
-	 * @param	\Closure	$task
-	 * @return	mixed	what closure returns
+	 * @param	callable 	$task
+	 * @return	mixed	what callable returns
 	 */
-	public function always($title, \Closure $task);
+	public function always($title, callable $task);
 
 	/**
 	 * Task may fail, process continues.
 	 *
 	 * @param	string		$title
-	 * @param	\Closure	$task
-	 * @return	mixed	what closure returns
+	 * @param	callable 	$task
+	 * @return	mixed	what callable returns
 	 */
-	public function eventually($title, \Closure $task);
+	public function eventually($title, callable $task);
 }
