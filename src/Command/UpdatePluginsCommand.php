@@ -50,7 +50,7 @@ class UpdatePluginsCommand extends BaseCommand
 	 */
 	protected function update(array $args)
 	{
-		$u = new Executer\UpdatePluginsILIAS($args['config'], $this->checker, $this->git);
+		$u = new Executer\UpdatePluginsILIAS($args['config'], $this->checker, $this->git, $this->path);
 		$u->run();
 	}
 }
