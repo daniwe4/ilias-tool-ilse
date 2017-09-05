@@ -47,9 +47,14 @@ class InstallCommandTest extends PHPUnit_Framework_TestCase {
 		$build_installation_environment
 			->expects($this->once())
 			->method("perform");
+		$check_requirements = $this->createMock(Action\CheckRequirements::class);
+		$check_requirements
+			->expects($this->once())
+			->method("perform");
 
 		$dic["action.initAppFolder"] = $init_app_folder;
 		$dic["action.buildInstallationEnvironment"] = $build_installation_environment;
+		$dic["action.checkRequirements"] = $check_requirements;
 
 	
 		$command = new InstallCommandForTest($dic);
