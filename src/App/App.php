@@ -20,10 +20,19 @@ class App extends Application
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_BRANCH			= "master";
 
+<<<<<<< HEAD:src/App/App.php
 	public function __construct() {
 		parent::__construct();
 		$this->initCommands();
 	}
+=======
+		$ge 	= new GitExecutor();
+		$repos 	= $this->getConfigRepos($path, $gw, $parser);
+
+		$this->initAppFolder($path);
+		$this->initConfigRepo($path, $gw, $parser, $repos, $ge);
+		$this->initCommands($path, $merger, $checker, $git, $repos);
+>>>>>>> 824fb83f78d7c8a8d1b3a042a2d7398a3e8e3d7f:src/App.php
 
 	/**
 	 * Initialize the dependency injection container.
@@ -128,9 +137,9 @@ class App extends Application
 	 * @param Git\Git 		$gw
 	 * @param Interfaces\Parser 	$parser
 	 * @param string 				$repos
-	 * @param GitExecuter 			$ge
+	 * @param GitExecutor 			$ge
 	 */
-	protected function initConfigRepo($path, Git\Git $gw, Interfaces\Parser $parser, $repos, GitExecuter $ge)
+	protected function initConfigRepo($path, Git\Git $gw, Interfaces\Parser $parser, $repos, GitExecutor $ge)
 	{
 		$name = "";
 		$path = $path->getHomeDir() . "/" . self::I_P_GLOBAL_CONFIG;
