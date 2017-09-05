@@ -59,8 +59,6 @@ class DeleteILIAS implements Action
 	 * @return	void
 	 */
 	public function perform() {
-		assert('is_bool($complete)');
-
 		$this->dropDatabase();
 		$this->deleteILIASFolder();
 		$this->deleteDataFolder();
