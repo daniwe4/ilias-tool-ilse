@@ -24,12 +24,17 @@ class SetupEnvironment extends BaseExecuter
 	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
 	 * @param \CaT\Ilse\Interfaces\Git 					$git
 	 * @param bool 										$interactive
+	 * @param \CaT\Ilse\Interfaces\Pathes 				$path
 	 */
-	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker, \CaT\Ilse\Interfaces\Git $git, $interactive)
+	public function __construct($config,
+								\CaT\Ilse\Interfaces\RequirementChecker $checker,
+								\CaT\Ilse\Interfaces\Git $git,
+								$interactive,
+								\CaT\Ilse\Interfaces\Pathes $path)
 	{
 		assert('is_string($config)');
 		assert('is_bool($interactive)');
-		parent::__construct($config, $checker, $git);
+		parent::__construct($config, $checker, $git, $path);
 
 		$this->interactive = $interactive;
 	}

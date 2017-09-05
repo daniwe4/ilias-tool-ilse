@@ -65,8 +65,13 @@ abstract class BaseExecuter
 	 *
 	 * @param string 									$config
 	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
+	 * @param \CaT\Ilse\Interfaces\Git 					$git
+	 * @param \CaT\Ilse\Interfaces\Pathes 				$path
 	 */
-	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker, \CaT\Ilse\Interfaces\Git $git)
+	public function __construct($config,
+								\CaT\Ilse\Interfaces\RequirementChecker $checker,
+								\CaT\Ilse\Interfaces\Git $git,
+								\CaT\Ilse\Interfaces\Pathes $path)
 	{
 		assert('is_string($config)');
 
@@ -75,13 +80,13 @@ abstract class BaseExecuter
 
 		$this->checker 			= $checker;
 		$this->git 				= $git;
-		$this->http_path 		= $this->gc->server()->httpPath();
-		$this->absolute_path 	= $this->gc->server()->absolutePath();
-		$this->data_path 		= $this->gc->client()->dataDir();
-		$this->client_id 		= $this->gc->client()->name();
-		$this->git_url 			= $this->gc->git()->url();
-		$this->git_branch_name 	= $this->gc->git()->branch();
-		$this->error_log 		= $this->gc->log()->errorLog();
-		$this->web_dir 			= App::I_D_WEB_DIR;
+		$this->http_path 		= $path->expandPath($this->gc->server()->httpPath());
+		$this->absolute_path 	= $path->expandPath($this->gc->server()->absolutePath());
+		$this->data_path 		= $path->expandPath($this->gc->client()->dataDir());
+		$this->client_id 		= $path->expandPath($this->gc->client()->name());
+		$this->git_url 			= $path->expandPath($this->gc->git()->url());
+		$this->git_branch_name 	= $path->expandPath($this->gc->git()->branch());
+		$this->error_log 		= $path->expandPath($this->gc->log()->errorLog());
+		$this->web_dir 			= $path->expandPath(App::I_D_WEB_DIR);
 	}
 }
