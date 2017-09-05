@@ -19,7 +19,7 @@ class TaskLoggerSymfonyTest extends PHPUnit_Framework_TestCase
 	 */
 	public function setUp()
 	{
-		$this->tls = new \CaT\Ilse\TaskLoggerSymfony($this->getMockOut());
+		$this->tls = new \CaT\Ilse\Aux\TaskLoggerSymfony($this->getMockOut());
 	}
 
 	/**
