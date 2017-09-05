@@ -1,5 +1,6 @@
 <?php
-/* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Extended GPL, see LICENSE */
+
+/* Copyright (c) 2016, 2017 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
 namespace CaT\Ilse\Action;
 
@@ -10,7 +11,7 @@ use CaT\Ilse\Aux\TaskLogger;
 /**
  * Delete an ILIAS instance
  */
-class DeleteILIAS
+class DeleteILIAS implements Action
 {
 	/**
 	 * @var Config\DB
@@ -57,7 +58,7 @@ class DeleteILIAS
 	 *
 	 * @return	void
 	 */
-	public function run() {
+	public function perform() {
 		assert('is_bool($complete)');
 
 		$this->dropDatabase();

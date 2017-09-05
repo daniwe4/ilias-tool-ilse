@@ -16,7 +16,7 @@ class InstallILIASForTest extends InstallILIAS {
 }
 
 class InstallILIASTest extends PHPUnit_Framework_TestCase {
-	public function test_run() {
+	public function test_perform() {
 		$config = $this->createMock(Config\General::class);
 		$core_installer_factory = $this->createMock(CoreInstallerFactory::class);
 		$core_installer = $this->createMock(CoreInstaller::class);
@@ -68,6 +68,6 @@ class InstallILIASTest extends PHPUnit_Framework_TestCase {
 			->expects($this->at(7))
 			->method("finishSetup");
 
-		$action->run();
+		$action->perform();
 	}
 }

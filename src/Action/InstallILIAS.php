@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Extended GPL, see LICENSE */
+/* Copyright (c) 2016, 2017 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
 namespace CaT\Ilse\Action;
 
@@ -14,7 +14,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 /**
  * Run the ILIAS installation process
  */
-class InstallILIAS
+class InstallILIAS implements Action
 {
 	/**
 	 * @var CoreInstallerFactory
@@ -53,7 +53,7 @@ class InstallILIAS
 	/**
 	 * Start the installation process
 	 */
-	public function run()
+	public function perform()
 	{
 		$version = "5.2"; // TODO: read this from config somehow
 

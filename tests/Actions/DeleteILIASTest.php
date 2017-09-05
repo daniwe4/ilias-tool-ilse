@@ -17,7 +17,7 @@ class DeleteILIASForTest extends DeleteILIAS {
 }
 
 class DeleteILIASTest extends PHPUnit_Framework_TestCase {
-	public function test_run() {
+	public function test_perform() {
 		$db_config = $this->createMock(Config\DB::class);
 		$server_config = new Config\Server("http://path", "absolute_path", "Europe/Berlin");
 		$client_config = new Config\Client("data_dir", "name", "bcrypt", 32);
@@ -44,7 +44,7 @@ class DeleteILIASTest extends PHPUnit_Framework_TestCase {
 				$c();
 			}));
 
-		$action->run();
+		$action->perform();
 
 		$this->assertEquals(1, $action->drop_database_called);
 	}
