@@ -24,4 +24,16 @@ class CommonPathes implements Interfaces\CommonPathes
 	{
 		return getenv("HOME");
 	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function expandHomePath($path)
+	{
+		if(strpos($path, '~') !== 0)
+		{
+			return $path;
+		}
+		return str_replace('~', $this->getHomeDir(), $path);
+	}
 }
