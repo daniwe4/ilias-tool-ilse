@@ -4,8 +4,8 @@
 namespace CaT\Ilse\Action;
 
 use CaT\Ilse\Config;
-use CaT\Ilse\Filesystem;
-use CaT\Ilse\TaskLogger;
+use CaT\Ilse\Aux\Filesystem;
+use CaT\Ilse\Aux\TaskLogger;
 
 /**
  * Delete an ILIAS instance

@@ -4,8 +4,8 @@
 
 use \CaT\Ilse\Action\DeleteILIAS;
 use \CaT\Ilse\Config;
-use \CaT\Ilse\Filesystem;
-use \CaT\Ilse\TaskLogger;
+use \CaT\Ilse\Aux\Filesystem;
+use \CaT\Ilse\Aux\TaskLogger;
 
 // If database had it own interface like filesystem, we could
 // drop this and write a proper test instead.

@@ -4,7 +4,7 @@
 
 use CaT\Ilse\Setup\CoreInstaller52;
 use CaT\Ilse\Config;
-use CaT\Ilse\TaskLogger;
+use CaT\Ilse\Aux\TaskLogger;
 
 class SmokeTest extends PHPUnit_Framework_TestCase {
 	// TODO: currently this does not worl because ilse relies on some config file in the

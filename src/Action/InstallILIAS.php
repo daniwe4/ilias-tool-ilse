@@ -6,7 +6,7 @@ namespace CaT\Ilse\Action;
 use CaT\Ilse\Config;
 use CaT\Ilse\Setup\CoreInstallerFactory;
 use CaT\Ilse\Setup\CoreInstaller;
-use CaT\Ilse\TaskLogger;
+use CaT\Ilse\Aux\TaskLogger;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;

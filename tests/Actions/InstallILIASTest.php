@@ -4,7 +4,7 @@
 
 use \CaT\Ilse\Action\InstallILIAS;
 use \CaT\Ilse\Config;
-use \CaT\Ilse\TaskLogger;
+use \CaT\Ilse\Aux\TaskLogger;
 use \CaT\Ilse\Setup\CoreInstaller;
 use \CaT\Ilse\Setup\CoreInstallerFactory;
 

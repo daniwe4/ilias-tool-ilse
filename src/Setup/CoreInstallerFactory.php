@@ -4,7 +4,7 @@
 namespace CaT\Ilse\Setup;
 
 use CaT\Ilse\Config;
-use Cat\Ilse\TaskLogger;
+use Cat\Ilse\Aux\TaskLogger;
 
 class CoreInstallerFactory {
 	/**
