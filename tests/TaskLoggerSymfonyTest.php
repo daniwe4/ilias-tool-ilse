@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\Console\Output\ConsoleOutput;
+
 /**
  * Test class for TaskLoggerSymfony
  *
@@ -22,7 +24,7 @@ class TaskLoggerSymfonyTest extends PHPUnit_Framework_TestCase
 	 */
 	public function setUp()
 	{
-		$this->tls = new \CaT\Ilse\TaskLoggerSymfony();
+		$this->tls = new \CaT\Ilse\TaskLoggerSymfony($this->getMockOut());
 	}
 
 	/**
@@ -93,5 +95,11 @@ class TaskLoggerSymfonyTest extends PHPUnit_Framework_TestCase
 		return array(array("Test_1", $this->getFunc(4, 2), 2),
 					 array("Test_2", $this->getFunc(4, 0), null)
 					);
+	}
+
+	private function getMockOut()
+	{
+		return $this->getMockBuilder('Symfony\\Component\\Console\\Output\\OutputInterface')
+					->getMock();
 	}
 }
