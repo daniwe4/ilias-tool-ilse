@@ -40,6 +40,7 @@ class App extends Application
 						( self::ILSE_DIR
 						, self::ILSE_CONFIG
 						, $c["aux.filesystem"]
+						, $c["aux.taskLogger"]
 						);
 		};
 		$container["action.deleteILIAS"] = function($c) {
