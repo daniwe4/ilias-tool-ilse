@@ -15,11 +15,6 @@ class TaskLoggerSymfonyTest extends PHPUnit_Framework_TestCase
 	protected $tls;
 
 	/**
-	 * \Closure
-	 */
-	protected $func;
-
-	/**
 	 * Setup the testing environment
 	 */
 	public function setUp()
