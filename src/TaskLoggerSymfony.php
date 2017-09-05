@@ -1,7 +1,7 @@
 <?php
 namespace CaT\Ilse;
 
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class TaskLoggerSymfony
@@ -15,9 +15,9 @@ class TaskLoggerSymfony
 	/**
 	 * Constructor of TaskLoggerSymfony
 	 */
-	public function __construct()
+	public function __construct(OutputInterface $out)
 	{
-		$this->out = new ConsoleOutput();
+		$this->out = $out;
 	}
 
 	/**
@@ -26,17 +26,16 @@ class TaskLoggerSymfony
 	public function always($title, \Closure $task)
 	{
 		$this->out->write($title);
+		$this->writeSpaces($title);
 		try
 		{
 			$result = $task();
 		}
 		catch(\Exception $e)
 		{
-			$this->writeSpaces($title);
 			$this->out->write("<fg=red>FAIL</>", true);
 			throw $e;
 		}
-		$this->writeSpaces($title);
 		$this->out->write("<fg=green>DONE</>", true);
 		return $result;
 
@@ -48,17 +47,16 @@ class TaskLoggerSymfony
 	public function eventually($title, \Closure $task)
 	{
 		$this->out->write($title);
+		$this->writeSpaces($title);
 		try
 		{
 			$result = $task();
 		}
 		catch(\Exception $e)
 		{
-			$this->writeSpaces($title);
 			$this->out->write("<fg=yellow>FAIL</>", true);
 			return;
 		}
-		$this->writeSpaces($title);
 		$this->out->write("<fg=green>DONE</>", true);
 		return $task();
 	}
