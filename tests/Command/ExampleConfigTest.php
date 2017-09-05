@@ -22,7 +22,7 @@ class ExampleConfigTest extends PHPUnit_Framework_TestCase {
 		$in = $this->createMock(InputInterface::class);
 		$out = $this->createMock(OutputInterface::class);
 
-		$expected = file_get_contents(__DIR__."/../assets/example_config.yaml");
+		$expected = file_get_contents(__DIR__."/../../assets/example_config.yaml");
 
 		$out
 			->expects($this->once())
