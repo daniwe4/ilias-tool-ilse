@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Extended GPL, see LICENSE */
+/* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
 namespace CaT\Ilse\App\Command;
 
@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use CaT\Ilse\Executer;
 
 /**
  * Implementation of the install command
@@ -25,7 +24,6 @@ class InstallCommand extends BaseCommand
 			->setName("install")
 			->setDescription("Start the installation.")
 			->addArgument("config_names", InputArgument::IS_ARRAY, "Name of the Ilias Config Files.")
-			->addOption("interactive", "i", InputOption::VALUE_NONE, "Set i to start the setup in interactive mode.");
 			;
 	}
 
@@ -37,6 +35,13 @@ class InstallCommand extends BaseCommand
 	 */
 	protected function execute(InputInterface $in, OutputInterface $out)
 	{
+		$this->dic["aux.taskLogger"] = $this->buildTaskLogger($out);
+
+		$init_app_folder = $this->dic["action.initAppFolder"];
+		$init_app_folder->perform();
+
+		return;
+
 		$config_names = $in->getArgument("config_names");
 		$args["config"] = $this->merge($config_names);
 		$args["interactive"] = $in->getOption("interactive");
