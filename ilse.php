@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * Main entry point for Ilse
