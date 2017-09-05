@@ -7,7 +7,7 @@
 * @author	Stefan Hecken <stefan.hecken@concepts-and-training.de>
 */
 
-namespace CaT\Ilse\Executer;
+namespace CaT\Ilse\Executor;
 
 // remove notices from error reporting
 if (version_compare(PHP_VERSION, '5.3.0', '>='))

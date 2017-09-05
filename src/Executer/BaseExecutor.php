@@ -1,14 +1,14 @@
 <?php
 /* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse\Executer;
+namespace CaT\Ilse\Executor;
 
 use CaT\Ilse\App;
 
 /**
- * Base class for all executers
+ * Base class for all executors
  */
-abstract class BaseExecuter
+abstract class BaseExecutor
 {
 	/**
 	 * @var string
@@ -61,7 +61,7 @@ abstract class BaseExecuter
 	protected $web_dir;
 
 	/**
-	 * Constructor of the BaseExecuter class
+	 * Constructor of the BaseExecutor class
 	 *
 	 * @param string 									$config
 	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker

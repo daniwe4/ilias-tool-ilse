@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use CaT\Ilse\Executer;
+use CaT\Ilse\Executor;
 
 /**
  * Implementation of the config command
@@ -50,7 +50,7 @@ class ConfigCommand extends BaseCommand
 	 */
 	protected function config(array $args)
 	{
-		$ci = new Executer\ConfigureILIAS($args['config'], $this->checker, $this->git, $this->path);
+		$ci = new Executor\ConfigureILIAS($args['config'], $this->checker, $this->git, $this->path);
 		$ci->run();
 	}
 }
