@@ -4,7 +4,7 @@
 namespace CaT\Ilse\Setup;
 
 use CaT\Ilse\Config;
-use CaT\Ilse\TaskLogger;
+use CaT\Ilse\Aux\TaskLogger;
 
 /**
  * implementation of an ilias installer
