@@ -6,7 +6,7 @@ namespace CaT\Ilse\Action;
 /**
  * Run the ILIAS setup
  */
-class SetupEnvironment implements Action 
+class BuildInstallationEnvironment implements Action
 {
 	/**
 	 * Constructor of the class SetupEnvironment

@@ -43,13 +43,13 @@ class InstallCommandTest extends PHPUnit_Framework_TestCase {
 		$init_app_folder
 			->expects($this->once())
 			->method("perform");
-		$setup_environment = $this->createMock(Action\SetupEnvironment::class);
-		$setup_environment
+		$build_installation_environment = $this->createMock(Action\BuildInstallationEnvironment::class);
+		$build_installation_environment
 			->expects($this->once())
 			->method("perform");
 
 		$dic["action.initAppFolder"] = $init_app_folder;
-		$dic["action.setupEnvironment"] = $setup_environment;
+		$dic["action.buildInstallationEnvironment"] = $build_installation_environment;
 
 	
 		$command = new InstallCommandForTest($dic);
