@@ -1,12 +1,12 @@
 <?php
 /* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse\Executer;
+namespace CaT\Ilse\Executor;
 
 /**
- * Base class for all executers
+ * Base class for all executors
  */
-abstract class BaseExecuter
+abstract class BaseExecutor
 {
 	/**
 	 * @var string
@@ -61,12 +61,17 @@ abstract class BaseExecuter
 	const I_D_WEB_DIR			= "data";
 
 	/**
-	 * Constructor of the BaseExecuter class
+	 * Constructor of the BaseExecutor class
 	 *
 	 * @param string 									$config
 	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
+	 * @param \CaT\Ilse\Interfaces\Git 					$git
+	 * @param \CaT\Ilse\Interfaces\Pathes 				$path
 	 */
-	public function __construct($config, \CaT\Ilse\Interfaces\RequirementChecker $checker, \CaT\Ilse\Interfaces\Git $git)
+	public function __construct($config,
+								\CaT\Ilse\Interfaces\RequirementChecker $checker,
+								\CaT\Ilse\Interfaces\Git $git,
+								\CaT\Ilse\Interfaces\Pathes $path)
 	{
 		assert('is_string($config)');
 
