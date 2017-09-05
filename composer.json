@@ -19,7 +19,7 @@
         "symfony/yaml" : "2.8",
         "symfony/process": "2.4.*",
         "pimple/pimple": "3.2.*",
-		"phpdocumentor/reflection-docblock": "3.*",
+		"phpdocumentor/reflection-docblock": "2.*",
 		"phpunit/php-token-stream": "1.*"
     },
     "require-dev" : {
