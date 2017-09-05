@@ -42,7 +42,7 @@ class FilesystemImpl implements Filesystem {
 	 */
 	public function makeDirectory($path) {
 		assert('is_string($path)');
-		mkdir($path, "755", true);
+		mkdir($path, 0755, true);
 	}
 
 	/**
