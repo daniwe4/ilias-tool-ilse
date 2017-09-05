@@ -14,9 +14,9 @@ use Symfony\Component\Console\Application;
  */
 class App extends Application
 {
-	const I_P_GLOBAL_CONFIG 	= ".ilse/ilias-configs";
-	const I_F_CONFIG_REPOS 		= ".ilse/config_repos.yaml";
-	const I_P_GLOBAL 			= ".ilse";
+	const CONFIG_REPOS_DIR	= "ilias-configs";
+	const ILSE_CONFIG		= "config.yaml";
+	const ILSE_DIR			= ".ilse";
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_BRANCH			= "master";
 
@@ -35,6 +35,13 @@ class App extends Application
 
 		// Actions
 
+		$container["action.initAppFolder"] = function($c) {
+			return new Action\InitAppFolder
+						( self::ILSE_DIR
+						, self::ILSE_CONFIG
+						, $c["aux.filesystem"]
+						);
+		}
 		$container["action.deleteILIAS"] = function($c) {
 			$config = $container["config.ilias"];
 			return new Action\DeleteILIAS
@@ -43,15 +50,14 @@ class App extends Application
 						, $config->client()
 						, $config->log()
 						, $c["aux.filesystem"]
-						, $c["aux.task_logger"]
+						, $c["aux.taskLogger"]
 						);
 		};
-
 		$container["action.installILIAS"] = function($c) {
 			return new Action\InstallILIAS
 						( $c["config.ilias"]
-						, $c["setup.core_installer_factory"]
-						, $c["aux.task_logger"]
+						, $c["setup.coreInstallerFactory"]
+						, $c["aux.taskLogger"]
 						);
 		};
 
@@ -69,13 +75,13 @@ class App extends Application
 		$container["aux.filesystem"] = function($c) {
 			return new Aux\FilesystemImpl();
 		};
-		$container["aux.task_logger"] = function($c) {
+		$container["aux.taskLogger"] = function($c) {
 			throw new \RuntimeException("Expected command to initialize task logger.");
 		};
 
 		// Setup
 
-		$container["setup.core_installer_factory"] = function($c) {
+		$container["setup.coreInstallerFactory"] = function($c) {
 			return new CoreInstallerFactory();
 		};
 
