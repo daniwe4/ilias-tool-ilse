@@ -12,7 +12,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class InstallILIAS extends BaseExecuter
 {
 	/**
-	 * @var \CaT\Ilse\IliasReleaseInstaller
+	 * @var \CaT\Ilse\CoreInstaller
 	 */
 	protected $iinst;
 
@@ -90,13 +90,13 @@ class InstallILIAS extends BaseExecuter
 	}
 
 	/**
-	 * Initialitze the IliasReleaseInstaller
+	 * Initialitze the CoreInstaller
 	 */
 	protected function initInstaller()
 	{
 		$setup = new \ilSetup(true,"admin");
 		echo "Initializing installer...";
-		$this->iinst = new \CaT\Ilse\IliasReleaseInstaller($setup, $this->gc);
+		$this->iinst = new \CaT\Ilse\Setup\CoreInstaller52($setup, $this->gc);
 		echo "\t\t\t\t\t\t\t\t\t\t\t\tDone!\n";
 	}
 

@@ -1,7 +1,7 @@
 <?php
-/* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
+/* Copyright (c) 2016, 2017 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse\Interfaces;
+namespace CaT\Ilse\Setup;
 
 /**
  * Interface for installing ILIAS with a client.
@@ -11,8 +11,9 @@ namespace CaT\Ilse\Interfaces;
  *       in comments.
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
+ * @author Richard Klees <richard.klees@concepts-and-training.de>
  */
-interface Installer {
+interface CoreInstaller {
 	/**
 	 * Write the client.ini.
 	 *

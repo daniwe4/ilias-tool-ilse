@@ -1,15 +1,16 @@
 <?php
-/* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
+/* Copyright (c) 2016, 2017 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse;
+namespace CaT\Ilse\Setup;
 
 /**
 * implementation of an ilias installer
 *
 * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
+* @author Richard Klees <richard.klees@concepts-and-training.de>
 */
 
-class IliasReleaseInstaller implements \CaT\Ilse\Interfaces\Installer {
+class CoreInstaller52 implements CoreInstaller {
 	protected $ilias_setup;
 	protected $general;
 
