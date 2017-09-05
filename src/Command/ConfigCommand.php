@@ -23,7 +23,7 @@ class ConfigCommand extends BaseCommand
 	{
 		$this
 			->setName("config")
-			->setDescription("Configurate the ilias installation.")
+			->setDescription("Configure the ilias installation.")
 			->addArgument("config_names", InputArgument::IS_ARRAY, "Name of the Ilias Config Files.")
 			;
 	}
@@ -50,7 +50,7 @@ class ConfigCommand extends BaseCommand
 	 */
 	protected function config(array $args)
 	{
-		$ci = new Executer\ConfigurateILIAS($args['config'], $this->checker, $this->git, $this->path);
+		$ci = new Executer\ConfigureILIAS($args['config'], $this->checker, $this->git, $this->path);
 		$ci->run();
 	}
 }

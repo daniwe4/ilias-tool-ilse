@@ -268,7 +268,7 @@ password_settings:
     forgot_password_aktive: 1
     #Max Number of login attemps, before account get blocked. if you enter 0 user account never will be blocked
     max_num_login_attempts: 0
-#Configurate youre changings for the editor administratio part. It's possible to toggle usage of tinyMCE and configure
+#Configure youre changings for the editor administratio part. It's possible to toggle usage of tinyMCE and configure
 #repository page edit settings
 editor:
     #Active the TyniMCE editor. You can toggle with 1 (active) or 0 (inactive)

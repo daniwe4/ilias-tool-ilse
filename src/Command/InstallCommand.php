@@ -70,7 +70,7 @@ class InstallCommand extends BaseCommand
 	}
 
 	/**
-	 * Configurate the ILIAS environment
+	 * Configure the ILIAS environment
 	 *
 	 * @param string 		$cmd
 	 */

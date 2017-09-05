@@ -10,7 +10,7 @@ use CaT\Ilse\App;
 /**
  * Run the ILIAS configuration process
  */
-class ConfigurateILIAS extends BaseExecuter
+class ConfigureILIAS extends BaseExecuter
 {
 	/**
 	 * CaT\Ilse\IliasReleaseConfigurator
