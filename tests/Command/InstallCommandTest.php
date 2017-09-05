@@ -4,7 +4,7 @@
 
 use \CaT\Ilse\App\Command\InstallCommand;
 use \CaT\Ilse\Aux\TaskLogger;
-use \CaT\Ilse\Action\InitAppFolder;
+use \CaT\Ilse\Action;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,13 +39,17 @@ class InstallCommandTest extends PHPUnit_Framework_TestCase {
 				$c();
 			}));
 
-		$init_app_folder = $this->createMock(InitAppFolder::class);
+		$init_app_folder = $this->createMock(Action\InitAppFolder::class);
 		$init_app_folder
 			->expects($this->once())
 			->method("perform");
-
+		$setup_environment = $this->createMock(Action\SetupEnvironment::class);
+		$setup_environment
+			->expects($this->once())
+			->method("perform");
 
 		$dic["action.initAppFolder"] = $init_app_folder;
+		$dic["action.setupEnvironment"] = $setup_environment;
 
 	
 		$command = new InstallCommandForTest($dic);
