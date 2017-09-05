@@ -15,7 +15,7 @@ class ExampleConfigCommandForTest extends ExampleConfigCommand {
 
 class ExampleConfigTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
-		$this->command = new ExampleConfigCommandForTest();
+		$this->command = new ExampleConfigCommandForTest([]);
 	}
 
 	public function test_execute() {

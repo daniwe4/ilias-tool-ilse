@@ -11,12 +11,9 @@ use Pimple\Container;
  */
 abstract class BaseCommand extends Command
 {
-	/**
-	 * @var Container
-	 */
 	protected $dic;
 
-	public function __construct(Container $dic)
+	public function __construct($dic)
 	{
 		parent::__construct();
 		$this->dic = $dic;
