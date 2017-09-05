@@ -20,19 +20,10 @@ class App extends Application
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_BRANCH			= "master";
 
-<<<<<<< HEAD:src/App/App.php
 	public function __construct() {
 		parent::__construct();
 		$this->initCommands();
 	}
-=======
-		$ge 	= new GitExecutor();
-		$repos 	= $this->getConfigRepos($path, $gw, $parser);
-
-		$this->initAppFolder($path);
-		$this->initConfigRepo($path, $gw, $parser, $repos, $ge);
-		$this->initCommands($path, $merger, $checker, $git, $repos);
->>>>>>> 824fb83f78d7c8a8d1b3a042a2d7398a3e8e3d7f:src/App.php
 
 	/**
 	 * Initialize the dependency injection container.
