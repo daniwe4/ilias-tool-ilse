@@ -5,6 +5,7 @@
 namespace CaT\Ilse\Action;
 
 use CaT\Ilse\Aux\Filesystem;
+use CaT\Ilse\Aux\TaskLogger;
 
 /**
  * Initialize the folder of the app if it doesn't yet exist.
@@ -27,16 +28,22 @@ class InitAppFolder implements Action
 	protected $filesystem;	
 
 	/**
+	 * @var TaskLogger
+	 */
+	protected $task_logger;
+
+	/**
 	 * @param	string		$folder_name
 	 * @param	Filesystem $filesystem
 	 */
-	public function __construct($folder_name, $config_name, Filesystem $filesystem)
+	public function __construct($folder_name, $config_name, Filesystem $filesystem, TaskLogger $logger)
 	{
 		assert('is_string($folder_name)');
 		assert('is_string($config_name)');
 		$this->folder_name = $folder_name;
 		$this->config_name = $config_name;
 		$this->filesystem = $filesystem;
+		$this->task_logger = $logger;
 	}
 
 	/**
@@ -51,9 +58,13 @@ class InitAppFolder implements Action
 			return;
 		}
 
-		$fs->makeDirectory($dir);
-		$default_config = $fs->read(__DIR__."/../../assets/ilse_default_config.yaml");
+		$this->task_logger->always("Creating directory $dir for ilse", function () use ($dir, $fs) {
+			$fs->makeDirectory($dir);
+		});
 		$config_file = $dir."/".$this->config_name;
-		$fs->write($config_file, $default_config); 
+		$this->task_logger->always("Writing default config to $config_file", function() use ($config_file, $fs) {
+			$default_config = $fs->read(__DIR__."/../../assets/ilse_default_config.yaml");
+			$fs->write($config_file, $default_config);
+		});
 	}
 }
