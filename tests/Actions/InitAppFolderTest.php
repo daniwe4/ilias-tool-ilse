@@ -4,12 +4,14 @@
 
 use \CaT\Ilse\Action\InitAppFolder;
 use \CaT\Ilse\Aux\Filesystem;
+use \CaT\Ilse\Aux\TaskLogger;
 
 class InitAppFolderTest extends PHPUnit_Framework_TestCase {
 	public function test_perform_exists() {
 		$filesystem = $this->createMock(Filesystem::class);
+		$task_logger = $this->createMock(TaskLogger::class);
 
-		$action = new InitAppFolder(".ilse", "config.yaml", $filesystem);
+		$action = new InitAppFolder(".ilse", "config.yaml", $filesystem, $task_logger);
 
 		$filesystem
 			->expects($this->atLeastOnce())
@@ -32,7 +34,21 @@ class InitAppFolderTest extends PHPUnit_Framework_TestCase {
 	public function test_perform_not_exists() {
 		$filesystem = $this->createMock(Filesystem::class);
 
-		$action = new InitAppFolder(".ilse", "config.yaml", $filesystem);
+		$task_logger = $this->createMock(TaskLogger::class);
+		$task_logger
+			->expects($this->any())
+			->method("eventually")
+			->will($this->returnCallback(function($s, $c) {
+				$c();
+			}));
+		$task_logger
+			->expects($this->any())
+			->method("always")
+			->will($this->returnCallback(function($s, $c) {
+				$c();
+			}));
+
+		$action = new InitAppFolder(".ilse", "config.yaml", $filesystem, $task_logger);
 
 		$filesystem
 			->expects($this->atLeastOnce())
