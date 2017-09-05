@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Daniel Weise <daniel.weise@concepts-and-training.de>
  */
-class TaskLoggerSymfony
+class TaskLoggerSymfony implements TaskLogger
 {
 	const MAX_LENGTH = 80;
 
@@ -21,9 +21,9 @@ class TaskLoggerSymfony
 	}
 
 	/**
-	 * inheritdoc
+	 * @inheritdoc
 	 */
-	public function always($title, \Closure $task)
+	public function always($title, callable $task)
 	{
 		$this->out->write($title);
 		$this->writeSpaces($title);
@@ -42,9 +42,9 @@ class TaskLoggerSymfony
 	}
 
 	/**
-	 * inheritdoc
+	 * @inheritdoc
 	 */
-	public function eventually($title, \Closure $task)
+	public function eventually($title, callable $task)
 	{
 		$this->out->write($title);
 		$this->writeSpaces($title);
