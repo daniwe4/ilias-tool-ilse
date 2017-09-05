@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Richard Klees <richard.klees@concepts-and-training.de>
  */
-class ExampleConfigCommand extends Command
+class ExampleConfigCommand extends BaseCommand
 {
 	/**
 	 * Configure the command with description and help text

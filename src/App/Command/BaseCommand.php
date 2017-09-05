@@ -4,9 +4,7 @@
 namespace CaT\Ilse\App\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use CaT\Ilse\App\App;
+use Pimple\Container;
 
 /**
  * Base class for all commands
@@ -14,43 +12,14 @@ use CaT\Ilse\App\App;
 abstract class BaseCommand extends Command
 {
 	/**
-	 * @var Symfony\Component\Process\Process
+	 * @var Container
 	 */
-	protected $process;
+	protected $dic;
 
-	/**
-	 * @var CaT\Ilse\Interfaces\Path
-	 */
-	protected $path;
-
-	/**
-	 * @var CaT\Ilse\Interfaces\Merge
-	 */
-	protected $merge;
-
-	/**
-	 * @var \CaT\Ilse\Interfaces\RequirementChecker
-	 */
-	protected $checker;
-
-	/**
-	 * @var \CaT\Ilse\Interfaces\Git
-	 */
-	protected $git;
-
-	public function __construct(\CaT\Ilse\Interfaces\CommonPathes $path,
-								\CaT\Ilse\Interfaces\Merger $merger,
-								\CaT\Ilse\Interfaces\RequirementChecker $checker,
-								\CaT\Ilse\Interfaces\Git $git,
-								array $repos = array())
+	public function __construct(Container $dic)
 	{
 		parent::__construct();
-		$this->process 	= new Process("");
-		$this->path 	= $path;
-		$this->merger 	= $merger;
-		$this->checker 	= $checker;
-		$this->git 		= $git;
-		$this->repos 	= $repos;
+		$this->dic = $dic;
 	}
 
 	/**

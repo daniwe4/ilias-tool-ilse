@@ -20,6 +20,11 @@ class App extends Application
 	const I_F_CONFIG			= "ilse_config.yaml";
 	const I_R_BRANCH			= "master";
 
+	public function __construct() {
+		parent::__construct();
+		$this->initCommands();
+	}
+
 	/**
 	 * Initialize the dependency injection container.
 	 *
@@ -73,6 +78,8 @@ class App extends Application
 		$container["setup.core_installer_factory"] = function($c) {
 			return new CoreInstallerFactory();
 		};
+
+		return $container;
 	}
 
 	/**
@@ -82,13 +89,15 @@ class App extends Application
 	 */
 	protected function initCommands()
 	{
-		$this->add(new Command\UpdateCommand($path, $merger, $checker, $git, $repos));
-		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git, $repos));
-		$this->add(new Command\UpdatePluginsCommand($path, $merger, $checker, $git, $repos));
-		$this->add(new Command\ReinstallCommand($path, $merger, $checker, $git, $repos));
-		$this->add(new Command\InstallCommand($path, $merger, $checker, $git, $repos));
-		$this->add(new Command\ConfigCommand($path, $merger, $checker, $git, $repos));
-		$this->add(new Command\ExampleConfigCommand());
+		$dic = $this->getDIC();
+
+//		$this->add(new Command\UpdateCommand($path, $merger, $checker, $git, $repos));
+//		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git, $repos));
+//		$this->add(new Command\UpdatePluginsCommand($path, $merger, $checker, $git, $repos));
+//		$this->add(new Command\ReinstallCommand($path, $merger, $checker, $git, $repos));
+//		$this->add(new Command\InstallCommand($path, $merger, $checker, $git, $repos));
+//		$this->add(new Command\ConfigCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\ExampleConfigCommand($dic));
 	}
 
 	/**
