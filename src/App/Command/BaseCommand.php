@@ -1,10 +1,13 @@
 <?php
-/* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Extended GPL, see LICENSE */
+/* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
 namespace CaT\Ilse\App\Command;
 
+use CaT\Ilse\Aux\TaskLogger;
+use CaT\Ilse\Aux\TaskLoggerSymfony;
+
 use Symfony\Component\Console\Command\Command;
-use Pimple\Container;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Base class for all commands
@@ -17,6 +20,14 @@ abstract class BaseCommand extends Command
 	{
 		parent::__construct();
 		$this->dic = $dic;
+	}
+
+	/**
+	 * @param	OutputInterface	$output
+	 * @return	TaskLogger
+	 */
+	public function buildTaskLogger(OutputInterface $output) {
+		return new TaskLoggerSymfony($output);
 	}
 
 	/**
