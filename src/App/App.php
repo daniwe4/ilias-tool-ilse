@@ -41,7 +41,7 @@ class App extends Application
 						, self::ILSE_CONFIG
 						, $c["aux.filesystem"]
 						);
-		}
+		};
 		$container["action.deleteILIAS"] = function($c) {
 			$config = $container["config.ilias"];
 			return new Action\DeleteILIAS
