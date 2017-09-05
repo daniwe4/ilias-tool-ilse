@@ -6,6 +6,8 @@ namespace CaT\Ilse\Aux;
 
 /**
  * Some filesystem functions.
+ *
+ * TODO: make this expand ~ to home
  */
 class FilesystemImpl implements Filesystem {
 	/**
