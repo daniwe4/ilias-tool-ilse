@@ -3,27 +3,73 @@
 
 namespace CaT\Ilse\Action;
 
+use CaT\Ilse\Config;
+use CaT\Ilse\Setup\RequirementsChecker;
+use CaT\Ilse\Git\GitFactory;
+use CaT\Ilse\Aux\Filesystem;
+use CaT\Ilse\Aux\TaskLogger;
+
 /**
  * Run the ILIAS setup
  */
 class BuildInstallationEnvironment implements Action
 {
 	/**
-	 * Constructor of the class SetupEnvironment
-	 *
-	 * @param string 									$config
-	 * @param \CaT\Ilse\Interfaces\RequirementChecker 	$checker
-	 * @param \CaT\Ilse\Interfaces\Git 					$git
-	 * @param bool 										$interactive
-	 * @param \CaT\Ilse\Interfaces\Pathes 				$path
+	 * @var Config\Server
 	 */
-	public function __construct($config,
-								\CaT\Ilse\Interfaces\RequirementChecker $checker,
-								\CaT\Ilse\Interfaces\Git $git,
-								\CaT\Ilse\Interfaces\Pathes $path)
+	protected $server_config;
+
+	/**
+	 * @var	Config\Client
+	 */
+	protected $client_config;
+
+	/**
+	 * @var	Config\DB
+	 */
+	protected $db_config;
+
+	/**
+	 * @var	Config\Log
+	 */
+	protected $log_config;
+
+	/**
+	 * @var	Config\Git
+	 */
+	protected $git_config;
+
+	/**
+	 * @var	RequirementsChecker
+	 */
+	protected  $requirement_checker;
+
+	/**
+	 * @var TaskLogger
+	 */
+	protected $task_logger;
+
+	/**
+	 * @var GitFactory
+	 */
+	protected $git_factory;
+
+	/**
+	 * @var	Filesystem
+	 */
+	protected $filesystem;
+
+	public function __construct(Config\Server $server_config, Config\Client $client_config, Config\DB $db_config, Config\Log $log_config, Config\Git $git_config, RequirementsChecker $requirements_checker, TaskLogger $task_logger, GitFactory $git_factory, Filesystem $filesystem)
 	{
-		assert('is_string($config)');
-		parent::__construct($config, $checker, $git, $path);
+		$this->server_config = $server_config;
+		$this->client_config = $client_config;
+		$this->db_config = $db_config;
+		$this->log_config = $log_config;
+		$this->git_config = $git_config;
+		$this->requirements_checker = $requirements_checker;
+		$this->task_logger = $task_logger;
+		$this->git_factory = $git_factory;
+		$this->filesystem = $filesystem;
 	}
 
 	/**
@@ -31,240 +77,75 @@ class BuildInstallationEnvironment implements Action
 	 */
 	public function perform()
 	{
-		$this->crateDataDir();
-		$this->checkDataDirPermissions();
-		$this->checkDataDirEmpty();
-		$this->createLogDir();
-		$this->createErrorLogDir();
+		$this->createWebDir();
+		$this->createDataDir();
 		$this->createLogFile();
-		$this->checkPHPVersion();
-		$this->checkPDO();
-		$this->checkDBConnection();
-		$this->validPhpForIliasBranch();
+		$this->createErrorLogDir();
 		$this->cloneILIAS();
 	}
 
-	/**
-	 * Create data directory
-	 */
-	protected function crateDataDir()
-	{
-		$check = $this->checker->dataDirectoryExists($this->data_path);
-		if($this->interactive && !$check)
-		{
-			echo "Data directory does not exist. Create the directory (yes|no)? ";
-			$line = $this->getUserInput();
-			if(strtolower($line) != "yes") {
-				echo "Aborted by user.";
-				exit(1);
+	protected function createWebDir() {
+		$absolute_path = $this->server_config->absolute_path();
+		$this->task_logger->always("Creating web directory '$absolute_path'", function() use ($absolute_path) {
+			if (!$this->requirements_checker->webDirectoryExists($absolute_path)) {
+				$this->filesystem->makeDirectory($absolute_path);
 			}
-
-			echo "Creating data directory...";
-			mkdir($this->data_path, 0640, true);
-			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
-		}
-		else if(!$this->interactive && !$check)
-		{
-			echo "Creating data directory...";
-			mkdir($this->data_path, 0640, true);
-			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
-		}
-	}
-
-	/**
-	 * Check data directory permissions
-	 */
-	protected function checkDataDirPermissions()
-	{
-		$check = $this->checker->dataDirectoryPermissions($this->data_path);
-		if($this->interactive && !$check)
-		{
-			echo "Not enough permissions on data directory. Set permissions (yes|no)? ";
-			$line = $this->getUserInput();
-			if(strtolower($line) != "yes") {
-				echo "Aborted by user.";
-				exit(1);
+			if (!$this->requirements_checker->webDirectoryWriteable($absolute_path)) {
+				$this->filesystem->chmod($absolute_path, 0755);
 			}
-
-			echo "Setting permission to required...";
-			chmod($this->data_path, 0640);
-			echo "\t\t\t\t\t\tDone!\n";
-		}
-		else if(!$this->interactive && !$check)
-		{
-			echo "Setting permission to required...";
-			chmod($this->data_path, 0640);
-			echo "\t\t\t\t\t\tDone!\n";
-		}
-	}
-
-	/**
-	 * Check whether the data directory is empty
-	 */
-	protected function checkDataDirEmpty()
-	{
-		$check = $this->checker->dataDirectoryEmpty($this->data_path, $this->client_id, $this->web_dir);
-		if($this->interactive && !$check)
-		{
-			echo "Data directory is not empty. Clean the directory (yes|no)? ";
-			$line = $this->getUserInput();
-			if(strtolower($line) != "yes") {
-				echo "Aborted by user.";
-				exit(1);
+			if (!$this->requirements_checker->webDirectoryEmpty($absolute_path)) {
+				$this->filesystem->purgeDirectory($absolute_path);
 			}
-
-			echo "Cleaning the directory ".$this->data_path."/".$this->client_id."...";
-			$this->clearDirectory($this->data_path."/".$this->client_id);
-			echo "\t\t\t\t\t\tDone!\n";
-		}
+		});
 	}
 
-	/**
-	 * Create log directory
-	 */
-	protected function createLogDir()
-	{
-		$check = $this->checker->logDirectoryExists($this->gc->log()->path());
-		if($this->interactive && !$check)
-		{
-			echo "Log directory does not exist. Create the directory (yes|no)? ";
-			$line = $this->getUserInput();
-			if(strtolower($line) != "yes") {
-				echo "Aborted by user.";
-				exit(1);
+	protected function createDataDir() {
+		$data_dir = $this->client_config->data_dir();
+		$this->task_logger->always("Creating data directory '$data_dir'", function() use ($data_dir) {
+			if (!$this->requirements_checker->dataDirectoryExists($data_dir)) {
+				$this->filesystem->makeDirectory($data_dir);
 			}
-
-			echo "Creating log directory...";
-			mkdir($this->gc->log()->path(), 0640, true);
-			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
-		}
-		else if(!$this->interactive && !$check)
-		{
-			echo "Creating log directory...";
-			mkdir($this->gc->log()->path(), 0640, true);
-			echo "\t\t\t\t\t\t\t\t\t\t\tDone!\n";
-		}
+			if (!$this->requirements_checker->dataDirectoryWriteable($data_dir)) {
+				$this->filesystem->chmod($data_dir, 0755);
+			}
+			if (!$this->requirements_checker->dataDirectoryEmpty($data_dir, $this->client_config->name())) {
+				$this->filesystem->purgeDirectory($data_dir);
+			}
+		});
 	}
 
-	/**
-	 * Create error_log dir
-	 */
-	protected function createErrorLogDir()
-	{
-		$check = $this->checker->logDirectoryExists($this->gc->log()->error_log());
-		if(!$check)
-		{
-			mkdir($this->gc->log()->error_log(), 0640, true);
-		}
+	protected function createLogFile() {
+		$log_dir = $this->log_config->path();
+		$file_name = $this->log_config->file_name();
+		$path = "$log_dir/$file_name";
+		$this->task_logger->always("Creating log file '$path'", function() use ($log_dir, $file_name, $path) {
+			if (!$this->requirements_checker->logDirectoryExists($log_dir)) {
+				$this->filesystem->makeDirectory($log_dir);
+			}
+			if (!$this->requirements_checker->logFileExists($path)) {
+				$this->filesystem->write($path, "");
+			}
+			if (!$this->requirements_checker->logFileWriteable($path)) {
+				$this->filesystem->chmod($path, 0755);
+			}
+		});
 	}
 
-	/**
-	 * Create log file
-	 */
-	protected function createLogFile()
-	{
-		if(!$this->checker->logFileExists($this->gc->log()->path(), $this->gc->log()->fileName()))
-		{
-			touch($this->gc->log()->path()."/".$this->gc->log()->fileName());
-			chmod($this->gc->log()->path()."/".$this->gc->log()->fileName(), 0640);
-		}
+	protected function createErrorLogDir() {
+		$error_log_dir = $this->log_config->error_log();
+		$this->task_logger->always("Creating directory for error logs '$error_log_dir'", function() use ($error_log_dir) {
+			if (!$this->requirements_checker->logDirectoryExists($error_log_dir)) {
+				$this->filesystem->makeDirectory($error_log_dir);
+			}
+			if (!$this->requirements_checker->logDirectoryWriteable($error_log_dir)) {
+				$this->filesystem->chmod($error_log_dir, 0755);
+			}
+		});
 	}
 
-	/**
-	 * Check for valid php version
-	 *
-	 * @throws \Exception
-	 */
-	protected function checkPHPVersion()
-	{
-		if(!$this->checker->validPHPVersion(phpversion(), "5.4"))
-		{
-			throw new \Exception("Your PHP Version is too old. Please update to 5.4 or higher.");
-		}
-	}
-
-	/**
-	 * Check for installed PDO
-	 *
-	 * @throws \Exception
-	 */
-	protected function checkPDO()
-	{
-		if(!$this->checker->pdoExist())
-		{
-			throw new \Exception("PDO is not installed.");
-		}
-	}
-
-	/**
-	 * Check db connection
-	 *
-	 * @throws \Exception
-	 */
-	protected function checkDBConnection()
-	{
-		if(!$this->checker->databaseConnectable($this->gc->database()->host(), $this->gc->database()->user(), $this->gc->database()->password()))
-		{
-
-			throw new \Exception("It's not possible to connect a MySQL database. Please ensure you have a MySQL database installed or started.");
-		}
-	}
-
-	/**
-	 * Check for valid php version for ILIAS branch
-	 *
-	 * @throws \Exception
-	 */
-	protected function validPhpForIliasBranch()
-	{
-		if(!$this->checker->phpVersionILIASBranchCompatible(phpversion(), $this->git_branch_name))
-		{
-			throw new \Exception("Your PHP Version (".phpversion().") is not compatible to the selected branch (".$this->git_branch_name.").");
-		}
-	}
-
-	/**
-	 * Clone ILIAS
-	 */
-	protected function cloneILIAS()
-	{
-		try {
-			echo "Clone repository from ".$this->git_url;
-			echo " (This could take a few minutes)...";
-			$this->git->cloneGitTo($this->git_url,
-								   $this->git_branch_name,
-								   substr($this->absolute_path, 0, strrpos($this->absolute_path, '/')),
-								   ""
-								   );
-			echo "\t\t\tDone!\n";
-		} catch(\RuntimeException $e) {
-			echo $e->getMessage();
-			throw $e;
-		}
-	}
-
-	/**
-	 * Get user input from cli
-	 */
-	protected function getUserInput()
-	{
-		$handle = fopen ("php://stdin","r");
-		$line = fgets($handle);
-		return trim($line);
-	}
-
-	/**
-	 * Remove all stuff in the named dir recursiv
-	 *
-	 * @param string 		$dir
-	 */
-	protected function clearDirectory($dir)
-	{
-		$files = array_diff(scandir($dir), array('.','..'));
-		foreach ($files as $file) {
-			(is_dir("$dir/$file")) ? $this->clearDirectory("$dir/$file") : unlink("$dir/$file");
-		}
-
-		rmdir($dir);
+	protected function cloneILIAS() {
+		$git = $this->git_factory->getRepo($this->server_config->absolute_path(), $this->git_config->url(), "ILIAS");
+		$git->gitClone();
+		$git->gitCheckout($this->git_config->branch());
 	}
 }
