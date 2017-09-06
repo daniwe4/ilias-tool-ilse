@@ -57,6 +57,14 @@ interface Filesystem {
 	public function makeDirectory($path);
 
 	/**
+	 * Purge files in directory.
+	 *
+	 * @param	string	$path
+	 * @return	void
+	 */
+	public function purgeDirectory($path);
+
+	/**
 	 * Change access permissions.
 	 *
 	 * ATTENTION: second parameter is an integer, i.e. use 0755 e.g.

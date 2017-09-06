@@ -73,6 +73,18 @@ class FilesystemImpl implements Filesystem {
 	/**
 	 * @inheritdoc
 	 */
+	public function purgeDirectory($path) {
+		$files = array_diff(scandir($dir), array('.','..'));
+		foreach ($files as $file) {
+			(is_dir("$dir/$file")) ? $this->clearDirectory("$dir/$file") : unlink("$dir/$file");
+		}
+
+		rmdir($dir);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function chmod($path, $perms) {
 		assert('is_string($path)');
 		assert('is_int($perms)');
