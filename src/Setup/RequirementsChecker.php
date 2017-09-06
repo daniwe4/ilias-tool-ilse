@@ -8,6 +8,30 @@ namespace CaT\Ilse\Setup;
  */
 interface RequirementsChecker {
 	/**
+	 * Checks the defined web-path exists.
+	 *
+	 * @param	string	$path
+	 * @return	bool
+	 */
+	public function webDirectoryExists($path);
+
+	/**
+	 * Checks if the web-path is writeable.
+	 *
+	 * @param	string	$path
+	 * @return	bool
+	 */
+	public function webDirectoryWriteable($path);
+
+	/**
+	 * Checks if the web-path is empty.
+	 *
+	 * @param	string	$path
+	 * @return	bool
+	 */
+	public function webDirectoryEmpty($path);
+
+	/**
 	 * Checks the defined data directory exist
 	 *
 	 * @param string $path path to the data directory
@@ -61,12 +85,13 @@ interface RequirementsChecker {
 	/**
 	 * Checks if its possible to connect to MySQL Database
 	 *
-	 * @param string $host 		host name of databse server
-	 * @param string $user 		username for login
-	 * @param string §passwd 	password for user
+	 * @param string 		$host 		host name of database server
+	 * @param string|null 	$database	name of database
+	 * @param string 		$user 		username for login
+	 * @param string 		$passwd 	password for user
 	 * @return bool
 	 */
-	public function databaseConnectable($host, $user, $passwd);
+	public function databaseConnectable($host, $database, $user, $passwd);
 
 	/**
 	 * Checks the directory for the log file exist
@@ -79,16 +104,24 @@ interface RequirementsChecker {
 	/**
 	 * Checks if the defined log file exist
 	 *
-	 * @param sring $path 			path to log file
+	 * @param string $path 			path to log file
 	 * @return bool
 	 */
 	public function logFileExists($path);
 
 	/**
-	 * Checks if the logfile is writeabe.
+	 * Checks if the logfile is writeable
 	 *
 	 * @param sring $path 			path to log file
 	 * @return bool
 	 */
 	public function logFileWriteable($path);
+
+	/**
+	 * Checks if the directory is writeable
+	 *
+	 * @param sring $path 			path to log file
+	 * @return bool
+	 */
+	public function logDirectoryWriteable($path);
 }

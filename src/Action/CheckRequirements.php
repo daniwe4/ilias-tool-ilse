@@ -63,6 +63,18 @@ class CheckRequirements implements Action, RequirementsChecker
 	}
 
 	public function perform() {
+		$this->task_logger->always("Checking web directory", function() {
+			$path = $this->server_config->absolute_path();
+			if (!$this->webDirectoryExists($path)) {
+				throw new \RuntimeException("Web directory '$path' does not exist.");
+			}
+			if (!$this->webDirectoryWriteable($path)) {
+				throw new \RuntimeException("Web directory '$path' is not writeable.");
+			}
+			if (!$this->webDirectoryEmpty($path)) {
+				throw new \RuntimeException("Data directory '$path' is not empty.");
+			}
+		});
 		$this->task_logger->always("Checking data directory", function() {
 			$path = $this->client_config->dataDir();
 			if (!$this->dataDirectoryExists($path)) {
@@ -90,9 +102,10 @@ class CheckRequirements implements Action, RequirementsChecker
 				throw new \RuntimeException("PDO database classes must be installed.");
 			}
 			$host = $this->db_config->host();
+			$database = $this->db_config->create_db() ? $this->db_config->database() : null;
 			$user = $this->db_config->user();
 			$password = $this->db_config->password();
-			if (!$this->databaseConnectable($host, $user, $password)) {
+			if (!$this->databaseConnectable($host, $database, $user, $password)) {
 				throw new \RuntimeException("Cannot connect to database at '$host' with '$user'");
 			}
 		});
@@ -113,7 +126,34 @@ class CheckRequirements implements Action, RequirementsChecker
 			if (!$this->logDirectoryExists($error_log_directory)) {
 				throw new \RuntimeException("Directory '$log_directory' for error-logs does not exist.");
 			}
+			if (!$this->logDirectoryWriteable($error_log_directory)) {
+				throw new \RuntimeException("Directory '$log_directory' for error-logs is not writeable.");
+			}
 		});
+	}
+
+	/**
+	 * @inheritdocs
+	 */
+	public function webDirectoryExists($path) {
+		assert('is_string($path)');
+		return $this->filesystem->isDirectory($path);
+	}
+
+	/**
+	 * @inheritdocs
+	 */
+	public function webDirectoryWriteable($path) {
+		assert('is_string($path)');
+		return $this->filesystem->isWriteable($path);
+	}
+
+	/**
+	 * @inheritdocs
+	 */
+	public function webDirectoryEmpty($path) {
+		assert('is_string($path)');
+		return $this->filesystem->isEmpty($path);
 	}
 
 	/**
@@ -173,13 +213,19 @@ class CheckRequirements implements Action, RequirementsChecker
 	/**
 	 * @inheritdocs
 	 */
-	public function databaseConnectable($host, $user, $passwd) {
+	public function databaseConnectable($host, $database, $user, $passwd) {
 		assert('is_string($host)');
+		assert('is_string($database) || is_null($database)');
 		assert('is_string($user)');
 		assert('is_string($passwd)');
 
 		try{
-			$dsn = 'mysql:host=' . $host . ';charset=utf8';
+			if ($database !== null) {
+				$dsn = "mysql:host=$host;dbname=$database;charset=utf8;";
+			}
+			else {
+				$dsn = "mysql:host=$host;charset=utf8;";
+			}
 			$this->pdo = new \PDO($dsn, $user, $passwd, array(3=>2, 10000=>true, 2=>18000));
 		} catch(Exception $e) {
 			return false;
@@ -207,6 +253,14 @@ class CheckRequirements implements Action, RequirementsChecker
 	 * @inheritdocs
 	 */
 	public function logFileWriteable($path) {
+		assert('is_string($path)');
+		return $this->filesystem->isWriteable($path);
+	}
+
+	/**
+	 * @inheritdocs
+	 */
+	public function logDirectoryWriteable($path) {
 		assert('is_string($path)');
 		return $this->filesystem->isWriteable($path);
 	}
