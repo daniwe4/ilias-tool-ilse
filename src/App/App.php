@@ -79,6 +79,15 @@ class App extends Application
 		$container["aux.taskLogger"] = function($c) {
 			throw new \RuntimeException("Expected command to initialize task logger.");
 		};
+		$container["aux.configLoader"] = function($c) {
+			return new Aux\ConfigLoaderTemp($c["aux.configMerger"], $c["aux.configParser"]);
+		};
+		$container["aux.configMerger"] = function($c) {
+			return new Aux\ConfigMerger();
+		};
+		$container["aux.configParser"] = function($c) {
+			return new Aux\YamlConfigParser();
+		};
 
 		// Setup
 

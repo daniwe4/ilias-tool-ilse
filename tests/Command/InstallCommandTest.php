@@ -4,6 +4,7 @@
 
 use \CaT\Ilse\App\Command\InstallCommand;
 use \CaT\Ilse\Aux\TaskLogger;
+use \CaT\Ilse\Aux\ConfigLoader;
 use \CaT\Ilse\Action;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,6 +26,7 @@ class InstallCommandTest extends PHPUnit_Framework_TestCase {
 		$in = $this->createMock(InputInterface::class);
 		$out = $this->createMock(OutputInterface::class);
 		$task_logger = $this->createMock(TaskLogger::class);
+		$config_loader = $this->createMock(ConfigLoader::class);
 
 		$task_logger
 			->expects($this->any())
@@ -38,6 +40,18 @@ class InstallCommandTest extends PHPUnit_Framework_TestCase {
 			->will($this->returnCallback(function($s, $c) {
 				$c();
 			}));
+
+		$configs = ["CONFIG"];
+		$in
+			->expects($this->once())
+			->method("getArgument")
+			->with("config_names")
+			->willReturn($configs);
+
+		$config_loader
+			->expects($this->once())
+			->method("loadConfigToDic")
+			->with($this->anything(), $configs);
 
 		$init_app_folder = $this->createMock(Action\InitAppFolder::class);
 		$init_app_folder
@@ -55,7 +69,7 @@ class InstallCommandTest extends PHPUnit_Framework_TestCase {
 		$dic["action.initAppFolder"] = $init_app_folder;
 		$dic["action.buildInstallationEnvironment"] = $build_installation_environment;
 		$dic["action.checkRequirements"] = $check_requirements;
-
+		$dic["aux.configLoader"] = $config_loader;
 	
 		$command = new InstallCommandForTest($dic);
 		$command->task_logger = $task_logger;
