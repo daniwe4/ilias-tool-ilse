@@ -52,8 +52,8 @@ class BuildInstallationEnvironmentTest extends PHPUnit_Framework_TestCase {
 			->with("absolute_path")
 			->willReturn(true);	
 		$rc
-			->expects($this->once())
-			->method("webDirectoryEmpty")
+			->expects($this->exactly(2))
+			->method("webDirectoryContainsILIAS")
 			->with("absolute_path")
 			->willReturn(true);	
 		$rc
@@ -103,18 +103,8 @@ class BuildInstallationEnvironmentTest extends PHPUnit_Framework_TestCase {
 			->method($this->anything());	
 
 		$git_factory
-			->expects($this->once())
-			->method("getRepo")
-			->with("absolute_path", "http://git_repo", "ILIAS")
-			->willReturn($git);
-
-		$git
-			->expects($this->once())
-			->method("gitClone");
-		$git
-			->expects($this->once())
-			->method("gitCheckout")
-			->with("branch_name");
+			->expects($this->never())
+			->method("getRepo");
 
 		$action->perform();
 	}
@@ -157,8 +147,8 @@ class BuildInstallationEnvironmentTest extends PHPUnit_Framework_TestCase {
 			->with("absolute_path")
 			->willReturn(false);	
 		$rc
-			->expects($this->once())
-			->method("webDirectoryEmpty")
+			->expects($this->exactly(2))
+			->method("webDirectoryContainsILIAS")
 			->with("absolute_path")
 			->willReturn(false);	
 		$rc
