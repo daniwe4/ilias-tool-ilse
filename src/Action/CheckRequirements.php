@@ -161,8 +161,9 @@ class CheckRequirements implements Action, RequirementsChecker
 	 * @inheritdocs
 	 */
 	public function webDirectoryContainsILIAS($path) {
-		// TODO: implement me...
-		return true;
+		assert('is_string($path)');
+		// TODO: best effort...
+		return $this->filesystem->isDirectory($path."/.git");
 	}
 
 	/**
