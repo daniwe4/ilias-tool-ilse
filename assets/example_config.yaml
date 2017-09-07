@@ -67,3 +67,10 @@ git:
     url: https://github.com/ILIAS-eLearning/ILIAS.git
     #Branch name of the release you want to use
     branch: release_5-2
+https_auto_detect:
+    #en- or disable with value 0 or 1
+    enabled: 0
+    #default https header name
+    header_name: X-FORWARDED-SCHEME
+    #default https header value
+    header_value: https
