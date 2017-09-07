@@ -4,7 +4,6 @@
 
 namespace CaT\Ilse\Aux;
 
-use CaT\Ilse\Config;
 use Pimple\Container;
 
 interface ConfigLoader {
@@ -13,7 +12,7 @@ interface ConfigLoader {
 	 *
 	 * @param	array|Container		$dic
 	 * @param	string[]			$paths
-	 * @return	Config\General
+	 * @return	array|Container
 	 */
 	public function loadConfigToDic($dic, array $paths);
 }
