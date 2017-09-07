@@ -1,16 +1,13 @@
 <?php
 
-namespace CaT\Ilse;
+namespace CaT\Ilse\Aux;
 use Symfony\Component\Yaml\Yaml;
-use CaT\Ilse\Interfaces\Merger;
 
 /**
  * Merge any number of config files
  */
-class MergeConfigs implements Merger{
-
+class ConfigMerger {
 	public function __construct() {
-		$this->counter = 0;
 	}
 
 	/**
