@@ -45,7 +45,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	public function test_gitClone()
 	{
 		$this->gw->gitClone();
-		$this->assertFileExists($this->gw->gitGetPath() . "/ilias-tool-ilse/run_tests.sh");
+		$this->assertFileExists($this->gw->gitGetPath() . "/run_tests.sh");
 	}
 
 	/**

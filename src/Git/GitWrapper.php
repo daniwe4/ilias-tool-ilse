@@ -74,10 +74,10 @@ class GitWrapper implements Git
 		}
 		if($this->gitIsGitRepo())
 		{
-			throw new GitException($this->path.'/'.$this->repo_name." is already a git repo.");
+			throw new GitException($this->path." is already a git repo.");
 		}
 
-		$this->gitExec("git clone", array($this->repo_url, $this->repo_name), "");
+		$this->gitExec("git clone", array($this->repo_url, $this->path), "");
 		$this->gitIgnoreFileModeChanges();
 
 		return true;
@@ -146,7 +146,7 @@ class GitWrapper implements Git
 	 */
 	public function gitIsGitRepo()
 	{
-		return is_dir($this->path.'/'.$this->repo_name."/.git");
+		return is_dir($this->path."/.git");
 	}
 
 	/**
@@ -185,7 +185,7 @@ class GitWrapper implements Git
 			}, $params);
 
 		$complete_command = $cmd." ".implode(' ', $clean);
-		$working_dir = $this->path . '/' . $repo_name;
+		$working_dir = $this->path;
 
 		$process = new Process($complete_command, $working_dir);
 		$process->setTty($this->verbose);
