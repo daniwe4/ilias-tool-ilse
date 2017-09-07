@@ -15,6 +15,13 @@ namespace CaT\Ilse\Setup;
  */
 interface CoreInstaller {
 	/**
+	 * Initialize environment for ilias setup.
+	 *
+	 * @return void
+	 */
+	public function initEnvironment();
+
+	/**
 	 * Write the client.ini.
 	 *
 	 * @return void

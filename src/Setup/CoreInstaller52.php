@@ -106,7 +106,7 @@ class CoreInstaller52 implements CoreInstaller {
 	/**
 	 * @inheritdoc
 	 */
-	protected function initEnvironment() {
+	public function initEnvironment() {
 		if ($this->ilias_env_initialized) {
 			return;
 		}
