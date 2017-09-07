@@ -111,17 +111,17 @@ class CoreInstaller52 implements CoreInstaller {
 			return;
 		}
 		$env = new SetupEnvironment52
-					( $config->server()->httpPath()
-					, $config->server()->absolutePath()
-					, $config->client->dataDir()
-					, $config->client->name()
+					( $this->config->server()->httpPath()
+					, $this->config->server()->absolutePath()
+					, $this->config->client->dataDir()
+					, $this->config->client->name()
 					);
 
 		$this->task_logger->always("Initialize PHP Error Reporting for ILIAS", [$env, "initPHPErrorReporting"]);
 		$this->task_logger->always("Defining Constants and Superglobals for ILIAS", [$env, "defineConstantsAndSuperglobals"]);
 		$this->task_logger->always("Change to ILIAS Root Dir", [$env, "changeDirToILIASRoot"]);
 		$this->task_logger->always("Include required ILIAS Source", [$env, "includeSource"]);
-		$this->task_logger->always("Initialize ILIAS Error Handling", [$env, "setErrorHandling"]);
+		$this->task_logger->always("Initialize ILIAS Error Handling", [$env, "initErrorHandling"]);
 		$this->task_logger->always("Initialize ILIAS Logging", [$env, "initLog"]);
 		$this->task_logger->always("Initialize ILIAS Structure Reader", [$env, "initStructureReader"]);
 		$this->task_logger->always("Initialize ILIAS Benchmarking", [$env, "initBenchmark"]);
