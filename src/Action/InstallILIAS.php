@@ -61,6 +61,8 @@ class InstallILIAS implements Action
 			$this->core_installer = $this->core_installer_factory->getCoreInstallerForRelease($version, $this->config, $this->task_logger);
 		});
 
+		$this->core_installer->initEnvironment();
+
 		$this->writeILIASIni();
 		$this->writeClientIni();
 		$this->checkSessionLifetime();
