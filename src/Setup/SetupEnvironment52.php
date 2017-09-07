@@ -66,7 +66,7 @@ class SetupEnvironment52
 		define ("ILIAS_HTTP_PATH", $this->http_path);
 		define ("ILIAS_ABSOLUTE_PATH", $this->absolute_path);
 		define ("ILIAS_DATA_DIR", $this->data_path);
-		define ("ILIAS_WEB_DIR", $this->data_path);
+		define ("ILIAS_WEB_DIR", "data");
 		define ("CLIENT_DATA_DIR",ILIAS_DATA_DIR."/".$this->client_id);
 		define ("CLIENT_WEB_DIR",ILIAS_ABSOLUTE_PATH."/".ILIAS_WEB_DIR."/".$this->client_id);
 		define ("CLIENT_ID", $this->client_id);
@@ -75,7 +75,7 @@ class SetupEnvironment52
 		define('IL_PHPUNIT_TEST', true);
 
 		$this->lang 				= "de";
-		$_COOKIE['ilClientId'] 		= $client_id;
+		$_COOKIE['ilClientId'] 		= $this->client_id;
 		$_SESSION['lang'] 			= $this->lang;
 	}
 
