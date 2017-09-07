@@ -1,14 +1,14 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse\Interfaces;
+namespace CaT\Ilse\Aux;
 
 /**
  * Interface for config parser
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-interface Parser {
+interface ConfigParser {
 	/**
 	 * Construct a config of type $class from $string
 	 *

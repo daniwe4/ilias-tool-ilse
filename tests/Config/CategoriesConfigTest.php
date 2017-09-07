@@ -1,11 +1,11 @@
 <?php
 
 use \CaT\Ilse\Config\Categories;
-use \CaT\Ilse\YamlParser;
+use \CaT\Ilse\Aux\YamlConfigParser;
 
 class CategoriesConfigTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
-		$this->parser = new YamlParser();
+		$this->parser = new YamlConfigParser();
 		$this->yaml_string = "--- 
 categories:
     0:
