@@ -60,10 +60,15 @@ class InstallCommandTest extends PHPUnit_Framework_TestCase {
 		$check_requirements
 			->expects($this->once())
 			->method("perform");
+		$install_ilias = $this->createMock(Action\InstallILIAS::class);
+		$install_ilias
+			->expects($this->once())
+			->method("perform");
 
 		$dic["action.initAppFolder"] = $init_app_folder;
 		$dic["action.buildInstallationEnvironment"] = $build_installation_environment;
 		$dic["action.checkRequirements"] = $check_requirements;
+		$dic["action.installILIAS"] = $install_ilias;
 		$dic["aux.configLoader"] = $config_loader;
 
 		$config_loader
