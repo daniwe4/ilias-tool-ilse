@@ -2,7 +2,7 @@
 
 /* Copyright (c) 2017 Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse\App\Command;
+namespace CaT\Ilse\Aux;
 
 use CaT\Ilse\Aux\ConfigMerger;
 use CaT\Ilse\Aux\YamlConfigParser;
@@ -14,29 +14,18 @@ use CaT\Ilse\Config;
  */
 class ConfigLoaderTemp implements ConfigLoader { 
 	/**
-	 * @var	ConfigMerger|null
+	 * @var	ConfigMerger
 	 */
-	private $config_merger = null;
-
-	public functi
-
-	private function getConfigMerger() {
-		if ($this->config_merger === null) {
-			$this->config_merger = new ConfigMerger();
-		}
-		return $this->config_merger;
-	}
+	private $merger;
 
 	/**
-	 * @var	YamlConfigParser|null
+	 * @var	ConfigParser
 	 */
-	private $config_parser = null;
+	private $parser;
 
-	private function getConfigParser() { 
-		if ($this->config_parser === null) {
-			$this->config_parser = new YamlParser();
-		}
-		return $this->config_parser;
+	public function __construct(ConfigMerger $merger, ConfigParser $parser) {
+		$this->merger = $merger;
+		$this->parser = $parser;
 	}
 
 	/**
@@ -50,7 +39,7 @@ class ConfigLoaderTemp implements ConfigLoader {
 		if ($dic["config.ilias"] instanceof Config\General) {
 			throw new \LogicException("config.ilias already initialized.");
 		}
-		$merged = $this->config_merger->mergeConfigs($paths);
-		$dic["config.ilias"] = $this->config_parser->read_config($merged, Config\General::class);
+		$merged = $this->merger->mergeConfigs($paths);
+		$dic["config.ilias"] = $this->parser->read_config($merged, Config\General::class);
 	}
 }
