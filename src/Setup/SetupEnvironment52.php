@@ -30,24 +30,17 @@ class SetupEnvironment52
 	/**
 	 * @var string
 	 */
-	protected $web_dir;
-
-	/**
-	 * @var string
-	 */
 	protected $client_id;
 
 	public function __construct($http_path,
 								$absolute_path,
 								$data_path,
-								$web_dir,
 								$client_id
 								)
 	{
 		$this->http_path = $http_path;
 		$this->absolute_path = $absolute_path;
 		$this->data_path = $data_path;
-		$this->web_dir = $web_dir;
 		$this->client_id = $client_id;
 	}
 
@@ -70,13 +63,13 @@ class SetupEnvironment52
 	public function defineConstantsAndSuperglobals() {
 		define("DEBUG",false);
 
-		define ("ILIAS_HTTP_PATH", $http_path);
-		define ("ILIAS_ABSOLUTE_PATH", $absolute_path);
-		define ("ILIAS_DATA_DIR", $data_path);
-		define ("ILIAS_WEB_DIR", $web_dir);
-		define ("CLIENT_DATA_DIR",ILIAS_DATA_DIR."/".$client_id);
-		define ("CLIENT_WEB_DIR",ILIAS_ABSOLUTE_PATH."/".ILIAS_WEB_DIR."/".$client_id);
-		define ("CLIENT_ID", $client_id);
+		define ("ILIAS_HTTP_PATH", $this->http_path);
+		define ("ILIAS_ABSOLUTE_PATH", $this->absolute_path);
+		define ("ILIAS_DATA_DIR", $this->data_path);
+		define ("ILIAS_WEB_DIR", $this->data_path);
+		define ("CLIENT_DATA_DIR",ILIAS_DATA_DIR."/".$this->client_id);
+		define ("CLIENT_WEB_DIR",ILIAS_ABSOLUTE_PATH."/".ILIAS_WEB_DIR."/".$this->client_id);
+		define ("CLIENT_ID", $this->client_id);
 		define('IL_PHPUNIT_TEST', true);
 		define ("TPLPATH","./templates/blueshadow");
 		define('IL_PHPUNIT_TEST', true);
@@ -141,7 +134,7 @@ class SetupEnvironment52
 		$DIC["ilLog"] = function($c) { return $GLOBALS["ilLog"]; };
 	}
 
-	public function intiTemplate()
+	public function initTemplate()
 	{
 		$tpl = new ilTemplate("tpl.main.html", true, true, "setup");
 		$GLOBALS['ilTemplate'] = $tpl;
