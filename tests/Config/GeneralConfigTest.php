@@ -43,6 +43,10 @@ log:
 git:
     url: https://github.com/ILIAS-eLearning/ILIAS.git
     branch: release_5-1
+https_auto_detect:
+    enabled: 0
+    header_name: X-FORWARDED-SCHEME
+    header_value: https
 ";
 /*
 category:
@@ -111,10 +115,6 @@ plugin:
             git:
                 url: Bernd
                 branch: master
-https_auto_detect:
-    enabled: 0
-    header_name: X-FORWARDED-SCHEME
-    header_value: https
 orgunit_type:
     orgunit_types:
         0:
