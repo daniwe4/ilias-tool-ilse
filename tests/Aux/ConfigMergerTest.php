@@ -5,14 +5,14 @@
  * 
  * @author Daniel Weise <daniel.weise@concepts-and-training.de>
  */
-class MergeConfigsTest extends PHPUnit_Framework_TestCase
+class ConfigMergerTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * Setup the testing environment
 	 */
 	public function setUp()
 	{
-		$this->merger = new CaT\Ilse\MergeConfigs();
+		$this->merger = new CaT\Ilse\Aux\ConfigMerger();
 		$this->yaml_1 = "---
 client:
     data_dir: /home/dw/testing
