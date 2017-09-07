@@ -1,11 +1,11 @@
 <?php
 
 use \CaT\Ilse\Config\Roles;
-use \CaT\Ilse\YamlParser;
+use \CaT\Ilse\Aux\YamlConfigParser;
 
 class RolesConfigTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
-		$this->parser = new YamlParser();
+		$this->parser = new YamlConfigParser();
 		$this->yaml_string = "--- 
 roles:
     0:

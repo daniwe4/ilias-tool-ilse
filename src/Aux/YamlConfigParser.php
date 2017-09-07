@@ -1,7 +1,7 @@
 <?php
 /* Copyright (c) 2016 Stefan Hecken <stefan.hecken@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse;
+namespace CaT\Ilse\Aux;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -10,7 +10,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author Stefan Hecken <stefan.hecken@concepts-and-training.de>
  */
-class YamlParser implements \CaT\Ilse\Interfaces\Parser {
+class YamlConfigParser implements ConfigParser {
 	/**
 	 * @inheritdoc
 	 */

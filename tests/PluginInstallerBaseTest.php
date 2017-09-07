@@ -1,7 +1,7 @@
 <?php
 
 use \CaT\Ilse\Config\Plugins;
-use \CaT\Ilse\YamlParser;
+use \CaT\Ilse\Aux\YamlConfigParser;
 
 require_once(__DIR__."/mocks/IliasPluginInstallerMock.php");
 
@@ -9,7 +9,7 @@ require_once(__DIR__."/mocks/IliasPluginInstallerMock.php");
 
 class PluginInstallerBaseTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
-		$this->parser = new YamlParser();
+		$this->parser = new YamlConfigParser();
 		$this->yaml_string = "--- 
 plugins:
     0:
