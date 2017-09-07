@@ -5,6 +5,7 @@ namespace CaT\Ilse\App;
 
 use CaT\Ilse\Action;
 use CaT\Ilse\Aux;
+use CaT\Ilse\Git;
 
 use Pimple\Container;
 use Symfony\Component\Console\Application;
@@ -61,11 +62,37 @@ class App extends Application
 						, $c["aux.taskLogger"]
 						);
 		};
+		$container["action.buildInstallationEnvironment"] = function($c) {
+			$config = $c["config.ilias"];
+			return new Action\BuildInstallationEnvironment
+						( $config->server()
+						, $config->client()
+						, $config->database()
+						, $config->log()
+						, $config->git()
+						, $c["action.checkRequirements"]
+						, $c["aux.taskLogger"]
+						, $c["aux.gitFactory"]
+						, $c["aux.filesystem"]
+						);
+		};
+		$container["action.checkRequirements"] = function($c) {
+			$config = $c["config.ilias"];
+			return new Action\CheckRequirements
+						( $config->server()
+						, $config->client()
+						, $config->git()
+						, $config->database()
+						, $config->log()
+						, $c["aux.filesystem"]
+						, $c["aux.taskLogger"]
+						);
+		};
 
 		// Configs
 
 		$container["config.ilias"] = function($c) {
-			throw new \RuntimeException("Expected command to initialized ILIAS config.");
+			throw new \RuntimeException("Expected command to initialize ILIAS config.");
 		};
 		$container["config.ilse"] = function($c) {
 			throw new \RuntimeException("Don't know how to build");
@@ -87,6 +114,9 @@ class App extends Application
 		};
 		$container["aux.configParser"] = function($c) {
 			return new Aux\YamlConfigParser();
+		};
+		$container["aux.gitFactory"] = function($c) {
+			return new Git\GitFactory();
 		};
 
 		// Setup
