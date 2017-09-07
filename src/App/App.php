@@ -108,21 +108,6 @@ class App extends Application
 	}
 
 	/**
-	 * Checks whether the app folder exists otherwise create one
-	 *
-	 * @param string 		$path
-	 */
-	protected function initAppFolder($path)
-	{
-		assert('is_string($path)');
-
-		if(!is_dir($path->getHomeDir() . "/" . self::I_P_GLOBAL))
-		{
-			mkdir($path->getHomeDir() . "/" . self::I_P_GLOBAL, 0755);
-		}
-	}
-
-	/**
 	 * Initialize the config repo in ~/.ilias-installer/config
 	 *
 	 * @param string 				$path
