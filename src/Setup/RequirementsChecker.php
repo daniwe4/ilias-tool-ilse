@@ -32,6 +32,14 @@ interface RequirementsChecker {
 	public function webDirectoryEmpty($path);
 
 	/**
+	 * Checks if the web-path contains ILIAS
+	 *
+	 * @param	string	$path
+	 * @return	bool
+	 */
+	public function webDirectoryContainsILIAS($path);
+
+	/**
 	 * Checks the defined data directory exist
 	 *
 	 * @param string $path path to the data directory

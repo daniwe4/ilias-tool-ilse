@@ -71,19 +71,20 @@ class CheckRequirements implements Action, RequirementsChecker
 			if (!$this->webDirectoryWriteable($path)) {
 				throw new \RuntimeException("Web directory '$path' is not writeable.");
 			}
-			if (!$this->webDirectoryEmpty($path)) {
+			if (!$this->webDirectoryContainsILIAS($path)) {
 				throw new \RuntimeException("Data directory '$path' is not empty.");
 			}
 		});
 		$this->task_logger->always("Checking data directory", function() {
 			$path = $this->client_config->dataDir();
+			$name = $this->client_config->name();
 			if (!$this->dataDirectoryExists($path)) {
 				throw new \RuntimeException("Data directory '$path' does not exist.");
 			}
 			if (!$this->dataDirectoryWriteable($path)) {
 				throw new \RuntimeException("Data directory '$path' is not writeable.");
 			}
-			if (!$this->dataDirectoryEmpty($path)) {
+			if (!$this->dataDirectoryEmpty($path, $name)) {
 				throw new \RuntimeException("Data directory '$path' is not empty.");
 			}
 		});
@@ -102,7 +103,7 @@ class CheckRequirements implements Action, RequirementsChecker
 				throw new \RuntimeException("PDO database classes must be installed.");
 			}
 			$host = $this->db_config->host();
-			$database = $this->db_config->create_db() ? $this->db_config->database() : null;
+			$database = (!$this->db_config->create_db()) ? $this->db_config->database() : null;
 			$user = $this->db_config->user();
 			$password = $this->db_config->password();
 			if (!$this->databaseConnectable($host, $database, $user, $password)) {
@@ -154,6 +155,14 @@ class CheckRequirements implements Action, RequirementsChecker
 	public function webDirectoryEmpty($path) {
 		assert('is_string($path)');
 		return $this->filesystem->isEmpty($path);
+	}
+
+	/**
+	 * @inheritdocs
+	 */
+	public function webDirectoryContainsILIAS($path) {
+		// TODO: implement me...
+		return true;
 	}
 
 	/**
