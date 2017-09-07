@@ -48,11 +48,6 @@ class InstallCommandTest extends PHPUnit_Framework_TestCase {
 			->with("config_names")
 			->willReturn($configs);
 
-		$config_loader
-			->expects($this->once())
-			->method("loadConfigToDic")
-			->with($this->anything(), $configs);
-
 		$init_app_folder = $this->createMock(Action\InitAppFolder::class);
 		$init_app_folder
 			->expects($this->once())
@@ -70,6 +65,12 @@ class InstallCommandTest extends PHPUnit_Framework_TestCase {
 		$dic["action.buildInstallationEnvironment"] = $build_installation_environment;
 		$dic["action.checkRequirements"] = $check_requirements;
 		$dic["aux.configLoader"] = $config_loader;
+
+		$config_loader
+			->expects($this->once())
+			->method("loadConfigToDic")
+			->with($this->anything(), $configs)
+			->willReturn($dic);
 	
 		$command = new InstallCommandForTest($dic);
 		$command->task_logger = $task_logger;
