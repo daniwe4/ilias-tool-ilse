@@ -93,7 +93,7 @@ class BuildInstallationEnvironment implements Action
 			if (!$this->requirements_checker->webDirectoryWriteable($absolute_path)) {
 				$this->filesystem->chmod($absolute_path, 0755);
 			}
-			if (!$this->requirements_checker->webDirectoryEmpty($absolute_path)) {
+			if (!$this->requirements_checker->webDirectoryContainsILIAS($absolute_path)) {
 				$this->filesystem->purgeDirectory($absolute_path);
 			}
 		});
