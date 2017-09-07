@@ -1,0 +1,341 @@
+---
+client:
+    #Directory beside the webserver. ILIAS use it to save data or files. e.g. images before upload to the webserver.
+    #Example: /var/www/ilias/data/
+    data_dir: 
+    #ILIAS is a client based system. Client with this name will be created
+    #Example: ACMECorp
+    name: 
+    #It is possible to encode passwords in two ways. Enter the one you want to use. Possible encoder are 'md5' and 'bcrypt'
+    password_encoder: bcrypt
+    #Session life time in minutes. Default is 120.
+    session_expire: 120
+database:
+    #Host of your database.
+    host: localhost
+    #Name for the ILIAS database.
+    database: ilias
+    #User with permissions to create database / tables
+    user: 
+    #Password for above user
+    password: 
+    #ILIAS supports three database engines. InnoDB, MyISAM, .....
+    engine: innodb
+    #Encoding for database
+    encoding: utf8_unicode_ci
+    #Should a database be created. Possible option are 1 = create and 0 = no create
+    create_db: 1
+language:
+    #Default language ILIAS will use.
+    default: en
+    #Install languages user can decide to use. Default language must be listed too!
+    available: 
+        - en
+        - de
+server:
+    #Url ILIAS could be accessed by web browser
+    #Example: https://www.example.com/ilias/
+    http_path: 
+    #Directory on the webserver ILIAS should be installed in
+    #Example: /var/www/html/ilias/
+    absolute_path: 
+    #Timezone for PHP
+    timezone: Europe/Berlin
+setup:
+    #Master password to enter the setup.
+    master_password: 
+tools:
+    #ImageMagick is the requested image converter. It is used to create certificates. Enter the installation path
+    convert: /usr/bin/convert
+    #Installation path to zip
+    zip: /bin/zip
+    #Installation path to unzip
+    unzip: /bin/unzip
+    #Installation path to java
+    java: /usr/bin/java
+log:
+    #Directory for ILIAS log file (must be writeable for webserver user)
+    #Example: /var/log/ilias/
+    path: 
+    #Name of the log file
+    file_name: ilias.log
+    #Name of the error log path
+    #Example: /var/log/ilias/error_log/
+    error_log: /var/log/ilias/error_log/
+git:
+    #URL of your git repository you want to install ILIAS from
+    url: https://github.com/ILIAS-eLearning/ILIAS.git
+    #Branch name of the release you want to use
+    branch: release_5-2
+
+#It is possible to create different object like roles, categories or orunits in ILIAS.
+#In the next lines, it is possible to define default strucures or objects.
+#The setup will automaticly create the structure.
+#These blocks are optional. You can remove them if you won't use.
+
+#Categories on top level in the repository. Each category can hold one or more children.
+#Children will be defined in the same way. See the small example below
+category:
+    categories:
+        0:
+            title: Category1
+            children:
+                0:
+                    title: Child1
+                    children: []
+                1:
+                    title: Child2
+                    children: []
+
+#The way to create orgunits is very similar to categories.
+#Have look in the example
+orgunit:
+    orgunits:
+        0:
+            title: Orgunit1
+            children: 
+                0:
+                    title: Child1
+                    children: []
+                1:
+                    title: Child2
+                    children: []
+
+#In ILIAS is a RBAC System used. In this block you can definde roles to assign users.
+#Permission must be set after installation in the administration menu
+role:
+    roles:
+        0:
+            title: role1
+            description: This is a nice role for Users.
+
+#It is possible in ILIAS to enable user login with the LDAP credentials
+ldap:
+    #Name of the LDAP Server
+    name:
+    #URL of the Server
+    server:
+    #DN of the Server
+    basedn:
+    #Connection type. Value options are 0 or 1
+    con_type:
+    #DN user
+    con_user_dn:
+    #Passwort for DN User
+    con_user_pw:
+    #It is possible to sync ILIAS and LDAP user. Define what kind you want to use.
+    #It is necessary to set one option to 1 and the other to 0.
+    sync_on_login:
+    sync_per_cron:
+    #Attribute name for user access.
+    attr_name_user:
+    #Version of your LDAP. Usually it is 3. Also possible is 2.
+    protocol_version: 3
+    #Scope for user searching. Use 0 or 1. If you are unsure use 0.
+    user_search_scope: 0
+    #Default role user would be assigned to after the first login. You can use ILIAS standard roles like User, Administrator, Guest or Anonymous.
+    #Alternative you can use one of your own created out of this config. For this case mark the name of the role above with "&LDAP_ROLE". e.g. "title: &LDAP_ROLE role1".
+    #After that you only have to mark the register_role_name to use this value with the key "*LDAP_ROLE". e.g. "register_role_name: *LDAP_ROLE".
+    #The parser fills in the title of the role automaticly
+    register_role_name:
+    #ILIAS can syncronize user data with values from your LDAP.
+    #Map your LDAP fields to ILIAS fields in the lines below
+    mappings:
+        firstname:
+        lastname:
+        department:
+        email:
+        fax:
+        gender:
+        hobby:
+        institution:
+        matriculation:
+        phone_home:
+        phone_mobile:
+        phone_office:
+        street:
+        title:
+        zipcode:
+        city:
+        country:
+
+#In ILIAS you can use plugins to manipulate or add something to the system. Define in this block which plugins you want to use.
+plugin:
+    plugins:
+        #Single plugin entry.
+        0:
+            #Name of the ILIAS plugin.
+            name:
+            #Configuration where to find the ILIAS plugin.
+            git:
+                url:
+                branch:
+#should ilias detect https automaticly
+https_auto_detect:
+    #en- or disable with value 0 or 1
+    enabled: 0
+    #default https header name
+    header_name: X-FORWARDED-SCHEME
+    #default https header value
+    header_value: https
+#Each ordunit can be more specified with orgunit types. fill in these to create one ore more types.
+#To assign a type to an orgunit, you musst mark the orunit with an identifier like '&ORGU1'.
+#orgunit:
+#    orgunits:
+#        0:
+#            title: &ORGU1 OrgEins
+orgunit_type:
+    orgunit_types:
+        0:
+            #Default language for the type
+            #You musst mark it with an identifier like '&ORGU1_TYPE_DEFAULT_LANGUAGE' if would to assign this on to an org unit
+            #Example: default_language: &ORGU1_TYPE_DEFAULT_LANGUAGE de
+            default_language: de
+            #Each installed language can have is own title and description.
+            #At least it is necessary to define one set of language settings for the default language of the type
+            type_language_settings:
+                0:
+                    language: de
+                    #You musst mark it with an identifier like '&ORGU1_TYPE' if would to assign this on to an org unit
+                    #Example: title: &ORGU1_TYPE OrgunitTypeTest
+                    title: OrgunitTypeTest
+                    description: Ich bin ein Test
+#This part defines the assignment.
+orgunit_type_assignment:
+    orgunit_type_assignments:
+        #One assigment definition. reuse the identiefier from orgunt and orgunit_type. The example below uses the identiers from the examples above.
+        #example:
+        #0:
+            #orgunit_title: *ORGU1
+            #orgunit_type_default_language: *ORGU1_TYPE_DEFAULT_LANGUAGE
+            #orgunit_type_title: *ORGU1_TYPE
+
+#Enable user self registration or add some for initial create after ilias installation
+user:
+    #User can registrate themself. Decide which mode will be used. 1 (inactive) or 4 (registration with email confirmation)
+    registration: 1
+    #Lifetime of the registration link. Value is required in seconds
+    link_lifetime: 86400
+    #Define which of these fields are required in user profil. Not listed field names will be set as not required.
+    #If required_fields is an empty array, all fields will be not requred
+    required_fields:
+        - title
+        - birthday
+        - gender
+        - institution
+        - department
+        - street
+        - zipcode
+        - city
+        - country
+        - phone_office
+        - phone_home
+        - phone_mobile
+        - fax
+        - email
+        - matriculation
+    users:
+        0:
+            login: 
+            firstname: 
+            lastname: 
+            #It is possible to decide between "m" and "w"
+            gender: 
+            email: 
+            #Each user must have assigned to a global role. Basic roles are "User" or "Administration"
+            #Also it is possible to assign roles created by own in roles part of this installation
+            role: User
+
+#With this part you are able to configure the passwors settings like number of upper or lower chars, user special chars and so on
+password_settings:
+    #If activated the user is forced to change his passwort after first login. You can toggle with 1 (active) or 0 (inactive)
+    change_on_first_login: 1
+    #At least one special char is required in password. You can toggle with 1 (active) or 0 (inactive)
+    use_special_chars: 1
+    #Numbers and chars are required in password. You can toggle with 1 (active) or 0 (inactive)
+    numbers_and_chars: 1
+    #Minimum length for the password.
+    min_length: 8
+    #Maximum length for the password. If set to 0 the lenght is open end.
+    max_length: 0
+    #Number of required upper chars
+    num_upper_chars: 1
+    #Number of requires lower chars
+    num_lower_chars: 1
+    #Value in days the password will be expired
+    expire_in_days: 0
+    #If active the you can see the link "Forgot Password". You can toggle with 1 (active) or 0 (inactive)
+    forgot_password_aktive: 1
+    #Max Number of login attemps, before account get blocked. if you enter 0 user account never will be blocked
+    max_num_login_attempts: 0
+#Configure youre changings for the editor administratio part. It's possible to toggle usage of tinyMCE and configure
+#repository page edit settings
+editor:
+    #Active the TyniMCE editor. You can toggle with 1 (active) or 0 (inactive)
+    enable_tinymce: 1
+    #Settings for the repository page editor. You can toggle each part with 1 (active) or 0 (inactive)
+    repo_page_editor:
+        enable: 0
+        heavy_marked: 1
+        marked: 1
+        importand: 1
+        superscript: 1
+        subscript: 1
+        comment: 1
+        quote: 1
+        accent: 1
+        code: 1
+        latex: 1
+        footnote: 1
+        external_link: 1
+#Configure the java server. if configured ilias is able to generate pdf files and an extended search mode is activated
+java_server:
+    #host of running java server
+    host: 'localhost'
+    #port the java server is listening
+    port: 11111
+    #path for saving index files
+    index_path: '/var/lib/ilias/ilServer-index/'
+    #path and name of logfile. could be the same path as ilias log
+    log_file: '/var/log/ilias/ilServer.log'
+    #log lever. possible DEBUG, INFO, WARN, ERROR, FATAL
+    log_level: 'INFO'
+    #number of threads
+    num_threads: 1
+    #max size of files to get indexed. Value is given in MB
+    max_file_size: 500
+    #Path to create ilServer.ini
+    ini_path: '/etc/ilias/ilServer.ini'
+#Configure the ilias certificate generator. You can toggle with 1 (active) or 0 (inactive)
+certificate:
+    enable: 1
+#ILIAS is working with SOAP. In this line it is possible to configure
+soap:
+    #Toggle SOAP is active or not. 1 (active) or 0 (inactive)
+    enable: 1
+    #Path to WSDL Files
+    wdsl_path: http://localhost/webservice/soap/server.php?wsdl
+    #Conenction timeout in seconds
+    timeout: 10
+#Active and configure the learning progress
+learning_progress:
+    #Just active or not (0, 1)
+    enabled: 1
+    #Should the user data in LP tabs be anonymized or not (0, 1)
+    anonym: 1
+    #Maximum time of LP calls
+    time_span: 300
+    #Enable additional inforamtions. Add the values of extension you like to use.
+    #0 => no extended values
+    #1 => last access
+    #2 => count accesses
+    #4 => spendet time
+    extended_data: 0
+    #Enable object statistics (0, 1)
+    object_statistics: 0
+    #Enable session statistics (0, 1)
+    session_statistics: 1
+    #User have a look on his own LP (0, 1)
+    own_lp: 1
+    #Show the LP state in list GUI elements
+    personal_desktop: 0
