@@ -141,7 +141,7 @@ class App extends Application
 //		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git, $repos));
 //		$this->add(new Command\UpdatePluginsCommand($path, $merger, $checker, $git, $repos));
 //		$this->add(new Command\ReinstallCommand($path, $merger, $checker, $git, $repos));
-//		$this->add(new Command\InstallCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\InstallCommand($dic));
 //		$this->add(new Command\ConfigCommand($path, $merger, $checker, $git, $repos));
 		$this->add(new Command\ExampleConfigCommand($dic));
 	}
