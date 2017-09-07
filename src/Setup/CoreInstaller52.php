@@ -150,14 +150,14 @@ class CoreInstaller52 implements CoreInstaller {
 
 		$client_ini_data = $this->getClientIniData();
 		$client = $setup->getClient();
-		$client->setId($ret["client_id"]);
-		$client->setName($ret["client_id"]);
-		$client->setDbHost($ret["db_host"]);
-		$client->setDbName($ret["db_name"]);
-		$client->setDbUser($ret["db_user"]);
-		$client->setDbPort($ret["db_port"]);
-		$client->setDbPass($ret["db_pass"]);
-		$client->setDbType($ret["db_type"]);
+		$client->setId($client_ini_data["client_id"]);
+		$client->setName($client_ini_data["client_id"]);
+		$client->setDbHost($client_ini_data["db_host"]);
+		$client->setDbName($client_ini_data["db_name"]);
+		$client->setDbUser($client_ini_data["db_user"]);
+		$client->setDbPort($client_ini_data["db_port"]);
+		$client->setDbPass($client_ini_data["db_pass"]);
+		$client->setDbType($client_ini_data["db_type"]);
 		$client->setDSN();
 		$client->ini->setVariable("session", "expire", ($ret["session_expire"] * 60));
 
