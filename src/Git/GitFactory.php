@@ -10,10 +10,14 @@ namespace CaT\Ilse\Git;
 class GitFactory
 {
 	/**
+	 * @param string    $path
+	 * @param string    $repo_url
+	 * @param string 	$name
+	 * @param bool		$verbose
 	 * @return Git
 	 */
-	public function getRepo($path, $repo_url, $name)
+	public function getRepo($path, $repo_url, $name, $verbose = false)
 	{
-		return new GitWrapper($path, $repo_url, $name);
+		return new GitWrapper($path, $repo_url, $name, $verbose);
 	}
 }
