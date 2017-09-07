@@ -21,10 +21,7 @@ class FilesystemImpl implements Filesystem {
 		}
 		else {
 			assert('is_dir($path)');
-			$files = array_diff(scandir($path), array('.','..'));
-			foreach ($files as $file) {
-				$this->remove($file);
-			}
+			$this->purgeDirectory($path);
 			rmdir($dir);
 		}
 	}
@@ -77,7 +74,8 @@ class FilesystemImpl implements Filesystem {
 		$files = array_diff(scandir($path), array('.','..'));
 		foreach ($files as $file) {
 			if (is_dir("$path/$file")) {
-				 $this->purgeDirectory("$path/$file");
+				$this->purgeDirectory("$path/$file");
+				rmdir("$path/$file");
 			}
 			else {
 				unlink("$path/$file");
