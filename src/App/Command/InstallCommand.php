@@ -48,16 +48,10 @@ class InstallCommand extends BaseCommand
 		$check_requirements = $this->dic["action.checkRequirements"];
 		$check_requirements->perform();
 
+		$install_ilias = $this->dic["action.installILIAS"];
+		$install_ilias->perform();
+
 		return;
-
-		$config_names = $in->getArgument("config_names");
-		$args["config"] = $this->merge($config_names);
-		$args["interactive"] = $in->getOption("interactive");
-
-		$this->setup($args);
-		$this->start($args);
-		$this->config('./ilse.php config ' . implode(" ", $config_names));
-		$out->writeln("\t\t\t\tDone!");
 	}
 
 	/**
