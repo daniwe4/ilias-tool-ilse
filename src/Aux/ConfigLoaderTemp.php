@@ -4,9 +4,9 @@
 
 namespace CaT\Ilse\Aux;
 
+use CaT\Ilse\Config;
 use CaT\Ilse\Aux\ConfigMerger;
 use CaT\Ilse\Aux\YamlConfigParser;
-use CaT\Ilse\Config;
 
 /**
  * TODO: this is just a temporary solution and deserves some test and
@@ -29,17 +29,14 @@ class ConfigLoaderTemp implements ConfigLoader {
 	}
 
 	/**
-	 * Load the config based on some directories.
-	 *
-	 * @param	array		$dic
-	 * @param	string[]	$paths
-	 * @return	Config\General
+	 * @inheritdoc
 	 */
 	public function loadConfigToDic($dic, array $paths) {
-		if ($dic["config.ilias"] instanceof Config\General) {
+		if ($dic->raw("config.ilias") instanceof Config\General) {
 			throw new \LogicException("config.ilias already initialized.");
 		}
 		$merged = $this->merger->mergeConfigs($paths);
 		$dic["config.ilias"] = $this->parser->read_config($merged, Config\General::class);
+		return $dic;
 	}
 }
