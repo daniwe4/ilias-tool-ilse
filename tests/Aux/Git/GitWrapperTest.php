@@ -11,6 +11,6 @@ class GitWrapperTest extends GitTest
 	public function getImplementation($target_dir, $remote_url, $repo_name)
 	{
 		// TODO: this should not rely on connectivity to github. it could use this repo instead.
-		return new \CaT\Ilse\Git\GitWrapper($target_dir, $remote_url, $repo_name);
+		return new \CaT\Ilse\Aux\Git\GitWrapper($target_dir, $remote_url, $repo_name);
 	}
 }

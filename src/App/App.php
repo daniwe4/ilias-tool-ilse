@@ -5,7 +5,7 @@ namespace CaT\Ilse\App;
 
 use CaT\Ilse\Action;
 use CaT\Ilse\Aux;
-use CaT\Ilse\Git;
+use CaT\Ilse\Aux\Git;
 use CaT\Ilse\Setup\CoreInstallerFactory;
 
 use Pimple\Container;

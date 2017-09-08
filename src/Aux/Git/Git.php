@@ -2,7 +2,7 @@
 
 /* Copyright (c) 2017 Daniel Weise <daniel.weise@concepts-and-training.de>, Richard Klees <richard.klees@concepts-and-training.de>, Extended GPL, see LICENSE */
 
-namespace CaT\Ilse\Git;
+namespace CaT\Ilse\Aux\Git;
 
 /**
  * Wrapper for git commands
