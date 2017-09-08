@@ -29,10 +29,10 @@ containing the required information for your installation.
 ilse example-config
 ```
 
-will give you a configuration that you need to adjust to your requirements.
+will give you an example configuration, which you will need to adjust to your requirements.
 
 ### Installation
-After you created your configuration file make **ilse** build an installation
+After you created your configuration file, make **ilse** build an installation
 from it:
 
 ```
@@ -41,7 +41,7 @@ ilse install $PATH_TO_CONFIG
 
 You may also supply **ilse** with multiple config files. **ilse** will then prefer
 entries from the latter over the former. This allows you to create basic config
-file and overwrite only some config entries with more specific config files.
+files and overwrite only distinct config entries with more specific config files.
 
 ### Delete installation
 If you got tired of your ILIAS installation, **ilse** will be happy to remove
@@ -72,15 +72,15 @@ on their system. This requirement will vanish as well, once [doil](github.com/co
 or a similar tool works reliably. This project could also pen a huge space
 for testing, manual as well as automatic.
 
-We hope that this or a similar tool will be the or at least one official
-way to install ILIAS in the future and will be happy to contribute our
-code and knowledge to the community.
+We hope that in the future this or a similar tool will be the only, or at least one, 
+official way to install ILIAS. 
+For this, we will be happy to contribute our code and knowledge to the community.
 
 ## Contributions
 We are not ready to take contributions to **ilse** in an organized way at the moment.
-Please contact us per e-mail if want to contribute code to the project, preferably
+Please contact us via e-mail if you want to contribute code to the project, preferably
 before you start your work.
 
-We started cleanup and also perform major internal changes to the code base at the
-moment. Once they are completed we reconsider opening this project to outside 
+We started cleanup and are also performing major internal changes to the code base 
+at the moment. Once this is complete, we consider opening this project to outside 
 contributions in a more structured way.
