@@ -4,7 +4,7 @@
 # **ilse** automatically builds ILIAS installations
 **Proof of Concept for a Command Line Installation Script for [ILIAS](https://github.com/ILIAS-eLearning/ILIAS)**
 
-*Please make sure you understand that this is yet ready for production. Use this at your own risk.*
+*Please make sure you understand that this is not yet ready for production. Use this at your own risk.*
 
 **Contact:** [Daniel Weise](https://github.com/daniwe4), [Richard Klees](https://github.com/klees)
 
@@ -36,7 +36,7 @@ After you created your configuration file make **ilse** build an installation
 from it:
 
 ```
-$ ./ilse.php install $PATH_TO_CONFIG
+ilse install $PATH_TO_CONFIG
 ```
 
 You may also supply **ilse** with multiple config files. **ilse** will then prefer
@@ -48,7 +48,7 @@ If you got tired of your ILIAS installation, **ilse** will be happy to remove
 it for you:
 
 ```
-$ ./ilse.php delete $PATH_TO_CONFIG
+ilse delete $PATH_TO_CONFIG
 ```
 
 ## Outlook
