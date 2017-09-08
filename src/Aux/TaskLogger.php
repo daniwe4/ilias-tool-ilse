@@ -28,7 +28,10 @@ interface TaskLogger {
 	public function eventually($title, callable $task);
 
 	/**
-	 * Task may fail, process continues.
+	 * Task needs to succeed in order for the whole process
+	 * to go on.
+	 *
+	 * Start a process that expected nested processes
 	 *
 	 * @param	string		$title
 	 * @param	callable 	$task
