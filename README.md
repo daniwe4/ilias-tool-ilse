@@ -1,80 +1,86 @@
 [![Software License](https://img.shields.io/aur/license/yaourt.svg?style=round-square)](LICENSE.md)
 [![Build Status](https://travis-ci.com/conceptsandtraining/ilias-tool-ilse.svg?token=S5A6thmo2LVbsWtZHFUA&branch=master)](https://travis-ci.com/conceptsandtraining/ilias-tool-ilse)
 
-# ilse
-**A Command Line Installation Script for [ILIAS](https://github.com/ILIAS-eLearning/ILIAS)**
+# **ilse** automatically builds ILIAS installations
+**Proof of Concept for a Command Line Installation Script for [ILIAS](https://github.com/ILIAS-eLearning/ILIAS)**
+
+*Please make sure you understand that this is yet ready for production. Use this at your own risk.*
 
 **Contact:** [Daniel Weise](https://github.com/daniwe4), [Richard Klees](https://github.com/klees)
 
-## Usage
+## Prerequisits
+
 ### Software requirements
-* PHP 5.6 or higher (PHP 7 works since release_5-2)
+* PHP 5.6 or higher (PHP 7 works since Release 5.2)
 * git 2.1.4 or higher
 * [ILIAS requirements](https://github.com/ILIAS-eLearning/ILIAS/blob/trunk/docs/configuration/install.md)
 
 ### Installation
-```
-$ cd DESTINATION_FOLDER
-$ git clone https://github.com/conceptsandtraining/ilias-tool-ilse.git ilse
-$ cd ilse
-$ composer install
-```
+Download the PHAR for the latest release [here](https://github.com/conceptsandtraining/ilias-tool-ilse/releases).
+These instructions assume that you make ilse executable as `ilse`.
+
+## Usage
 
 ### Configuration
-The Ilias-installer relies on a github-repository as the source of configuration files.  
-The corresponding repo-paths should be specified in `$HOMEDIR/.ilse/config_repos.yaml`.  
-Please refer to `config_repos_default.yaml` for the required layout.
-   
-The name of the config file is always `ilse_config.yaml`.  
-Each config file is inside a directory that represents the customomer name.  
-
-* Edit the file src/default.yaml
-* Save the file as ilse_config.yaml
-* Push the file into the destination folder of the repo named above.
-
-
-### Required configuration entries
-For new installation of ILIAS you need these configuration entries.
+In order to let **ilse** install ILIAS for you, you need to create a configuration file
+containing the required information for your installation.
 
 ```
-* client
-* database
-* language
-* server
-* setup
-* tools
-* log
-* git_branch
+ilse example-config
 ```
 
-### Re- / Installation of ILIAS
-With ilse it´s possible to install a new ILIAS or drop your old an install in one step.
-For both it is possible to run the installation in a non interactiv mode.
-If you would use this, just add the parameter -i in your command.
+will give you a configuration that you need to adjust to your requirements.
 
-##### Installation
+### Installation
+After you created your configuration file make **ilse** build an installation
+from it:
+
 ```
-$ ./ilse.php install $REPO_FOLDER_NAMES [-i]
+$ ./ilse.php install $PATH_TO_CONFIG
 ```
-##### Reinstallation
+
+You may also supply **ilse** with multiple config files. **ilse** will then prefer
+entries from the latter over the former. This allows you to create basic config
+file and overwrite only some config entries with more specific config files.
+
+### Delete installation
+If you got tired of your ILIAS installation, **ilse** will be happy to remove
+it for you:
+
 ```
-$ ./ilse.php reinstall $REPO_FOLDER_NAMES [-i][-a]
+$ ./ilse.php delete $PATH_TO_CONFIG
 ```
-With the option -a ilse will delete all log files and the whole data folder before installing ILIAS again. 
-##### Delete installation
-```
-$ ./ilse.php delete $REPO_FOLDER_NAMES [-a]
-```
-With the option -a ilse will also delete all log files and the whole data folder. 
-##### Update installation
-```
-$ ./ilse.php update $REPO_FOLDER_NAMES
-```
-##### Update plugins
-```
-$ ./ilse.php updateplugins $REPO_FOLDER_NAMES
-```
-##### Update config
-```
-$ ./ilse.php config $REPO_FOLDER_NAMES
-```
+
+## Outlook
+**ilse** is in internal use at CaT for about a year now. It already contains
+facilities to do some more stuff automatically:
+
+* make some configurations (e.g. LDAP, SOAP, password requirements, ...)
+* install plugins
+* update the installation
+* import content and org-structures
+* create roles and users
+
+At the moment we do not consider these to be stable enough to show them
+to the public, thus only basic functionality is available for the cli interface
+at the moment.
+
+We also have the vision that someday some ILIAS configurations are provided
+in a repository like [this one](github.com/conceptsandtraining/ilias-configs-public)
+so that people who want to try ILIAS only need to configure some locations
+on their system. This requirement will vanish as well, once [doil](github.com/conceptsandtraining/ilias-tool-doil)
+or a similar tool works reliably. This project could also pen a huge space
+for testing, manual as well as automatic.
+
+We hope that this or a similar tool will be the or at least one official
+way to install ILIAS in the future and will be happy to contribute our
+code and knowledge to the community.
+
+## Contributions
+We are not ready to take contributions to **ilse** in an organized way at the moment.
+Please contact us per e-mail if want to contribute code to the project, preferably
+before you start your work.
+
+We started cleanup and also perform major internal changes to the code base at the
+moment. Once they are completed we reconsider opening this project to outside 
+contributions in a more structured way.

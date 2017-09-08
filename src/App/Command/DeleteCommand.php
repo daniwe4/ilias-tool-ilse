@@ -23,9 +23,8 @@ class DeleteCommand extends BaseCommand
 	{
 		$this
 			->setName("delete")
-			->setDescription("Delete the Ilias-Environment.")
-			->addArgument("config_names", InputArgument::IS_ARRAY, "Name of the Ilias Config Files.")
-			->addOption("all", "a", InputOption::VALUE_NONE, "Also delete log files and the data folder.")
+			->setDescription("Delete the ILIAS installation")
+			->addArgument("config_names", InputArgument::IS_ARRAY, "names of the ilse config files")
 			;
 	}
 
