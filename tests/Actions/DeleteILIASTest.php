@@ -37,6 +37,17 @@ class DeleteILIASTest extends PHPUnit_Framework_TestCase {
 				, ["error_log"]
 				);
 
+		$filesystem
+			->expects($this->exactly(4))
+			->method("exists")
+			->withConsecutive
+				( ["absolute_path"]
+				, ["data_dir"]
+				, ["path/filename"]
+				, ["error_log"]
+				)
+			->willReturn(true);
+
 		$task_logger
 			->expects($this->exactly(4))
 			->method("eventually")
