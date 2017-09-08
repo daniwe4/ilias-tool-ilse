@@ -144,7 +144,7 @@ class BuildInstallationEnvironment implements Action
 	}
 
 	protected function cloneILIAS() {
-		$this->task_logger->always("Getting ILIAS-repo", function () {
+		$this->task_logger->progressing("Getting ILIAS-repo", function () {
 			if (!$this->requirements_checker->webDirectoryContainsILIAS($this->server_config->absolute_path())) {
 				$git = $this->git_factory->getRepo($this->server_config->absolute_path(), $this->git_config->url(), "ILIAS", true);
 				$git->gitClone();
