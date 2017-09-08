@@ -46,7 +46,7 @@ class App extends Application
 						);
 		};
 		$container["action.deleteILIAS"] = function($c) {
-			$config = $container["config.ilias"];
+			$config = $c["config.ilias"];
 			return new Action\DeleteILIAS
 						( $config->database()
 						, $config->server()
@@ -139,7 +139,7 @@ class App extends Application
 		$dic = $this->getDIC();
 
 //		$this->add(new Command\UpdateCommand($path, $merger, $checker, $git, $repos));
-//		$this->add(new Command\DeleteCommand($path, $merger, $checker, $git, $repos));
+		$this->add(new Command\DeleteCommand($dic));
 //		$this->add(new Command\UpdatePluginsCommand($path, $merger, $checker, $git, $repos));
 //		$this->add(new Command\ReinstallCommand($path, $merger, $checker, $git, $repos));
 		$this->add(new Command\InstallCommand($dic));
