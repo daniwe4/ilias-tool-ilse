@@ -40,6 +40,12 @@ class BuildInstallationEnvironmentTest extends PHPUnit_Framework_TestCase {
 			->will($this->returnCallback(function($s, $c) {
 				$c();
 			}));
+		$task_logger
+			->expects($this->any())
+			->method("progressing")
+			->will($this->returnCallback(function($s, $c) {
+				$c();
+			}));
 
 		$rc
 			->expects($this->once())
@@ -132,6 +138,12 @@ class BuildInstallationEnvironmentTest extends PHPUnit_Framework_TestCase {
 		$task_logger
 			->expects($this->any())
 			->method("always")
+			->will($this->returnCallback(function($s, $c) {
+				$c();
+			}));
+		$task_logger
+			->expects($this->any())
+			->method("progressing")
 			->will($this->returnCallback(function($s, $c) {
 				$c();
 			}));
