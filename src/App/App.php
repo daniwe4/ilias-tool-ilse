@@ -23,7 +23,7 @@ class App extends Application
 	const I_R_BRANCH			= "master";
 
 	public function __construct() {
-		parent::__construct();
+		parent::__construct("ilse - automatically sets ILIAS up");
 		$this->initCommands();
 	}
 

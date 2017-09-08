@@ -22,8 +22,8 @@ class InstallCommand extends BaseCommand
 	{
 		$this
 			->setName("install")
-			->setDescription("Start the installation.")
-			->addArgument("config_names", InputArgument::IS_ARRAY, "Name of the Ilias Config Files.")
+			->setDescription("Build the ILIAS installation")
+			->addArgument("config_names", InputArgument::IS_ARRAY,  "names of the ilse config files")
 			;
 	}
 
