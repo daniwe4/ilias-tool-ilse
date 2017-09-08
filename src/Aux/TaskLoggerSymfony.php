@@ -95,12 +95,10 @@ class TaskLoggerSymfony implements TaskLogger
 		if ($failed)
 		{
 			$this->out->write("<fg=yellow>FAIL</>", true);
-		}
-		else
-		{
-			$this->writeLineEnd($title, "<fg=green>DONE</>");
+			return null;
 		}
 
+		$this->writeLineEnd($title, "<fg=green>DONE</>");
 		return $result;
 	}
 
