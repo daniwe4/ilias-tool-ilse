@@ -26,4 +26,16 @@ interface TaskLogger {
 	 * @return	mixed	what callable returns
 	 */
 	public function eventually($title, callable $task);
+
+	/**
+	 * Task needs to succeed in order for the whole process
+	 * to go on.
+	 *
+	 * Start a process that expected nested processes
+	 *
+	 * @param	string		$title
+	 * @param	callable 	$task
+	 * @return	mixed	what callable returns
+	 */
+	public function progressing($title, callable $task);
 }

@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class TaskLoggerSymfony implements TaskLogger
 {
 	const MAX_LENGTH = 80;
+	protected $titles = [];
 
 	/**
 	 * Constructor of TaskLoggerSymfony
@@ -25,8 +26,92 @@ class TaskLoggerSymfony implements TaskLogger
 	 */
 	public function always($title, callable $task)
 	{
+		if (count($this->titles) > 0) {
+			$last = end($this->titles);
+			$this->writeLineEnd($last, "IN PROGRESS");
+		}
+
+		$title = str_repeat(" ", count($this->titles) * 4).$title;
+
+		$this->out->write($title);
+
+		try
+		{
+			$this->titles[] = $title;
+			$result = $task();
+		}
+		catch(\Exception $e)
+		{
+			$this->out->write("<fg=red>FAIL</>", true);
+			throw $e;
+		}
+		finally 
+		{
+			array_pop($this->titles);
+		}
+
+		if (count($this->titles) == 0) {
+			$this->out->write($title);
+		}
+
+		$this->writeLineEnd($title, "<fg=green>DONE</>");
+
+		return $result;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function eventually($title, callable $task)
+	{
+		if (count($this->titles) > 0) {
+			$last = end($this->titles);
+			$this->writeLineEnd($last, "IN PROGRESS");
+		}
+
+		$title = str_repeat(" ", count($this->titles) * 4).$title;
+
+		$this->out->write($title);
+
+		try
+		{
+			$this->titles[] = $title;
+			$result = $task();
+			$failed = false;
+		}
+		catch(\Exception $e)
+		{
+			$failed = true;
+		}
+		finally
+		{
+			array_pop($this->titles);
+		}
+
+		if (count($this->titles) == 0) {
+			$this->out->write($title);
+		}
+
+		if ($failed)
+		{
+			$this->out->write("<fg=yellow>FAIL</>", true);
+		}
+		else
+		{
+			$this->writeLineEnd($title, "<fg=green>DONE</>");
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function progressing($title, callable $task)
+	{
 		$this->out->write($title);
 		$this->writeSpaces($title);
+		$this->out->write("<fg=orange>in progress</>", true);
 		try
 		{
 			$result = $task();
@@ -36,29 +121,16 @@ class TaskLoggerSymfony implements TaskLogger
 			$this->out->write("<fg=red>FAIL</>", true);
 			throw $e;
 		}
-		$this->out->write("<fg=green>DONE</>", true);
-		return $result;
-
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function eventually($title, callable $task)
-	{
 		$this->out->write($title);
 		$this->writeSpaces($title);
-		try
-		{
-			$result = $task();
-		}
-		catch(\Exception $e)
-		{
-			$this->out->write("<fg=yellow>FAIL</>", true);
-			return;
-		}
 		$this->out->write("<fg=green>DONE</>", true);
-		return $task();
+		return $result;
+	}
+
+	private function writeLineEnd($title, $end) {
+		$length = strlen($title);
+		$spaces = self::MAX_LENGTH - $length;
+		$this->out->write(str_repeat(" ", $spaces).$end, true);
 	}
 
 	/**
