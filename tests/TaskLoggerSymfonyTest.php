@@ -2,6 +2,8 @@
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Test class for TaskLoggerSymfony
  *
@@ -90,6 +92,56 @@ class TaskLoggerSymfonyTest extends PHPUnit_Framework_TestCase
 		{
 		}
 		$this->assertTrue($raised);
+	}
+
+	public function test_output_tree_always()
+	{
+		$output_interface = $this->createMock(OutputInterface::class);
+
+		$task_logger = new \CaT\Ilse\Aux\TaskLoggerSymfony($output_interface);
+
+		$output_interface
+			->expects($this->exactly(6))
+			->method("write")
+			->withConsecutive
+				( ["Step A", false, 0]
+				, [$this->stringContains("IN PROGRESS"), true]
+					, ["    Step A.1", false, 0]
+				, [$this->stringContains("DONE"), true]
+				, ["Step A", false, 0]
+				, [$this->stringContains("DONE"), true]
+				);
+
+		$task_logger->always("Step A", function() use ($task_logger) {
+			$task_logger->always("Step A.1", function() {
+				// do stuff
+			});
+		});
+	}
+
+	public function test_output_tree_eventually()
+	{
+		$output_interface = $this->createMock(OutputInterface::class);
+
+		$task_logger = new \CaT\Ilse\Aux\TaskLoggerSymfony($output_interface);
+
+		$output_interface
+			->expects($this->exactly(6))
+			->method("write")
+			->withConsecutive
+				( ["Step A", false, 0]
+				, [$this->stringContains("IN PROGRESS"), true]
+					, ["    Step A.1", false, 0]
+				, [$this->stringContains("DONE"), true]
+				, ["Step A", false, 0]
+				, [$this->stringContains("DONE"), true]
+				);
+
+		$task_logger->eventually("Step A", function() use ($task_logger) {
+			$task_logger->eventually("Step A.1", function() {
+				// do stuff
+			});
+		});
 	}
 
 	private function getFunc($val_1, $val_2)
