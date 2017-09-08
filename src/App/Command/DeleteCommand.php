@@ -37,20 +37,14 @@ class DeleteCommand extends BaseCommand
 	 */
 	protected function execute(InputInterface $in, OutputInterface $out)
 	{
+		$this->dic["aux.taskLogger"] = $this->buildTaskLogger($out);
 		$config_names = $in->getArgument("config_names");
-		$args["config"] = $this->merge($config_names);
-		$args["all"] = $in->getOption("all");
+		$this->dic = $this->dic["aux.configLoader"]->loadConfigToDic($this->dic, $config_names);
 
-		$this->delete($args);
-		$out->writeln("\t\t\t\tDone!");
-	}
+		$init_app_folder = $this->dic["action.initAppFolder"];
+		$init_app_folder->perform();
 
-	/**
-	 * Delete an ILIAS-Environment
-	 */
-	protected function delete(array $args)
-	{
-		$ri = new Executor\DeleteILIAS($args['config'], $this->checker, $this->git, $this->path);
-		$ri->run($args['all']);
+		$delete_ilias = $this->dic["action.deleteILIAS"];
+		$delete_ilias->perform();
 	}
 }
