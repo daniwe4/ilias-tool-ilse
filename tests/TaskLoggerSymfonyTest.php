@@ -69,6 +69,29 @@ class TaskLoggerSymfonyTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($res, $result);
 	}
 
+	/**
+	 * @dataProvider dataProvider
+	 */
+	public function test_progressing($title, $closure, $result)
+	{
+		$value = $this->tls->progressing($title, $closure);
+		$this->assertEquals($value, $result);
+	}
+
+	public function test_progressing_exception()
+	{
+		$raised = true;
+		try
+		{
+			$res = $this->tls->progressing("title", function() {return 5/0;});
+			$raised = false;
+		}
+		catch(\Exception $e)
+		{
+		}
+		$this->assertTrue($raised);
+	}
+
 	private function getFunc($val_1, $val_2)
 	{
 		$func = function () use($val_1, $val_2) {
