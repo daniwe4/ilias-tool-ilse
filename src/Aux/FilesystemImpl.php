@@ -22,7 +22,7 @@ class FilesystemImpl implements Filesystem {
 		else {
 			assert('is_dir($path)');
 			$this->purgeDirectory($path);
-			rmdir($dir);
+			rmdir($path);
 		}
 	}
 
