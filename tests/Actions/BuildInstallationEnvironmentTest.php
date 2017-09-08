@@ -5,7 +5,7 @@
 use \CaT\Ilse\Action\BuildInstallationEnvironment;
 use \CaT\Ilse\Config;
 use \CaT\Ilse\Aux\TaskLogger;
-use \CaT\Ilse\Aux\FileSystem;
+use \CaT\Ilse\Aux\Filesystem;
 use \CaT\Ilse\Setup\RequirementsChecker;
 use \CaT\Ilse\Aux\Git\Git;
 use \CaT\Ilse\Aux\Git\GitFactory;
