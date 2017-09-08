@@ -72,14 +72,15 @@ class DeleteILIAS implements Action
 	 * @return	\mysqli
 	 */
 	protected function connectDB() {
-		$this->task_logger->eventually("Connecting to Database", function () {
+		return $this->task_logger->eventually("Connecting to Database", function () {
 			$host = $this->db_config->host();
 			$user = $this->db_config->user();
 			$passwd = $this->db_config->password();
 
-			//TODO: This should be using PDO instead.
-			$connection = new \mysqli($host, $user, $passwd);
-			return $con;
+			//TODO: This should be using some DB-class
+			$dsn = "mysql:host=$host;charset=utf8;";
+			$connection = new \PDO($dsn, $user, $passwd, array(3=>2, 10000=>true, 2=>18000));
+			return $connection;
 		});
 	}
 
@@ -87,14 +88,13 @@ class DeleteILIAS implements Action
 	 * Drop the database used by ILIAS
 	 */
 	protected function dropDatabase() {
-		$connection = $this->connectDB();
 		$database = $this->db_config->database();
-
-		$this->task_logger->eventually("Droping database '$database'", function () {
+		$this->task_logger->eventually("Droping database '$database'", function () use ($database) {
+			$connection = $this->connectDB();
 			if($this->databaseExist($connection, $database)) {
 				$drop_query = "DROP DATABASE ".$database;
-				if(!$con->query($drop_query)) {
-					throw new Exception("Database could not be deleted. (Error: )");
+				if(!$connection->query($drop_query)) {
+					throw new Exception("Database could not be deleted.");
 				}
 			}
 		});
@@ -105,7 +105,10 @@ class DeleteILIAS implements Action
 	 */
 	protected function deleteILIASFolder() {
 		$this->task_logger->eventually("Deleting ILIAS files", function () {
-			$this->filesystem->remove($this->server_config->absolutePath());
+			$path = $this->server_config->absolutePath();
+			if ($this->filesystem->exists($path)) {
+				$this->filesystem->remove($path);
+			}
 		});
 	}
 
@@ -114,7 +117,10 @@ class DeleteILIAS implements Action
 	 */
 	protected function deleteDataFolder() {
 		$this->task_logger->eventually("Deleting data folder", function () {
-			$this->filesystem->remove($this->client_config->dataDir());
+			$path = $this->client_config->dataDir();
+			if ($this->filesystem->exists($path)) {
+				$this->filesystem->remove($path);
+			}
 		});
 	}
 
@@ -123,7 +129,10 @@ class DeleteILIAS implements Action
 	 */
 	protected function deleteErrorLog() {
 		$this->task_logger->eventually("Deleting error_log folder", function () {
-			$this->filesystem->remove($this->log_config->error_log());
+			$path = $this->log_config->error_log();
+			if ($this->filesystem->exists($path)) {
+				$this->filesystem->remove($path);
+			}
 		});
 	}
 
@@ -133,7 +142,10 @@ class DeleteILIAS implements Action
 	protected function deleteLogFile()
 	{
 		$this->task_logger->eventually("Deleting log file", function () {
-			$this->filesystem->remove($this->log_config->path()."/".$this->log_config->file_name());
+			$path = $this->log_config->path()."/".$this->log_config->file_name();
+			if ($this->filesystem->exists($path)) {
+				$this->filesystem->remove($path);
+			}
 		});
 	}
 
@@ -148,6 +160,6 @@ class DeleteILIAS implements Action
 		$select = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '".$database."'";
 		$res = $connection->query($select);
 
-		return $res->num_rows > 0;
+		return $res->rowCount() > 0;
 	}
 }
