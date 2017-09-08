@@ -58,7 +58,30 @@ class TaskLoggerSymfony implements TaskLogger
 			return;
 		}
 		$this->out->write("<fg=green>DONE</>", true);
-		return $task();
+		return $result;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function progressing($title, callable $task)
+	{
+		$this->out->write($title);
+		$this->writeSpaces($title);
+		$this->out->write("<fg=orange>in progress</>", true);
+		try
+		{
+			$result = $task();
+		}
+		catch(\Exception $e)
+		{
+			$this->out->write("<fg=red>FAIL</>", true);
+			throw $e;
+		}
+		$this->out->write($title);
+		$this->writeSpaces($title);
+		$this->out->writeln("<fg=green>DONE</>");
+		return $result;
 	}
 
 	/**
