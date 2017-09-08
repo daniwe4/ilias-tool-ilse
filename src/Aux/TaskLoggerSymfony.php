@@ -12,6 +12,7 @@ class TaskLoggerSymfony implements TaskLogger
 {
 	const MAX_LENGTH = 80;
 	protected $titles = [];
+	protected $depth = 0;
 
 	/**
 	 * Constructor of TaskLoggerSymfony
@@ -29,6 +30,7 @@ class TaskLoggerSymfony implements TaskLogger
 		if (count($this->titles) > 0) {
 			$last = end($this->titles);
 			$this->writeLineEnd($last, "IN PROGRESS");
+			$this->depth++;
 		}
 
 		$title = str_repeat(" ", count($this->titles) * 4).$title;
@@ -50,7 +52,7 @@ class TaskLoggerSymfony implements TaskLogger
 			array_pop($this->titles);
 		}
 
-		if (count($this->titles) == 0) {
+		if (count($this->titles) < $this->depth) {
 			$this->out->write($title);
 		}
 
@@ -67,6 +69,7 @@ class TaskLoggerSymfony implements TaskLogger
 		if (count($this->titles) > 0) {
 			$last = end($this->titles);
 			$this->writeLineEnd($last, "IN PROGRESS");
+			$this->depth++;
 		}
 
 		$title = str_repeat(" ", count($this->titles) * 4).$title;
@@ -88,8 +91,9 @@ class TaskLoggerSymfony implements TaskLogger
 			array_pop($this->titles);
 		}
 
-		if (count($this->titles) == 0) {
+		if (count($this->titles) < $this->depth) {
 			$this->out->write($title);
+			$this->depth--;
 		}
 
 		if ($failed)
