@@ -105,7 +105,7 @@ class TaskLoggerSymfonyTest extends PHPUnit_Framework_TestCase
 			->method("write")
 			->withConsecutive
 				( ["Step A", false, 0]
-				, [$this->stringContains("IN PROGRESS"), true]
+				, [$this->stringContains("in progress"), true]
 					, ["    Step A.1", false, 0]
 				, [$this->stringContains("DONE"), true]
 				, ["Step A", false, 0]

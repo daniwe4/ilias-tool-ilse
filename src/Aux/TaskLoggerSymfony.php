@@ -29,7 +29,7 @@ class TaskLoggerSymfony implements TaskLogger
 	{
 		if (count($this->titles) > 0) {
 			$last = end($this->titles);
-			$this->writeLineEnd($last, "IN PROGRESS");
+			$this->writeLineEnd($last, "in progress");
 			$this->depth++;
 		}
 
@@ -113,7 +113,7 @@ class TaskLoggerSymfony implements TaskLogger
 	{
 		$this->out->write($title);
 		$this->writeSpaces($title);
-		$this->out->write("<fg=orange>in progress</>", true);
+		$this->out->write("in progress", true);
 		try
 		{
 			$result = $task();
