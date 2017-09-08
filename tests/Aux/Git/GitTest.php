@@ -35,7 +35,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 	 */
 	public function setUp()
 	{
-		$this->gw 	= $this->getImplementation(tempdir(), __DIR__."/../..", "ilias-tool-ilse");
+		$this->gw 	= $this->getImplementation(tempdir(), __DIR__."/../../..", "ilias-tool-ilse");
 		$this->gwe 	= $this->getImplementation("www/falscheAdresse/de", "httpsss://testbla", "testbla");
 	}
 
@@ -114,7 +114,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 			$this->gwe->gitClone();
 			$this->assertFalse("Should have raised.");
 		}
-		catch(\Cat\Ilse\Git\GitException $e)
+		catch(\Cat\Ilse\Aux\Git\GitException $e)
 		{
 			$this->assertTrue(true, "throws GitException");
 		}
@@ -130,7 +130,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 			$this->gwe->gitFetch();
 			$this->assertFalse("Should have raised.");
 		}
-		catch(\Cat\Ilse\Git\GitException $e)
+		catch(\Cat\Ilse\Aux\Git\GitException $e)
 		{
 			$this->assertTrue(true, "throws GitException");
 		}
@@ -146,7 +146,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 			$this->gwe->gitPull("master");
 			$this->assertFalse("Should have raised.");
 		}
-		catch(\Cat\Ilse\Git\GitException $e)
+		catch(\Cat\Ilse\Aux\Git\GitException $e)
 		{
 			$this->assertTrue(true, "throws GitException");
 		}
@@ -164,7 +164,7 @@ abstract class GitTest extends PHPUnit_Framework_TestCase
 			$result = $this->gwe->gitCheckout($branch, $new);
 			$this->assertFalse("Should have raised.");
 		}
-		catch(\Cat\Ilse\Git\GitException $e)
+		catch(\Cat\Ilse\Aux\Git\GitException $e)
 		{
 			$this->assertTrue(true, "throws GitException");
 		}

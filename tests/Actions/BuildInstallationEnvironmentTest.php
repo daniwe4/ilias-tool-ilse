@@ -7,8 +7,8 @@ use \CaT\Ilse\Config;
 use \CaT\Ilse\Aux\TaskLogger;
 use \CaT\Ilse\Aux\FileSystem;
 use \CaT\Ilse\Setup\RequirementsChecker;
-use \CaT\Ilse\Git\Git;
-use \CaT\Ilse\Git\GitFactory;
+use \CaT\Ilse\Aux\Git\Git;
+use \CaT\Ilse\Aux\Git\GitFactory;
 
 class BuildInstallationEnvironmentForTest extends BuildInstallationEnvironment {
 }

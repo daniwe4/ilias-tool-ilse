@@ -5,7 +5,7 @@ namespace CaT\Ilse\Action;
 
 use CaT\Ilse\Config;
 use CaT\Ilse\Setup\RequirementsChecker;
-use CaT\Ilse\Git\GitFactory;
+use CaT\Ilse\Aux\Git\GitFactory;
 use CaT\Ilse\Aux\Filesystem;
 use CaT\Ilse\Aux\TaskLogger;
 

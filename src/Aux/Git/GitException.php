@@ -1,6 +1,6 @@
 <?php
 
-namespace CaT\Ilse\Git;
+namespace CaT\Ilse\Aux\Git;
 
 /**
  * Wrapper for git commands
