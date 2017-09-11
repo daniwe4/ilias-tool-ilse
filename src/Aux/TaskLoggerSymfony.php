@@ -10,9 +10,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class TaskLoggerSymfony implements TaskLogger
 {
-	const MAX_LENGTH = 80;
-	protected $titles = [];
-	protected $depth = 0;
+	const MAX_LENGTH = 100;
+
+	const IN_PROGRESS = "in progress";
+	const DONE = "<fg=green>DONE</>";
+	const FAIL_SOFT = "<fg=yellow>FAIL</>";
+	const FAIL_HARD = "<fg=red>FAIL</>";
 
 	/**
 	 * Constructor of TaskLoggerSymfony
@@ -27,38 +30,22 @@ class TaskLoggerSymfony implements TaskLogger
 	 */
 	public function always($title, callable $task)
 	{
-		if (count($this->titles) > 0) {
-			$last = end($this->titles);
-			$this->writeLineEnd($last, "in progress");
-			$this->depth++;
-		}
-
-		$title = str_repeat(" ", count($this->titles) * 4).$title;
-
-		$this->out->write($title);
+		$title = $this->getIndentedTitle($title);
+		$this->pushTitle($title);
+		$this->writeLineHead($title);
 
 		try
 		{
 			$this->titles[] = $title;
 			$result = $task();
+			$this->popTitle(self::DONE);
+			return $result;
 		}
 		catch(\Exception $e)
 		{
-			$this->out->write("<fg=red>FAIL</>", true);
+			$this->popTitle(self::FAIL_HARD);
 			throw $e;
 		}
-		finally 
-		{
-			array_pop($this->titles);
-		}
-
-		if (count($this->titles) < $this->depth) {
-			$this->out->write($title);
-		}
-
-		$this->writeLineEnd($title, "<fg=green>DONE</>");
-
-		return $result;
 	}
 
 	/**
@@ -66,44 +53,24 @@ class TaskLoggerSymfony implements TaskLogger
 	 */
 	public function eventually($title, callable $task)
 	{
-		if (count($this->titles) > 0) {
-			$last = end($this->titles);
-			$this->writeLineEnd($last, "IN PROGRESS");
-			$this->depth++;
-		}
 
-		$title = str_repeat(" ", count($this->titles) * 4).$title;
-
-		$this->out->write($title);
+		$title = $this->getIndentedTitle($title);
+		$this->pushTitle($title);
+		$this->writeLineHead($title);
 
 		try
 		{
 			$this->titles[] = $title;
 			$result = $task();
-			$failed = false;
+			$this->popTitle(self::DONE);
+			return $result;
 		}
 		catch(\Exception $e)
 		{
-			$failed = true;
-		}
-		finally
-		{
-			array_pop($this->titles);
-		}
-
-		if (count($this->titles) < $this->depth) {
-			$this->out->write($title);
-			$this->depth--;
-		}
-
-		if ($failed)
-		{
-			$this->out->write("<fg=yellow>FAIL</>", true);
+			$this->popTitle(self::FAIL_SOFT);
+			$this->out->write($e);
 			return null;
 		}
-
-		$this->writeLineEnd($title, "<fg=green>DONE</>");
-		return $result;
 	}
 
 	/**
@@ -111,22 +78,29 @@ class TaskLoggerSymfony implements TaskLogger
 	 */
 	public function progressing($title, callable $task)
 	{
-		$this->out->write($title);
-		$this->writeSpaces($title);
-		$this->out->write("in progress", true);
+		$this->writeLineHead($title);
+		$this->writeLineEnd($title, self::IN_PROGRESS);
+
 		try
 		{
 			$result = $task();
+			$this->writeLineHead($title);
+			$this->writeLineEnd($title, self::DONE);
+			return $result;
 		}
 		catch(\Exception $e)
 		{
-			$this->out->write("<fg=red>FAIL</>", true);
+			$this->writeLineEnd($title, self::FAIL_HARD);
 			throw $e;
 		}
-		$this->out->write($title);
-		$this->writeSpaces($title);
-		$this->out->write("<fg=green>DONE</>", true);
-		return $result;
+	}
+
+	private function getIndentedTitle($title) {
+		return str_repeat(" ", count($this->titles_stack) * 4).$title;
+	}
+
+	private function writeLineHead($title) {
+		$this->out->write("<fg=default>$title</fg>");
 	}
 
 	private function writeLineEnd($title, $end) {
@@ -135,15 +109,25 @@ class TaskLoggerSymfony implements TaskLogger
 		$this->out->write(str_repeat(" ", $spaces).$end, true);
 	}
 
-	/**
-	 * Write MAX_LENGTH spaces minus title length
-	 *
-	 * @param string 	$title
-	 */
-	private function writeSpaces($title)
-	{
-		$length = strlen($title);
-		$spaces = self::MAX_LENGTH - $length;
-		$this->out->write(str_repeat(" ", $spaces));
+	protected $titles_stack = [];
+
+	protected function pushTitle($title) {
+		if (count($this->titles_stack) > 0) {
+			list($t, $p) = end($this->titles_stack);
+			if (!$p) {
+				$this->writeLineEnd($t, self::IN_PROGRESS);
+				array_pop($this->titles_stack);
+				$this->titles_stack[] = [$t, true];
+			}
+		}
+		$this->titles_stack[] = [$title, false];
+	}
+
+	protected function popTitle($end_text) {
+		list($t, $p) = array_pop($this->titles_stack);
+		if ($p) {
+			$this->out->write($t);
+		}
+		$this->writeLineEnd($t, $end_text);
 	}
 }

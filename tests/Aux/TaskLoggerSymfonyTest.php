@@ -104,9 +104,9 @@ class TaskLoggerSymfonyTest extends PHPUnit_Framework_TestCase
 			->expects($this->exactly(6))
 			->method("write")
 			->withConsecutive
-				( ["Step A", false, 0]
+				( ["<fg=default>Step A</fg>", false, 0]
 				, [$this->stringContains("in progress"), true]
-					, ["    Step A.1", false, 0]
+				, ["<fg=default>    Step A.1</fg>", false, 0]
 				, [$this->stringContains("DONE"), true]
 				, ["Step A", false, 0]
 				, [$this->stringContains("DONE"), true]
@@ -129,9 +129,9 @@ class TaskLoggerSymfonyTest extends PHPUnit_Framework_TestCase
 			->expects($this->exactly(6))
 			->method("write")
 			->withConsecutive
-				( ["Step A", false, 0]
+				( ["<fg=default>Step A</fg>", false, 0]
 				, [$this->stringContains("IN PROGRESS"), true]
-					, ["    Step A.1", false, 0]
+					, ["<fg=default>    Step A.1</fg>", false, 0]
 				, [$this->stringContains("DONE"), true]
 				, ["Step A", false, 0]
 				, [$this->stringContains("DONE"), true]
