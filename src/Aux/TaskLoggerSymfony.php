@@ -100,7 +100,7 @@ class TaskLoggerSymfony implements TaskLogger
 	}
 
 	private function writeLineHead($title) {
-		$this->out->write("<fg=default>$title</fg>");
+		$this->out->write("<fg=default>$title</>");
 	}
 
 	private function writeLineEnd($title, $end) {
