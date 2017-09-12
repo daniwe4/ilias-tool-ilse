@@ -36,7 +36,6 @@ class TaskLoggerSymfony implements TaskLogger
 
 		try
 		{
-			$this->titles[] = $title;
 			$result = $task();
 			$this->popTitle(self::DONE);
 			return $result;
@@ -53,14 +52,12 @@ class TaskLoggerSymfony implements TaskLogger
 	 */
 	public function eventually($title, callable $task)
 	{
-
 		$title = $this->getIndentedTitle($title);
 		$this->pushTitle($title);
 		$this->writeLineHead($title);
 
 		try
 		{
-			$this->titles[] = $title;
 			$result = $task();
 			$this->popTitle(self::DONE);
 			return $result;
@@ -78,19 +75,25 @@ class TaskLoggerSymfony implements TaskLogger
 	 */
 	public function progressing($title, callable $task)
 	{
+
+		$title = $this->getIndentedTitle($title);
+		$this->pushTitle($title, true);
 		$this->writeLineHead($title);
 		$this->writeLineEnd($title, self::IN_PROGRESS);
+
+		$this->writeLineEnd("","");
 
 		try
 		{
 			$result = $task();
-			$this->writeLineHead($title);
-			$this->writeLineEnd($title, self::DONE);
+			$this->writeLineEnd("","");
+			$this->popTitle(self::DONE);
 			return $result;
 		}
 		catch(\Exception $e)
 		{
-			$this->writeLineEnd($title, self::FAIL_HARD);
+			$this->writeLineEnd("","");
+			$this->popTitle(self::FAIL_HARD);
 			throw $e;
 		}
 	}
@@ -106,12 +109,15 @@ class TaskLoggerSymfony implements TaskLogger
 	private function writeLineEnd($title, $end) {
 		$length = strlen($title);
 		$spaces = self::MAX_LENGTH - $length;
+		if ($spaces <= 0) {
+			$spaces = 5;
+		}
 		$this->out->write(str_repeat(" ", $spaces).$end, true);
 	}
 
 	protected $titles_stack = [];
 
-	protected function pushTitle($title) {
+	protected function pushTitle($title, $has_line_end = false) {
 		if (count($this->titles_stack) > 0) {
 			list($t, $p) = end($this->titles_stack);
 			if (!$p) {
@@ -120,7 +126,7 @@ class TaskLoggerSymfony implements TaskLogger
 				$this->titles_stack[] = [$t, true];
 			}
 		}
-		$this->titles_stack[] = [$title, false];
+		$this->titles_stack[] = [$title, $has_line_end];
 	}
 
 	protected function popTitle($end_text) {
