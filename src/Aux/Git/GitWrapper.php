@@ -224,6 +224,6 @@ class GitWrapper implements Git
 	public function gitGetBranches()
 	{
 		$out = $this->gitExec("git branch", array(), $this->repo_name);
-		return explode("\n", trim(str_replace("*", " ", $out)));
+		return array_map('trim', explode("\n", trim(str_replace("*", " ", $out))));
 	}
 }
