@@ -54,17 +54,15 @@ class InitAppFolder implements Action
 	public function perform() {
 		$fs = $this->filesystem;
 		$dir = $fs->homeDirectory()."/".$this->folder_name;
-		if ($fs->exists($dir)) {
-			return;
+		if (!$fs->exists($dir)) {
+			$this->task_logger->always("Creating directory $dir for ilse", function () use ($dir, $fs) {
+				$fs->makeDirectory($dir);
+			});
+			$config_file = $dir."/".$this->config_name;
+			$this->task_logger->always("Writing default config to $config_file", function() use ($config_file, $fs) {
+				$default_config = $fs->read(__DIR__."/../../assets/ilse_default_config.yaml");
+				$fs->write($config_file, $default_config);
+			});
 		}
-
-		$this->task_logger->always("Creating directory $dir for ilse", function () use ($dir, $fs) {
-			$fs->makeDirectory($dir);
-		});
-		$config_file = $dir."/".$this->config_name;
-		$this->task_logger->always("Writing default config to $config_file", function() use ($config_file, $fs) {
-			$default_config = $fs->read(__DIR__."/../../assets/ilse_default_config.yaml");
-			$fs->write($config_file, $default_config);
-		});
 	}
 }
