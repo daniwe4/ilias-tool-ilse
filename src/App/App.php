@@ -96,7 +96,11 @@ class App extends Application
 			throw new \RuntimeException("Expected command to initialize ILIAS config.");
 		};
 		$container["config.ilse"] = function($c) {
-			throw new \RuntimeException("Don't know how to build");
+			return $this->readAppConfigFile
+						( $c["aux.filesystem"]
+						, $c["aux.configParser"]
+						, $c["aux.taskLogger"]
+						);
 		};
 
 		// Auxiliary Services
@@ -183,19 +187,21 @@ class App extends Application
 	/**
 	 * Read app config file
 	 *
-	 * @param string 				$path
-	 * @param Interfaces\Parser 	$parser
+	 * @param Aux\Filesystem		$fs
+	 * @param Aux\YamlConfigParser	$parser
+	 * @param Aux\TaskLogger		$logger
 	 *
-	 * @return string
+	 * @return array
 	 */
-	protected function readAppConfigFile($path, $parser)
+	protected function readAppConfigFile(Aux\Filesystem	$fs, Aux\YamlConfigParser $parser, Aux\TaskLogger $logger)
 	{
-		if(!is_file($path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS))
-		{
-			throw new \Exception("File not found at " . self::I_F_CONFIG_REPOS);
-		}
-
-		return $parser->read($path->getHomeDir() . "/" . self::I_F_CONFIG_REPOS);
+		return $task_logger->always("Read ilse config file", function() use ($fs, $parser, $logger) {
+			$path = $fs->homeDirectory()."/".self::ILSE_DIR."/".self::ILSE_CONFIG;
+			if (!$fs->exists($path)) {
+				throw new \RuntimeException("ilse config file not '$path'.");
+			}
+			return $parser->read($path);
+		});
 	}
 
 	/**
