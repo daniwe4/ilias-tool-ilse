@@ -4,6 +4,7 @@
 
 namespace CaT\Ilse\Action;
 
+use CaT\Ilse\Aux\ConfigRepoLoader;
 use CaT\Ilse\Aux\Filesystem;
 use CaT\Ilse\Aux\TaskLogger;
 
@@ -23,6 +24,16 @@ class InitAppFolder implements Action
 	protected $config_name;
 
 	/**
+	 * @var ConfigRepoLoader
+	 */
+	protected $config_repo_loader = null;
+
+	/**
+	 * @var	callable
+	 */
+	protected $get_config_repo_loader;
+
+	/**
 	 * @var	Filesystem
 	 */
 	protected $filesystem;	
@@ -36,12 +47,13 @@ class InitAppFolder implements Action
 	 * @param	string		$folder_name
 	 * @param	Filesystem $filesystem
 	 */
-	public function __construct($folder_name, $config_name, Filesystem $filesystem, TaskLogger $logger)
+	public function __construct($folder_name, $config_name, callable $get_config_repo_loader, Filesystem $filesystem, TaskLogger $logger)
 	{
 		assert('is_string($folder_name)');
 		assert('is_string($config_name)');
 		$this->folder_name = $folder_name;
 		$this->config_name = $config_name;
+		$this->get_config_repo_loader = $get_config_repo_loader;
 		$this->filesystem = $filesystem;
 		$this->task_logger = $logger;
 	}
@@ -55,13 +67,23 @@ class InitAppFolder implements Action
 		$fs = $this->filesystem;
 		$dir = $fs->homeDirectory()."/".$this->folder_name;
 		if (!$fs->exists($dir)) {
-			$this->task_logger->always("Creating directory $dir for ilse", function () use ($dir, $fs) {
-				$fs->makeDirectory($dir);
-			});
-			$config_file = $dir."/".$this->config_name;
-			$this->task_logger->always("Writing default config to $config_file", function() use ($config_file, $fs) {
-				$default_config = $fs->read(__DIR__."/../../assets/ilse_default_config.yaml");
-				$fs->write($config_file, $default_config);
+			$this->task_logger->always("Initializing ilse directory", function () use ($dir, $fs) {
+				$this->task_logger->always("Creating directory $dir for ilse", function () use ($dir, $fs) {
+					$fs->makeDirectory($dir);
+				});
+				$config_file = $dir."/".$this->config_name;
+				$this->task_logger->always("Writing default config to $config_file", function() use ($config_file, $fs) {
+					$default_config = $fs->read(__DIR__."/../../assets/ilse_default_config.yaml");
+					$fs->write($config_file, $default_config);
+				});
+				$get_config_repo_loader  = $this->get_config_repo_loader;
+				$this->config_repo_loader = $get_config_repo_loader();
+				if (!($this->config_repo_loader instanceof ConfigRepoLoader)) {
+					throw new \RuntimeException("Expected ConfigRepoLoader, got ".get_class($this->config_repo_loader));
+				}
+				$this->task_logger->always("Updating config repos", function() {
+					$this->config_repo_loader->updateConfigRepos();
+				});
 			});
 		}
 	}
