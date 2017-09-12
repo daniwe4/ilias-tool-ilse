@@ -15,4 +15,11 @@ interface ConfigLoader {
 	 * @return	array|Container
 	 */
 	public function loadConfigToDic($dic, array $paths);
+
+	/**
+	 * Refreshes the config repos in the ilse-home folder.
+	 *
+	 * @return void
+	 */
+	public function updateConfigRepos();
 }
