@@ -112,7 +112,15 @@ class App extends Application
 			throw new \RuntimeException("Expected command to initialize task logger.");
 		};
 		$container["aux.configLoader"] = function($c) {
-			return new Aux\ConfigLoaderTemp($c["aux.configMerger"], $c["aux.configParser"]);
+			$path = $c["aux.filesystem"]->homeDirectory()."/".self::ILSE_DIR;
+			return new Aux\ConfigLoaderTemp
+						( $path
+						, $c["config.ilse"]["repos"]
+						, $c["aux.configMerger"]
+						, $c["aux.configParser"]
+						, $c["aux.taskLogger"]
+						, $c["aux.gitFactory"]
+						);
 		};
 		$container["aux.configMerger"] = function($c) {
 			return new Aux\ConfigMerger();
@@ -203,48 +211,4 @@ class App extends Application
 			return $parser->read($path);
 		});
 	}
-
-	/**
-	 * Get the config repos
-	 *
-	 * @param string 				$path
-	 * @param Git\Git 		$gw
-	 * @param Interfaces\Parser 	$parser
-	 *
-	 * @return string
-	 */
-	protected function getConfigRepos($path, Git\Git $gw, Interfaces\Parser $parser)
-	{
-		assert('is_string($path)');
-
-		$result = array();
-		foreach($this->readAppConfigFile($path, $parser)['repos'] as $repo)
-		{
-			if($gw->gitIsRemoteGitRepo($repo) === 0)
-			{
-				$result[] = $repo;
-			}
-		}
-		return $result;
-	}
-
-	/**
-	 * Get a name from md5 hash of path + url
-	 *
-	 * @param string 		$path
-	 * @param string 		$url
-	 *
-	 * @return string
-	 */
-	protected function getUniqueDirName($path, $url)
-	{
-		assert('is_string($path)');
-		assert('is_string($url)');
-
-		$hash 	= md5($url);
-		$dir 	= $path . "/" . $hash;
-
-		return $dir;
-	}
-
 }
