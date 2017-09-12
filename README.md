@@ -66,9 +66,9 @@ to the public, thus only basic functionality is available for the cli interface
 at the moment.
 
 We also have the vision that someday some ILIAS configurations are provided
-in a repository like [this one](github.com/conceptsandtraining/ilias-configs-public)
+in a repository like [this one](https://github.com/conceptsandtraining/ilias-configs-public)
 so that people who want to try ILIAS only need to configure some locations
-on their system. This requirement will vanish as well, once [doil](github.com/conceptsandtraining/ilias-tool-doil)
+on their system. This requirement will vanish as well, once [doil](https://github.com/conceptsandtraining/ilias-tool-doil)
 or a similar tool works reliably. This project could also pen a huge space
 for testing, manual as well as automatic.
 
