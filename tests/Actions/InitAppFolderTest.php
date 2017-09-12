@@ -5,13 +5,15 @@
 use \CaT\Ilse\Action\InitAppFolder;
 use \CaT\Ilse\Aux\Filesystem;
 use \CaT\Ilse\Aux\TaskLogger;
+use \CaT\Ilse\Aux\ConfigRepoLoader;
 
 class InitAppFolderTest extends PHPUnit_Framework_TestCase {
 	public function test_perform_exists() {
 		$filesystem = $this->createMock(Filesystem::class);
 		$task_logger = $this->createMock(TaskLogger::class);
+		$config_repo_loader = $this->createMock(ConfigRepoLoader::class);
 
-		$action = new InitAppFolder(".ilse", "config.yaml", $filesystem, $task_logger);
+		$action = new InitAppFolder(".ilse", "config.yaml", function() use ($config_repo_loader) { return $config_repo_loader; }, $filesystem, $task_logger);
 
 		$filesystem
 			->expects($this->atLeastOnce())
@@ -32,6 +34,7 @@ class InitAppFolderTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_perform_not_exists() {
+		$config_repo_loader = $this->createMock(ConfigRepoLoader::class);
 		$filesystem = $this->createMock(Filesystem::class);
 
 		$task_logger = $this->createMock(TaskLogger::class);
@@ -48,7 +51,7 @@ class InitAppFolderTest extends PHPUnit_Framework_TestCase {
 				$c();
 			}));
 
-		$action = new InitAppFolder(".ilse", "config.yaml", $filesystem, $task_logger);
+		$action = new InitAppFolder(".ilse", "config.yaml", function() use ($config_repo_loader) { return $config_repo_loader; }, $filesystem, $task_logger);
 
 		$filesystem
 			->expects($this->atLeastOnce())
@@ -76,6 +79,10 @@ class InitAppFolderTest extends PHPUnit_Framework_TestCase {
 			->expects($this->once())
 			->method("write")
 			->with("HOME/.ilse/config.yaml", "DEFAULT_CONFIG");
+
+		$config_repo_loader
+			->expects($this->once())
+			->method("updateConfigRepos");
 
 		$action->perform();
 	}

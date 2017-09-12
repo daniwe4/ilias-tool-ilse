@@ -41,6 +41,7 @@ class App extends Application
 			return new Action\InitAppFolder
 						( self::ILSE_DIR
 						, self::ILSE_CONFIG
+						, function () use ($c) { return $c["aux.configRepoLoader"]; }
 						, $c["aux.filesystem"]
 						, $c["aux.taskLogger"]
 						);
@@ -112,12 +113,17 @@ class App extends Application
 			throw new \RuntimeException("Expected command to initialize task logger.");
 		};
 		$container["aux.configLoader"] = function($c) {
-			$path = $c["aux.filesystem"]->homeDirectory()."/".self::ILSE_DIR;
 			return new Aux\ConfigLoaderTemp
+						( $c["aux.configMerger"]
+						, $c["aux.configParser"]
+						);
+		};
+		$container["aux.configRepoLoader"] = function($c) {
+			$path = $c["aux.filesystem"]->homeDirectory()."/".self::ILSE_DIR;
+			return new Aux\ConfigRepoLoaderTemp
 						( $path
 						, $c["config.ilse"]["repos"]
-						, $c["aux.configMerger"]
-						, $c["aux.configParser"]
+						, $c["aux.filesystem"]
 						, $c["aux.taskLogger"]
 						, $c["aux.gitFactory"]
 						);
