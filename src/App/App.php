@@ -203,10 +203,10 @@ class App extends Application
 	 */
 	protected function readAppConfigFile(Aux\Filesystem	$fs, Aux\YamlConfigParser $parser, Aux\TaskLogger $logger)
 	{
-		return $task_logger->always("Read ilse config file", function() use ($fs, $parser, $logger) {
+		return $logger->always("Read ilse config file", function() use ($fs, $parser, $logger) {
 			$path = $fs->homeDirectory()."/".self::ILSE_DIR."/".self::ILSE_CONFIG;
 			if (!$fs->exists($path)) {
-				throw new \RuntimeException("ilse config file not '$path'.");
+				throw new \RuntimeException("ilse config file not found at '$path'.");
 			}
 			return $parser->read($path);
 		});
