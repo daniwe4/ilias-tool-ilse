@@ -36,11 +36,12 @@ class InstallCommand extends BaseCommand
 	protected function execute(InputInterface $in, OutputInterface $out)
 	{
 		$this->dic["aux.taskLogger"] = $this->buildTaskLogger($out);
-		$config_names = $in->getArgument("config_names");
-		$this->dic = $this->dic["aux.configLoader"]->loadConfigToDic($this->dic, $config_names);
 
 		$init_app_folder = $this->dic["action.initAppFolder"];
 		$init_app_folder->perform();
+
+		$config_names = $in->getArgument("config_names");
+		$this->dic = $this->dic["aux.configLoader"]->loadConfigToDic($this->dic, $config_names);
 
 		$build_installation_environment = $this->dic["action.buildInstallationEnvironment"];
 		$build_installation_environment->perform();
