@@ -11,8 +11,8 @@ interface ConfigLoader {
 	 * Load the config.
 	 *
 	 * @param	array|Container		$dic
-	 * @param	string[]			$paths
+	 * @param	string[]			$configs
 	 * @return	array|Container
 	 */
-	public function loadConfigToDic($dic, array $paths);
+	public function loadConfigToDic($dic, array $configs);
 }

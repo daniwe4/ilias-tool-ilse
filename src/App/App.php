@@ -116,6 +116,8 @@ class App extends Application
 			return new Aux\ConfigLoaderTemp
 						( $c["aux.configMerger"]
 						, $c["aux.configParser"]
+						, $c["aux.filesystem"]
+						, function () use ($c) { return $c["aux.configRepoLoader"]; }
 						);
 		};
 		$container["aux.configRepoLoader"] = function($c) {
