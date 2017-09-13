@@ -65,7 +65,7 @@ class TaskLoggerSymfony implements TaskLogger
 		catch(\Exception $e)
 		{
 			$this->popTitle(self::FAIL_SOFT);
-			$this->out->write($e);
+			$this->out->write("".$e);
 			return null;
 		}
 	}
