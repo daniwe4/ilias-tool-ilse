@@ -25,18 +25,51 @@ class ConfigLoaderTemp implements ConfigLoader {
 	 */
 	private $parser;
 
-	public function __construct(ConfigMerger $merger, ConfigParser $parser) {
+	/**
+	 * @var	Filesystem
+	 */
+	private $filesystem;
+
+	/**
+	 * @var	callable
+	 */
+	private $get_config_loader;
+
+	/**
+	 * @var	ConfigRepoLoader
+	 */
+	private $config_repo_loader = null;
+
+	public function __construct(ConfigMerger $merger, ConfigParser $parser, Filesystem $filesystem, callable $get_config_repo_loader) {
 		$this->merger = $merger;
 		$this->parser = $parser;
+		$this->filesystem = $filesystem;
+		$this->get_config_repo_loader = $get_config_repo_loader;
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function loadConfigToDic($dic, array $paths) {
+	public function loadConfigToDic($dic, array $configs) {
 		if ($dic->raw("config.ilias") instanceof Config\General) {
 			throw new \LogicException("config.ilias already initialized.");
 		}
+
+		$paths = [];
+		$get_config_repo_loader = $this->get_config_repo_loader;
+		$this->config_repo_loader = $get_config_repo_loader();
+		if (!($this->config_repo_loader instanceof ConfigRepoLoader)) {
+			throw new \RuntimeException("Expected ConfigRepoLoader, got ".get_class($this->config_repo_loader));
+		}
+		foreach ($configs as $config) {
+			if (!$this->filesystem->exists($config)) {
+				$paths[] = $this->config_repo_loader->getConfigPath($config);
+			}
+			else {
+				$paths[] = $config;
+			}
+		}
+
 		$merged = $this->merger->mergeConfigs($paths);
 		$dic["config.ilias"] = $this->parser->read_config($merged, Config\General::class);
 		return $dic;
