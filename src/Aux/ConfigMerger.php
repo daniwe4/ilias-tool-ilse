@@ -52,7 +52,7 @@ class ConfigMerger {
 		return $base;
 	}
 
-	protected function addMissingKeys($base, $new)
+	protected function addMissingKeys(array $base, array $new)
 	{
 		$key_base = array_keys($base);
 		$key_new = array_keys($new);
