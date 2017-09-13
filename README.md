@@ -4,7 +4,9 @@
 # **ilse** automatically builds ILIAS installations
 **Proof of Concept for a Command Line Installation Script for [ILIAS](https://github.com/ILIAS-eLearning/ILIAS)**
 
-*Please make sure you understand that this is not yet ready for production. Use this at your own risk.*
+*Please make sure you understand that this is not yet ready for production. Use this
+at your own risk. This may also be shaky, as using the ILIAS setup from another
+application is mostly try and error and sometimes also changes in stable versions.*
 
 **Contact:** [Daniel Weise](https://github.com/daniwe4), [Richard Klees](https://github.com/klees)
 
@@ -42,6 +44,13 @@ ilse install $PATH_TO_CONFIG
 You may also supply **ilse** with multiple config files. **ilse** will then prefer
 entries from the latter over the former. This allows you to create basic config
 files and overwrite only distinct config entries with more specific config files.
+
+You may also use a config from a [config repo](https://github.com/conceptsandtraining/ilias-configs/public)
+and only add your local folders and credentials, e.g.:
+
+```
+ilse install release_5-2 local.yaml
+```
 
 ### Delete installation
 If you got tired of your ILIAS installation, **ilse** will be happy to remove
