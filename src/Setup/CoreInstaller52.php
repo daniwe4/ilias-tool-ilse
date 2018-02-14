@@ -276,6 +276,10 @@ class CoreInstaller52 implements CoreInstaller {
 		$client->ini->setVariable("client","access",1);
 		$client->ini->write();
 
+		// "ilDB" will be reinitialized during reconnect, which will
+		// throw an error on the DIC if we don't remove the key before.
+		$DIC->offsetUnset("ilDB");
+
 		$client->reconnect();
 		$client->setSetting("setup_ok",1);
 		$client->status["finish"]["status"] = true;
