@@ -73,18 +73,24 @@ class PluginInfoReader52 implements PluginInfoReader
 		assert('is_string($path)');
 		assert('is_string($plugin_name)');
 
-		$this->filesystem->changeDir($this->server->absolute_path());
-		require_once(
-			$path.
-			"/".
-			self::CLASS_FOLDER.
-			"/".
-			self::FILENAME_PREFIX.
-			$plugin_name.
-			self::FILENAME_SUFFIX
-		);
-		$plugin = new \ReflectionClass("il".$plugin_name."Plugin");
-		return $plugin->newInstanceWithoutConstructor();
+		$cur = getcwd();
+		try {
+			chdir($this->server->absolute_path());
+			require_once(
+				$path.
+				"/".
+				self::CLASS_FOLDER.
+				"/".
+				self::FILENAME_PREFIX.
+				$plugin_name.
+				self::FILENAME_SUFFIX
+			);
+			$plugin = new \ReflectionClass("il".$plugin_name."Plugin");
+			return $plugin->newInstanceWithoutConstructor();
+		}
+		finally {
+			chdir($cur);
+		}
 	}
 
 	/**
