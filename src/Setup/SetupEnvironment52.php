@@ -79,6 +79,10 @@ class SetupEnvironment52
 		$_SESSION['lang'] 			= $this->lang;
 	}
 
+	public function initDIC() {
+		$GLOBALS["DIC"] = new \ILIAS\DI\Container();
+	}
+
 	public function includeSource() {
 		include_once $this->absolute_path.'/libs/composer/vendor/autoload.php';
 		require_once "./setup/classes/class.ilTemplate.php";	// modified class. needs to be merged with base template class 
@@ -115,8 +119,10 @@ class SetupEnvironment52
 
 	public function initLanguage()
 	{
+		global $DIC;
 		$lng = new \ilLanguage($this->lang);
 		$GLOBALS['lng'] = $lng;
+		$DIC["lng"] = $lng;
 		return $lng;
 	}
 
@@ -137,22 +143,28 @@ class SetupEnvironment52
 
 	public function initTemplate()
 	{
+		global $DIC;
 		$tpl = new ilTemplate("tpl.main.html", true, true, "setup");
 		$GLOBALS['ilTemplate'] = $tpl;
+		$DIC['ilTemplate'] = $tpl;
 	}
 
 	public function initStructureReader()
 	{
+		global $DIC;
 		$ilCtrlStructureReader = new \ilCtrlStructureReader();
 		$ilCtrlStructureReader->setErrorObject($this->ilErr);
 		$GLOBALS['ilCtrlStructureReader'] = $ilCtrlStructureReader;
+		$DIC['ilCtrlStructureReader'] = $ilCtrlStructureReader;
 	}
 
 	public function initBenchmark()
 	{
+		global $DIC;
 		require_once "./Services/Utilities/classes/class.ilBenchmark.php";
 		$ilBench = new \ilBenchmark();
 		$GLOBALS['ilBench'] = $ilBench;
+		$DIC['ilBench'] = $ilBench;
 
 		include_once("./Services/Database/classes/class.ilDBAnalyzer.php");
 		include_once("./Services/Database/classes/class.ilMySQLAbstraction.php");

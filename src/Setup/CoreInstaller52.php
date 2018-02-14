@@ -121,6 +121,7 @@ class CoreInstaller52 implements CoreInstaller {
 		$this->task_logger->always("Defining Constants and Superglobals for ILIAS", [$env, "defineConstantsAndSuperglobals"]);
 		$this->task_logger->always("Change to ILIAS Root Dir", [$env, "changeDirToILIASRoot"]);
 		$this->task_logger->always("Include required ILIAS Source", [$env, "includeSource"]);
+		$this->task_logger->always("Initialize Dependency Injection Container", [$env, "initDIC"]);
 		$this->task_logger->always("Initialize ILIAS Error Handling", [$env, "initErrorHandling"]);
 		$this->task_logger->always("Initialize ILIAS Logging", [$env, "initLog"]);
 		$this->task_logger->always("Initialize ILIAS Language", [$env, "initLanguage"]);
