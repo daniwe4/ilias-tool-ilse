@@ -27,15 +27,6 @@ class FilesystemImpl implements Filesystem {
 	}
 
 	/**
-	 *@inheritdoc
-	 */
-	public function changeDir($path)
-	{
-		assert('is_string($path)');
-		chdir($path);
-	}
-
-	/**
 	 * @inheritdoc
 	 */
 	public function exists($path) {
