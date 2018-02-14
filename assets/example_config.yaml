@@ -75,13 +75,12 @@ https_auto_detect:
     #default https header value
     header_value: https
 plugin:
-	# ilse installs all plugins to one directory and then links
-	# them to ILIAS for easier maintenance
-	dir:
-	# install no plugins
-	plugins:
-        0:
-            name: TestRepositoryObject
-            git:
-				url: https://github.com/ILIAS-eLearning/TestRepositoryObject
-				branch: master
+    # ilse installs all plugins to one directory and then links
+    # them to ILIAS for easier maintenance
+    dir:
+    # install no plugins
+    plugins:
+        - name: TestRepositoryObject
+          git:
+              url: https://github.com/ILIAS-eLearning/TestRepositoryObject
+              branch: master
