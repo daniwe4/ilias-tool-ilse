@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0c2bafa1b0a5377f22ace925558872d4",
+    "content-hash": "c72d414481e5b3811d434242c2e90a6a",
     "packages": [
         {
             "name": "phpxmlrpc/extras",
-            "version": "0.6.2",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gggeek/phpxmlrpc-extras.git",
-                "reference": "327f1195feae4079c691fa281b7e63d2be4c193a"
+                "reference": "7ff78d83244e472d02f68df2f3a9622187882e30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gggeek/phpxmlrpc-extras/zipball/327f1195feae4079c691fa281b7e63d2be4c193a",
-                "reference": "327f1195feae4079c691fa281b7e63d2be4c193a",
+                "url": "https://api.github.com/repos/gggeek/phpxmlrpc-extras/zipball/7ff78d83244e472d02f68df2f3a9622187882e30",
+                "reference": "7ff78d83244e472d02f68df2f3a9622187882e30",
                 "shasum": ""
             },
             "require": {
@@ -36,7 +36,7 @@
                     "jsonrpc/jsonrpcs.inc",
                     "proxy/proxyxmlrpcs.inc",
                     "xmlrpc_extension_api/xmlrpc_extension_api.inc",
-                    "docxmlrpcserver/docxmlrpcs.inc"
+                    "docxmlrpcs.inc"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -50,7 +50,7 @@
                 "webservices",
                 "xmlrpc"
             ],
-            "time": "2017-12-02T15:40:43+00:00"
+            "time": "2017-03-14T23:35:02+00:00"
         },
         {
             "name": "phpxmlrpc/phpxmlrpc",
